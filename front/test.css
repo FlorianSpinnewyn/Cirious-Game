@@ -1,0 +1,53 @@
+.fond {
+  background-image: url("./pictures/foret.png");
+  background-repeat: no-repeat;
+
+  height: 100%;
+}
+
+.fenetre {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto;
+  background-color: rgba(191, 191, 191, 0.50);
+  padding: 5% 15%;
+  text-align:center;
+  background-repeat: no-repeat;
+}
+
+.mairie {
+  background-image: url("./pictures/mairie.png");
+}
+
+.kiosque {
+  background-image: url("./pictures/kiosque.png");
+}
+
+.content {
+  background-repeat: no-repeat;
+  padding:2%;
+  width: 100%; 
+  height: 100%; 
+}
+
+.panneau {
+  margin-left: 4.5%;
+  margin-top: 14%;
+  width: 50%;
+}
+
+.pancarte {
+  margin-left: 2%;
+  margin-top: 23%;
+  width: 50%;
+}
+
+.cancel {
+  letter-spacing:0.3em;
+  float:right;
+
+  margin-right: 4%;
+}

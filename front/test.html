@@ -1,0 +1,87 @@
+<!--      * * * * * * * * * * * * * * * * * * * * * * * * * * *
+          *                                                   *
+          *                CIRious Game - Test                *
+          *                                                   *
+          * * * * * * * * * * * * * * * * * * * * * * * * * * *                  -->
+
+<!-- 
+-->
+ 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CIRious Game - Test</title>
+    <link rel="stylesheet" href="test.css">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">   <!-- liens w3 school -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">    <!-- pour la police des titres -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">    <!-- pour la police classique -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  <!-- pour les icônes -->
+    <link rel="icon" href="./pictures/favicon.ico"/>    <!--pour la petite icône en haut -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- boostrap 4 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body class="fond">
+
+    <!-- bouton mairie -->
+    <div id="information" class="fenetre">
+        <div class="mairie content">
+            <div class="clearfix">
+                <button id="cancel" class="btn btn-outline-dark cancel" name="cancel" type="button">X</button>
+            </div>
+            <div class="panneau">
+                <h2>Panneau d'informations de la <strong>Mairie</strong> :</h2>
+                <br><br><br>
+                <div id="bonheur" hidden=false>Tout va bien :)</div> 
+                <div id="panneMetro" hidden=true>Le métro est en panne</div>  
+                <div id="panneTrain" hidden=true>Le train est en panne</div>
+                <div id="manqueVelo" hidden=true>Il manque des vélos à une station</div>
+                <div id="embouteillage" hidden=true>Il y a un embouteillage sur la route</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- bouton kiosque -->
+    <div id="actualite" class="fenetre">
+        <div class="kiosque content">
+            <div class="clearfix">
+                <button id="close" class="btn btn-outline-dark cancel" name="close" type="button">X</button>
+            </div>
+            <div class="pancarte">
+                <h2>Voici les actualités du <strong>Kiosque</strong> :</h2>
+                <br><br>
+                <div id="score"></div> <br>
+                <div id="badgeDebloque"></div> <br>
+                <div id="prochainObjectif"></div>
+            </div>
+        </div>
+    </div>
+
+    <button id='Personne'><span>Personne</span></button>
+    <button id='Mairie'><span>Mairie</span></button>
+    <button id='Kiosque'><span>Kiosque</span></button>
+    <button id='Technicentre'><span>Technicentre</span></button>
+    <button id='Parking'><span>Parking</span></button>
+    <button id='Garage'><span>Garage</span></button>
+    <button id='Atelier'><span>Atelier</span></button>
+    <button id='Gare'><span>Gare</span></button>
+    <button id='Velo'><span>Station Vélo</span></button>
+    <button id='Métro'><span>Station Métro</span></button>
+
+    
+  <script>
+    let socket = io();
+  </script>
+  <script src="test.js"></script>
+</body>
+</html>
