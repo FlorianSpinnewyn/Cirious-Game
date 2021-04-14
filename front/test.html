@@ -43,10 +43,10 @@
                 <h2>Panneau d'informations de la <strong>Mairie</strong> :</h2>
                 <br><br><br>
                 <div id="bonheur" hidden=false>Tout va bien :)</div> 
-                <div id="panneMetro" hidden=true>Le métro est en panne</div>  
-                <div id="panneTrain" hidden=true>Le train est en panne</div>
-                <div id="manqueVelo" hidden=true>Il manque des vélos à une station</div>
-                <div id="embouteillage" hidden=true>Il y a un embouteillage sur la route</div>
+                <div id="panneMetro" hidden=true>Le métro est en panne.</div>  
+                <div id="panneTrain" hidden=true>Le train est en panne.</div>
+                <div id="manqueVelo" hidden=true>Il manque des vélos à une station.</div>
+                <div id="embouteillage" hidden=true>Il y a un embouteillage sur la route.</div>
             </div>
         </div>
     </div>
@@ -67,6 +67,109 @@
         </div>
     </div>
 
+    <!-- bouton technicentre -->
+    <div id="reparationTrain" class="fenetre">
+        <div class="technicentre content">
+            <div class="clearfix">
+                <button id="croix" class="btn btn-outline-dark cancel" name="croix" type="button">X</button>
+            </div>
+            <div class="tableau">
+                <h2>Tableau des missions du <strong>Technicentre</strong> :</h2>
+                <br><br>
+                <div id="parfait" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les trains.</div> 
+                <div id="probTrain" hidden=true><button id="trainRepare">Réparer le train</button></div> 
+            </div>
+        </div>
+    </div>
+
+    <!--bouton parking -->
+    <div id="reparationVoiture" class="fenetre">
+        <div class="parking content">
+            <div class="clearfix">
+                <button id="fermer" class="btn btn-outline-dark cancel" name="fermer" type="button">X</button>
+            </div>
+            <div class="barriere">
+                <h2>Résolution de l' <strong>Embouteillage</strong> :</h2>
+                <br><br>
+                <div id="joie" hidden=false>Le trafic est fluide pour le moment.</div> 
+                <div id="probVoiture" hidden=true><button id="traficOk">Fluidifier le trafic</button></div> 
+            </div>
+        </div>
+    </div>
+
+    <!-- bouton garage -->
+    <div id="stockVelo" class="fenetre">
+        <div class="garage content">
+            <div class="clearfix">
+                <button id="quitter" class="btn btn-outline-dark cancel" name="quitter" type="button">X</button>
+            </div>
+            <div class="porte">
+                <h2><strong>Garage</strong> de maintien du stock de vélo :</h2>
+                <br><br>
+                <div id="noStress" hidden=false>Il y a assez de vélo.</div> 
+                <div id="probVelo" hidden=true><button id="veloRempli">Remettre des vélos</button></div> 
+            </div>
+        </div>
+    </div> 
+
+    <!-- bouton atelier -->
+    <div id="reparationMetro" class="fenetre">
+        <div class="atelier content">
+            <div class="clearfix">
+                <button id="partir" class="btn btn-outline-dark cancel" name="partir" type="button">X</button>
+            </div>
+            <div class="affiche">
+                <h2>Affiche des tâches de l' <strong>Atelier</strong> :</h2>
+                <br><br>
+                <div id="relax" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les métros.</div> 
+                <div id="probMetro" hidden=true><button id="metroRepare">Réparer le métro</button></div> 
+            </div>
+        </div>
+    </div> 
+
+    <!-- bouton gare -->
+    <div id="horaireTrain" class="fenetre">
+        <div class="gare content">
+            <div class="clearfix">
+                <button id="bye" class="btn btn-outline-dark cancel" name="bye" type="button">X</button>
+            </div>
+            <div class="tabAff">
+                <h2>Tableau d'affichage des horaires des <strong>Trains</strong> :</h2>
+                <br><br>
+                <div id="prochainTrain" hidden=true>Le prochain train part dans <span id="tempsTrain"></span> minutes.</div> 
+            </div>
+        </div>
+    </div>
+
+    <!-- bouton station métro-->
+    <div id="horaireMetro" class="fenetre">
+        <div class="stationM content">
+            <div class="clearfix">
+                <button id="ciao" class="btn btn-outline-dark cancel" name="ciao" type="button">X</button>
+            </div>
+            <div class="horaireM">
+                <h2>Tableau d'affichage des horaires des <strong>Métros</strong> :</h2>
+                <br><br>
+                <div id="prochainMetro" hidden=true>Le prochain métro part dans <span id="tempsMetro"></span> minutes.</div> 
+            </div>
+        </div>
+    </div>
+
+    <!-- bouton station vélo -->
+    <div id="veloRestants" class="fenetre">
+        <div class="stationV content">
+            <div class="clearfix">
+                <button id="aurevoir" class="btn btn-outline-dark cancel" name="aurevoir" type="button">X</button>
+            </div>
+            <div class="compteurV">
+                <h2>Stock des <strong>Vélos</strong> restants :</h2>
+                <br><br>
+                <div id="nombreVelo" hidden=true>Il reste <span id="resteVelo"></span> vélos.</div> 
+            </div>
+        </div>
+    </div>
+
+
     <button id='Personne'><span>Personne</span></button>
     <button id='Mairie'><span>Mairie</span></button>
     <button id='Kiosque'><span>Kiosque</span></button>
@@ -76,7 +179,7 @@
     <button id='Atelier'><span>Atelier</span></button>
     <button id='Gare'><span>Gare</span></button>
     <button id='Velo'><span>Station Vélo</span></button>
-    <button id='Métro'><span>Station Métro</span></button>
+    <button id='Metro'><span>Station Métro</span></button>
 
     
   <script>

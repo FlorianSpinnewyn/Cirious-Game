@@ -18,19 +18,15 @@
   background-repeat: no-repeat;
 }
 
-.mairie {
-  background-image: url("./pictures/mairie.png");
-}
-
-.kiosque {
-  background-image: url("./pictures/kiosque.png");
-}
-
 .content {
   background-repeat: no-repeat;
   padding:2%;
   width: 100%; 
   height: 100%; 
+}
+*
+.mairie {
+  background-image: url("./pictures/mairie.png");
 }
 
 .panneau {
@@ -39,9 +35,86 @@
   width: 50%;
 }
 
+.kiosque {
+  background-image: url("./pictures/kiosque.png");
+}
+
 .pancarte {
   margin-left: 2%;
   margin-top: 23%;
+  width: 50%;
+}
+
+.technicentre {
+  background-image: url("./pictures/technicentre.png");
+}
+
+.tableau {
+  margin-left: 2%;
+  margin-top: 23%;
+  width: 50%;
+}
+
+.parking {
+  background-image: url("./pictures/parking.png");
+}
+
+.barriere {
+  margin-left: 23%;
+  margin-top: 31%;
+  width: 50%;
+}
+
+.garage {
+  background-image: url("./pictures/parking.png");
+}
+
+.porte {
+  margin-left: 23%;
+  margin-top: 31%;
+  width: 50%;
+}
+
+.atelier {
+  background-image: url("./pictures/atelier.png");
+}
+
+.affiche {
+  margin-left: 6%;
+  margin-top: 7.8%;
+  width: 50%;
+}
+
+.gare {
+  background-image: url("./pictures/gare.png");
+}
+
+.tabAff {
+  color:white;
+  margin-left: 5%;
+  margin-top: 5.5%;
+  width: 50%;
+}
+
+.stationV {
+  background-image: url("./pictures/stationV.png");
+}
+
+.compteurV {
+  color:white;
+  margin-left: 5%;
+  margin-top: 3%;
+  width: 50%;
+}
+
+.stationM {
+  background-image: url("./pictures/stationM.png");
+}
+
+.horaireM {
+  color:white;
+  margin-left: 5%;
+  margin-top: 2%;
   width: 50%;
 }
 

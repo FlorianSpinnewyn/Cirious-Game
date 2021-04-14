@@ -22,6 +22,20 @@ const { emit } = require('process');
 const { Socket } = require('dgram');
 const Mairie = require('./back/models/Mairie.js');
 const Kiosque = require('./back/models/Kiosque.js');
+const Technicentre = require('./back/models/Technicentre.js');
+const Parking = require('./back/models/Parking.js');
+const Garage = require('./back/models/Garage.js');
+const Atelier = require('./back/models/Atelier.js');
+const City = require('./back/models/city.js');
+const Level = require('./back/models/level.js');
+const StationsMetro = require('./back/models/StationsMetro.js');
+const StationsVelo = require('./back/models/StationsVelo.js');
+const Gare = require('./back/models/gare.js');
+const Transport = require('./back/models/Transport.js');
+const Train = require('./back/models/Train.js');
+const Velo = require('./back/models/Velo.js');
+const Metro = require('./back/models/Metro.js');
+const Pied = require('./back/models/Pied.js');
 const baseDeDonnees = require('./back/modules/baseDeDonnees.js');
 
 const jsonParser = bodyParser.json();
@@ -63,25 +77,39 @@ app.get('/', (req, res) =>
   }
 });
 
+
 let mairie = new Mairie();
+let kiosque = new Kiosque();
+let technicentre = new Technicentre();
+let parking = new Parking();
+let garage = new Garage();
+let atelier = new Atelier();
+let gare = new Gare();
+let stationsMetro = new StationsMetro();
+let stationsVelo = new StationsVelo();
+
+let city = new City(mairie,kiosque,technicentre, parking, garage, atelier, gare, stationsMetro, stationsVelo);
+let myLevel = new Level(city);
+
+
 
 io.on('connection', (socket) =>
 {
-    if(!mairie.panneMetro)
+    if(myLevel.city.mairie.panneMetro == false)
     {
-        mairie.evenementMetro();
+        myLevel.city.mairie.evenementMetro();
     }
-    if(!mairie.panneTrain)
+    if(myLevel.city.mairie.panneTrain == false)
     {
-        mairie.evenementTrain();
+        myLevel.city.mairie.evenementTrain();
     }
-    if(!mairie.manqueVelo)
+    if(myLevel.city.mairie.manqueVelo == false)
     {
-        mairie.evenementVelo();
+        myLevel.city.mairie.evenementVelo();
     }
-    if(!mairie.embouteillage)
+    if(myLevel.city.mairie.embouteillage == false)
     {
-        mairie.evenementEmbouteillage();
+        myLevel.city.mairie.evenementEmbouteillage();
     }
 
     socket.on("mairie", () => 
@@ -90,41 +118,36 @@ io.on('connection', (socket) =>
         let train = false;
         let velo = false;
         let voiture = false;
-        if(mairie.panneMetro)
+        if(myLevel.city.mairie.panneMetro)
         {
             metro = true;
         }
-        if(mairie.panneTrain)
+        if(myLevel.city.mairie.panneTrain)
         {
             train = true;
         }
-        if(mairie.manqueVelo)
+        if(myLevel.city.mairie.manqueVelo)
         {
             velo = true;
         }
-        if(mairie.embouteillage)
+        if(myLevel.city.mairie.embouteillage)
         {
             voiture = true;
         }
         socket.emit("afficheEvenement", metro, train, velo, voiture);
     });
     
-});
-
-let kiosque = new Kiosque;
-io.on('connection', (socket) =>
-{
-    if(!kiosque.score)
+    if(!myLevel.city.kiosque.score)
     {
-        kiosque.recupScore();
+        myLevel.city.kiosque.recupScore();
     }
-    if(!kiosque.prochainObjectif)
+    if(!myLevel.city.kiosque.prochainObjectif)
     {
-        kiosque.recupProchainObjectif();
+        myLevel.city.kiosque.recupProchainObjectif();
     }
-    if(!kiosque.badgeDebloque)
+    if(!myLevel.city.kiosque.badgeDebloque)
     {
-        kiosque.recupBadgeDebloque();
+        myLevel.city.kiosque.recupBadgeDebloque();
     }
 
     socket.on("kiosque", () => 
@@ -134,25 +157,135 @@ io.on('connection', (socket) =>
         let badgeDebloque = [];
         if(kiosque.score != 0)
         {
-            score = kiosque.recupScore();
+            score = myLevel.city.kiosque.recupScore();
         }
-        if(kiosque.prochainObjectif.length > 0)
+        if(myLevel.city.kiosque.prochainObjectif.length > 0)
         {
-            prochainObjectif = kiosque.recupProchainObjectif();
+            prochainObjectif = myLevel.city.kiosque.recupProchainObjectif();
         }
-        if(kiosque.BadgeDebloque != [])
+        if(myLevel.city.kiosque.BadgeDebloque != [])
         {
-            badgeDebloque = kiosque.recupBadgeDebloque();
+            badgeDebloque = myLevel.city.kiosque.recupBadgeDebloque();
         }
         socket.emit("afficheActualite", score, prochainObjectif, badgeDebloque);
     });
+
+    /*** Technicentre ***/
+    socket.on("technicentre", () => 
+    {
+        if(myLevel.city.mairie.panneTrain == true && myLevel.city.technicentre.repare == false)
+        {
+            socket.emit("RepTrain");
+        }
+        else
+        {
+            socket.emit("pasRepTrain");
+        }
+    });
+
+    socket.on("trainRepare", () => 
+    {
+        myLevel.city.technicentre.evenementRepare();
+        myLevel.city.mairie.panneTrain = false;
+    });
+
+     /*** Parking ***/
+    socket.on("parking", () => {
+        if(myLevel.city.mairie.embouteillage == true && myLevel.city.parking.repare == false)
+        {
+            socket.emit("Embouteillage");
+        }
+        else
+        {
+            socket.emit("noEmbouteillage");
+        }
+    });
+
+    socket.on("traficFluide", () => 
+    {
+        myLevel.city.parking.evenementRepare();
+        myLevel.city.mairie.embouteillage = false;
+    });
+
+    /*** Garage ***/
+    socket.on("garage", () => {
+        if(myLevel.city.mairie.manqueVelo == true && myLevel.city.garage.repare == false)
+        {
+            socket.emit("probVelo");
+        }
+        else
+        {
+            socket.emit("noProbVelo");
+        }
+    });
+
+    socket.on("stockRempli", () => {
+        myLevel.city.garage.evenementRepare();
+        myLevel.city.mairie.manqueVelo = false;
+    });
+
+    /*** Atelier ***/
+    socket.on("atelier", () => {
+        if(myLevel.city.mairie.panneMetro == true && myLevel.city.atelier.repare == false)
+        {
+            socket.emit("probMetro");
+        }
+        else
+        {
+            socket.emit("noProbMetro");
+        }
+    });
+
+    socket.on("metroRepare", () => {
+        myLevel.city.atelier.evenementRepare();
+        myLevel.city.mairie.panneMetro = false;
+    });
     
+    /*** Gare ***/
+    socket.on("gare", () => {
+        //on devra récupérer dans combien de temps est le prochain train
+        let temps = 10;
+        socket.emit("prochainTrain", temps);  
+    });
+    
+    
+    socket.on("metro", () => {
+        //on devra récupérer dans combien de temps est le prochain métro
+        let temps = 20;
+        socket.emit("prochainMetro", temps);
+    });
+
+    socket.on("velo", () => {
+        //on devra récupérer le nombre de vélos
+        let nombreV = 18;
+        socket.emit("nombreVelo", nombreV);
+    });  
 });
 
 http.listen(4235, () =>
 {
   console.log('Serveur lancé sur le port 4235');
 });
+
+/*function test(result)
+{
+    let depart;
+    let orientation;
+
+/*function test(result)
+{
+    let depart;
+    let orientation;
+
+/*function test(result)
+{
+    let depart;
+    let orientation;
+
+/*function test(result)
+{
+    let depart;
+    let orientation;
 
 /*function test(result)
 {
@@ -226,6 +359,3 @@ http.listen(4235, () =>
  
 }
 baseDeDonnees.select("SELECT * FROM move WHERE depart='0.7.N' AND idcity='8'", test);*/
-
-
-

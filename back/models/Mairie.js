@@ -9,7 +9,7 @@ class Mairie {
 
     evenementTrain() 
     {
-        let isPanneTrain = Math.random() * 3;
+        let isPanneTrain = Math.floor(Math.random() * 3);
         if(isPanneTrain == 1)
         {
             this.panneTrain = true;
@@ -18,7 +18,7 @@ class Mairie {
 
     evenementMetro() 
     {
-        let isPanneMetro = Math.random() * 2;
+        let isPanneMetro = Math.floor(Math.random() * 2);
         if(isPanneMetro == 1)
         {
             this.panneMetro = true;

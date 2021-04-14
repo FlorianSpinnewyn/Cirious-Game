@@ -1,4 +1,4 @@
-class Velo {
+class StationsVelo {
     constructor()
     {
         /*a voir*/
@@ -6,4 +6,4 @@ class Velo {
     
 
 }
-module.exports = Velo;
+module.exports = StationsVelo;
