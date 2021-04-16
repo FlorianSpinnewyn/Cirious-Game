@@ -20,6 +20,7 @@ const { body, validationResult } = require('express-validator');
 
 const { emit } = require('process');
 const { Socket } = require('dgram');
+const Personne = require('./back/models/Personne.js');
 const Mairie = require('./back/models/Mairie.js');
 const Kiosque = require('./back/models/Kiosque.js');
 const Technicentre = require('./back/models/Technicentre.js');
@@ -89,28 +90,71 @@ let stationsMetro = new StationsMetro();
 let stationsVelo = new StationsVelo();
 
 let city = new City(mairie,kiosque,technicentre, parking, garage, atelier, gare, stationsMetro, stationsVelo);
-let myLevel = new Level(city);
 
+let personnes = [];
+for(let i = 0; i < 3; ++i)
+{
+    let personne = new Personne();
+    let rand = Math.floor(Math.random() * 7 + 2);
+    function destination(result)
+    {
+        personne.setDestination(result[0].batiment);
+        personnes.push(personne);
+    }
+    baseDeDonnees.select("SELECT * FROM city WHERE idcity='" + rand + "'", destination);
+}
 
+let myLevel = new Level(city, personnes);
 
 io.on('connection', (socket) =>
 {
-    if(myLevel.city.mairie.panneMetro == false)
-    {
-        myLevel.city.mairie.evenementMetro();
-    }
-    if(myLevel.city.mairie.panneTrain == false)
-    {
-        myLevel.city.mairie.evenementTrain();
-    }
-    if(myLevel.city.mairie.manqueVelo == false)
-    {
-        myLevel.city.mairie.evenementVelo();
-    }
-    if(myLevel.city.mairie.embouteillage == false)
-    {
-        myLevel.city.mairie.evenementEmbouteillage();
-    }
+    
+    /**------------Initialisation des niveaux-----------**/
+    socket.on("initialisationLevel", (numeroLevel) => {
+        mylevel.reset();
+        myLevel.InitalisationLevel(numeroLevel);
+
+        socket.emit("initialisationViewLevel", myLevel.numLevel);
+    });
+
+
+    /** Affichage plusieurs boutons de personnes **/
+    socket.emit("boutonsPersonnes", myLevel.personnes);
+
+    
+    /**------------Requete des pannes-----------**/
+    socket.on("MiseAJour", () => {
+        
+        if(myLevel.city.mairie.panneMetro == false)
+        {
+            myLevel.city.mairie.evenementMetro();
+        }
+        if(myLevel.city.mairie.panneTrain == false)
+        {
+            myLevel.city.mairie.evenementTrain();
+        }
+        if(myLevel.city.mairie.manqueVelo == false)
+        {
+            myLevel.city.mairie.evenementVelo();
+        }
+        if(myLevel.city.mairie.embouteillage == false)
+        {
+            myLevel.city.mairie.evenementEmbouteillage();
+        }
+
+        if(!myLevel.city.kiosque.score)
+        {
+            myLevel.city.kiosque.recupScore();
+        }
+        if(!myLevel.city.kiosque.prochainObjectif)
+        {
+            myLevel.city.kiosque.recupProchainObjectif();
+        }
+        if(!myLevel.city.kiosque.badgeDebloque)
+        {
+            myLevel.city.kiosque.recupBadgeDebloque();
+        }
+    });
 
     socket.on("mairie", () => 
     {
@@ -136,19 +180,6 @@ io.on('connection', (socket) =>
         }
         socket.emit("afficheEvenement", metro, train, velo, voiture);
     });
-    
-    if(!myLevel.city.kiosque.score)
-    {
-        myLevel.city.kiosque.recupScore();
-    }
-    if(!myLevel.city.kiosque.prochainObjectif)
-    {
-        myLevel.city.kiosque.recupProchainObjectif();
-    }
-    if(!myLevel.city.kiosque.badgeDebloque)
-    {
-        myLevel.city.kiosque.recupBadgeDebloque();
-    }
 
     socket.on("kiosque", () => 
     {
@@ -260,6 +291,18 @@ io.on('connection', (socket) =>
         let nombreV = 18;
         socket.emit("nombreVelo", nombreV);
     });  
+
+    /*** Personne ****/
+    socket.on("CliquePersonne", (idPersonne) => 
+    {
+        socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination);
+    });
+
+    socket.on("SupprimePersonne", numberPersonne =>
+    {
+        myLevel.personnes.splice(numberPersonne, 1, undefined);
+        console.log(myLevel.personnes);
+    });
 });
 
 http.listen(4235, () =>

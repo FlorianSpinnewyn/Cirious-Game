@@ -4,8 +4,7 @@
           *                                                   *
           * * * * * * * * * * * * * * * * * * * * * * * * * * *                  -->
 
-<!-- 
--->
+
  
 <!DOCTYPE html>
 <html>
@@ -35,8 +34,19 @@
 
     <!-- Map -->
     <div id="game" class="fond">
+        <div id="HUD" hidden=true>
+            <div id=time>
+            </div>
+        </div>
         <canvas></canvas>
     </div>
+
+
+    <!-- Demarer -->
+    <div id="level" class="fenetre">
+        <button id="level1" type="button">Demarer Level 1</button>
+    </div>
+
 
     <!-- bouton mairie -->
     <div id="information" class="fenetre">
@@ -174,8 +184,28 @@
         </div>
     </div>
 
+    <!-- bouton personne -->
+    <div id="DestinationPersonne" class="fenetre">
+        <div class="personne content">
+            <div class="clearfix">
+                <button id="aplus" class="btn btn-outline-dark cancel" name="aplus" type="button">X</button>
+            </div>
+            <div class="destPersonne">
+                <br><br>
+                <div>Je voudrais aller <span id="dest"></span></div>
+                <div id="transport">
+                    <button id="transportPied">Pied</button>
+                    <button id="transportVélo">Vélo</button>
+                    <button id="transportMetro">Métro</button>
+                    <button id="transportTrain">Train</button>
+                </div>
+                <div id="idPersonne" hidden=true></div>
+            </div>
+        </div>
+    </div>
+
     <div id="button">
-        <button id='Personne'><span>Personne</span></button>
+        <div id='Personnes'></div>
         <button id='Mairie'><span>Mairie</span></button>
         <button id='Kiosque'><span>Kiosque</span></button>
         <button id='Technicentre'><span>Technicentre</span></button>

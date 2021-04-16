@@ -4,10 +4,22 @@
                             *                                                   *
                             * * * * * * * * * * * * * * * * * * * * * * * * * * *                  */
 
+/*** Demarer un niveau ***/
+document.getElementById('level1').addEventListener("click", event =>
+{
+    socket.emit("initialisationLevel", Parseint(document.getElementById('level1').id.substr(5)));
+});
+
+socket.on("initialisationViewLevel", numeroLevel => {
+    document.getElementById("HUD").hidden = false;
+
+    
+});
 
 
-
+socket.emit("MiseAJour");
 /*** Alertes ***/
+
 
 /*** Mairie ***/
 document.getElementById('Mairie').addEventListener("click", event =>
@@ -112,7 +124,7 @@ socket.on("pasRepTrain", () => {
     document.getElementById("probTrain").hidden = true;
 });
 
-socket.on("RepTrain", () => {
+socket.on("RepTrain", () => { 
     document.getElementById("parfait").hidden = true;
     document.getElementById("probTrain").hidden = false;
 });
@@ -276,3 +288,79 @@ document.getElementById('aurevoir').addEventListener("click", event =>
     document.getElementById('veloRestants').style.display='none';
     console.log("Nous avons quitté la station de vélo.");
 });
+
+/*** Personne ***/
+socket.on("boutonsPersonnes", personnes => 
+{
+    let chaine = "";
+    for(let i = 0; i < personnes.length; ++i)
+    {
+        chaine += "<button id='Personne" + i + "'>Personnne</button>";
+
+    }
+    document.getElementById("Personnes").innerHTML = chaine;
+});
+
+document.getElementById('Personnes').addEventListener("click", event =>
+{
+    console.log("On a cliqué sur une personne.");
+    let id = event.target.id.charAt(8);
+    document.getElementById("idPersonne").innerHTML = id;
+    socket.emit("CliquePersonne", id);
+});
+
+socket.on("AfficheDestination", (destination) => 
+{
+    if(destination == "Campagne")
+    {
+        destination = "à la " + destination;
+    }
+    else if(destination == "Ecole")
+    {
+        destination = "à l'" + destination;
+    }
+    else if(destination == "Magasins")
+    {
+        destination = "aux " + destination;
+    }
+    else
+    {
+        destination = "au " + destination;
+    }
+    console.log("Cette personne souhaite aller ", destination);
+    document.getElementById("dest").innerHTML = destination;
+    document.getElementById('DestinationPersonne').style.display='block';
+});
+
+document.getElementById("transport").addEventListener("click", event =>
+{
+    let typeTransport = event.target.id;
+    console.log(typeTransport);
+    let numberPersonne = document.getElementById("idPersonne").innerHTML;
+    console.log(numberPersonne);
+    let pers = document.getElementById("Personne" + numberPersonne);
+    document.getElementById("Personnes").removeChild(pers);
+    document.getElementById('DestinationPersonne').style.display='none';
+    socket.emit("SupprimePersonne", numberPersonne);
+});
+
+document.getElementById('aplus').addEventListener("click", event => 
+{ 
+    document.getElementById('DestinationPersonne').style.display='none';
+});
+
+function startTime(date) {
+    // Update the count down every 1 second
+    var countdownfunction = setInterval(function() {
+
+    // Time calculations for days, hours, minutes and seconds
+    var hours = Math.floor((date % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((date % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((date + 1 % (1000 * 60)) / 1000);
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("time").innerHTML = hours + "h "
+    + minutes + "m " + seconds + "s ";
+    
+  }, 1000);
+}

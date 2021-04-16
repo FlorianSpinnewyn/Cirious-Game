@@ -26,6 +26,15 @@ class City {
             this.stationsMetro.push(stationsMetro);
         }
     }
+
+    reset() {
+        this.atelier.reset();
+        this.garage.reset();
+        this.kiosque.reset();
+        this.mairie.reset();
+        this.parking.reset();
+        this.technicentre.reset();
+    }
     
 }
 

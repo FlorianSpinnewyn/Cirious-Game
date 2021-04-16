@@ -7,5 +7,9 @@ class Parking {
     evenementRepare(){
         this.repare = true;
     }
+
+    reset() {
+        this.repare = true;
+    }
 }
 module.exports = Parking;

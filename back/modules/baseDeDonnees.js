@@ -27,13 +27,11 @@ let baseDeDonnees = (function() {
     {
       con.query(r, params, (err,result) => {
         if(err) throw err;
-        console.log("resultat du change : ", result);
       });
     }
   
     function getConnection(r, isSelect, params) 
     {
-      console.log(r, params);
       if(isSelect)
       {
         select(r, params);

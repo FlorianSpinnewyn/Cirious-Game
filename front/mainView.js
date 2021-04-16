@@ -12,9 +12,9 @@ animate()
 function init()
 {
     /**------Affichage FPS------**/
-    stats = new Stats()
-    stats.showPanel(0)
-    document.body.appendChild(stats.dom)
+    //stats = new Stats()
+    //stats.showPanel(0)
+    //document.body.appendChild(stats.dom)
 
     /**------Scene et Fog------**/
     scene = new THREE.Scene();
@@ -87,9 +87,9 @@ function init()
 
 function animate()
 {
-    stats.begin()
+    //stats.begin()
     requestAnimationFrame( animate );
     controls.update();
     renderer.render( scene, camera );
-    stats.end()
+    //stats.end()
 }

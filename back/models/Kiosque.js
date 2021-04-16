@@ -25,6 +25,10 @@ class Kiosque {
         this.prochainObjectif = 'Faire un bouquet de fleurs';
         return this.prochainObjectif;
     }
+
+    reset() {
+        this.score = 0;
+    }
 }
 
 module.exports = Kiosque;

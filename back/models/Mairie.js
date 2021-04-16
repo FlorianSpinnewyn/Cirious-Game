@@ -34,6 +34,14 @@ class Mairie {
     {
         this.manqueVelo = true;
     }
+
+    reset()
+    {
+        this.panneMetro = false;
+        this.panneTrain = false;
+        this.manqueVelo = false;
+        this.embouteillage = false;
+    }
 }
 
 module.exports = Mairie;
