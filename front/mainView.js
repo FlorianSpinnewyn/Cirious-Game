@@ -1,10 +1,13 @@
 import { MapControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+
+
 let camera,
     scene,
     controls,
     renderer,
     stats,
     light;
+    
 
 init()
 animate()
@@ -12,9 +15,9 @@ animate()
 function init()
 {
     /**------Affichage FPS------**/
-    //stats = new Stats()
-    //stats.showPanel(0)
-    //document.body.appendChild(stats.dom)
+    stats = new Stats()
+    stats.showPanel(0)
+    document.body.appendChild(stats.dom)
 
     /**------Scene et Fog------**/
     scene = new THREE.Scene();
@@ -33,7 +36,7 @@ function init()
     light = new THREE.DirectionalLight(0x9a9a9a, 1)
     light.position.set(-300, 750, -300)
     light.rotation.y=Math.PI/4
-    light.castShadow = false
+    light.castShadow = true
     light.shadow.mapSize.width = 2048;  // default
     light.shadow.mapSize.height = 2048; // default
     light.shadow.camera.near = .5;       // default
@@ -47,7 +50,7 @@ function init()
     /**------Rendu-----**/
     renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector('canvas'),
-        antialias: true,
+        antialias: false,
     })
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -62,7 +65,7 @@ function init()
     controls.screenSpacePanning = false;
     controls.minDistance = 1;
     controls.maxDistance = 50;
-    controls.maxPolarAngle = Math.PI / 2;
+    controls.maxPolarAngle = 3*Math.PI / 8;
 
     /**------Axe-----**/
     const axesHelper = new THREE.AxesHelper( 5 );
@@ -82,14 +85,96 @@ function init()
         scene.add(gltf.scene);
     });
 
+    let interaction = new THREE.Interaction(renderer, scene, camera);
+    
+    /**------mairie-----**/
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const material = new THREE.MeshBasicMaterial( {color: 0xFF0000} );
+    const cube = new THREE.Mesh( geometry, material );
+    cube.position.set(-10,0,-11)
+    scene.add( cube );
+    cube.cursor = 'pointer';
+    cube.on('click', function(ev){socket.emit("mairie");});
+
+    /**------kiosque-----**/
+    const geometry2 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube2 = new THREE.Mesh( geometry2, material );
+    cube2.position.set(17,0,-15)
+    scene.add( cube2 );
+    cube2.cursor = 'pointer';
+    cube2.on('click', function(ev){socket.emit("kiosque");});
+
+
+    /**------Tecnhicentre-----**/
+    const geometry3 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube3 = new THREE.Mesh( geometry3, material );
+    cube3.position.set(19,0,11)
+    scene.add( cube3 );
+    cube3.cursor = 'pointer';
+    cube3.on('click', function(ev){
+        console.log("Nous sommes au Technicentre :)");
+        document.getElementById('reparationTrain').style.display='block';
+        socket.emit("technicentre");
+    });
+
+    /**------Parking-----**/
+    const geometry4 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube4 = new THREE.Mesh( geometry4, material );
+    cube4.position.set(-10,0,5)
+    scene.add( cube4 );
+    cube4.cursor = 'pointer';
+    cube4.on('click', function(ev){
+        console.log("Nous sommes au parking :)");
+        document.getElementById('reparationVoiture').style.display='block';
+        socket.emit("parking");
+    });
+
+    /**------Garage-----**/
+    const geometry5 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube5 = new THREE.Mesh( geometry5, material );
+    cube5.position.set(-17,0,12)
+    scene.add( cube5 );
+    cube5.cursor = 'pointer';
+    cube5.on('click', function(ev){
+        console.log("Nous sommes au garage :)");
+        document.getElementById('stockVelo').style.display='block';
+        socket.emit("garage");
+    });
+
+    /**------Atelier-----**/
+    const geometry6 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube6 = new THREE.Mesh( geometry6, material );
+    cube6.position.set(1,0,4)
+    scene.add( cube6 );
+    cube6.cursor = 'pointer';
+    cube6.on('click', function(ev){
+        console.log("Nous sommes à l'atelier :)");
+        document.getElementById('reparationMetro').style.display='block';
+        socket.emit("atelier");
+    });
+
+    /**------Gare-----**/
+    const geometry7 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube7 = new THREE.Mesh( geometry7, material );
+    cube7.position.set(-1,0,-17)
+    scene.add( cube7 );
+    cube7.cursor = 'pointer';
+    cube7.on('click', function(ev){
+        console.log("Nous sommes à la gare :)");
+        document.getElementById('horaireTrain').style.display='block';
+        socket.emit("gare");
+    });
+
+
+
 
 }
 
 function animate()
 {
-    //stats.begin()
+    stats.begin()
     requestAnimationFrame( animate );
     controls.update();
     renderer.render( scene, camera );
-    //stats.end()
+    stats.end()
 }

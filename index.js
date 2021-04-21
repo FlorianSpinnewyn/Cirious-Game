@@ -95,20 +95,42 @@ let personnes = [];
 for(let i = 0; i < 3; ++i)
 {
     let personne = new Personne();
-    let rand = Math.floor(Math.random() * 7 + 2);
+    let rand1 = Math.floor(Math.random() * 7 + 2);
     function destination(result)
     {
         personne.setDestination(result[0].batiment);
         personnes.push(personne);
     }
-    baseDeDonnees.select("SELECT * FROM city WHERE idcity='" + rand + "'", destination);
+    baseDeDonnees.select("SELECT * FROM city WHERE idcity='" + rand1 + "'", destination);
+    let rand2 = Math.floor(Math.random() * 2);
+    let rand3 = Math.floor(Math.random() * 3);
+    switch(rand3)
+    {
+        case 0 : rand3 = 7;
+        break;
+        case 1 : rand3 = 9;
+        break;
+        case 2 : rand3 = 11;
+        break;
+    }
+    let rand4 = Math.floor(Math.random() * 4);
+    switch(rand4)
+    {
+        case 0 : rand4 = "N";
+        break;
+        case 1 : rand4 = "E";
+        break;
+        case 2 : rand4 = "O";
+        break;
+        case 3 : rand4 = "S";
+    }
+    personne.setDepart(rand2 + "." + rand3 + "." + rand4);
 }
 
 let myLevel = new Level(city, personnes);
 
 io.on('connection', (socket) =>
 {
-    
     /**------------Initialisation des niveaux-----------**/
     socket.on("initialisationLevel", (numeroLevel) => {
         mylevel.reset();
@@ -296,6 +318,26 @@ io.on('connection', (socket) =>
     socket.on("CliquePersonne", (idPersonne) => 
     {
         socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination);
+    });
+
+    socket.on("GetMove", (numberPersonne, typeTransport) =>
+    {
+        typeTransport = typeTransport.substring(9).toLowerCase();
+        function idTransport(result1)
+        {
+            let idtransport = result1[0].idtransport;
+            function idBatiment(result2)
+            {
+                let idbatiment = result2[0].idcity;
+                function trajet(result3)
+                {
+                    console.log(result3);
+                }
+                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idTransport + "' AND depart='" + myLevel.personnes[numberPersonne].depart + "'");
+            }
+            baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + numberPersonne + "'", idBatiment);
+        }
+        baseDeDonnees.select("SELECT * FROM transport WHERE type='" + typeTransport + "'", idTransport);
     });
 
     socket.on("SupprimePersonne", numberPersonne =>

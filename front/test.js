@@ -22,10 +22,6 @@ socket.emit("MiseAJour");
 
 
 /*** Mairie ***/
-document.getElementById('Mairie').addEventListener("click", event =>
-{
-    socket.emit("mairie");
-});
 
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
 {
@@ -81,10 +77,6 @@ document.getElementById('cancel').addEventListener("click", event =>
 });
 
 /*** Kiosque ***/
-document.getElementById('Kiosque').addEventListener("click", event =>
-{
-    socket.emit("kiosque");
-});
 
 socket.on("afficheActualite", (score, prochainObjectif, badgeDebloque) => 
 {
@@ -112,12 +104,7 @@ document.getElementById('close').addEventListener("click", event =>
 });
 
 /*** Technicentre ***/
-document.getElementById('Technicentre').addEventListener("click", event =>
-{
-    console.log("Nous sommes au Technicentre :)");
-    document.getElementById('reparationTrain').style.display='block';
-    socket.emit("technicentre");
-});
+
 
 socket.on("pasRepTrain", () => {
     document.getElementById("parfait").hidden = false;
@@ -143,12 +130,6 @@ document.getElementById('croix').addEventListener("click", event =>
 });
 
 /*** Parking ***/
-document.getElementById('Parking').addEventListener("click", event =>
-{
-    console.log("Nous sommes au parking :)");
-    document.getElementById('reparationVoiture').style.display='block';
-    socket.emit("parking");
-});
 
 socket.on("Embouteillage", () => {
     document.getElementById("joie").hidden = true;
@@ -173,12 +154,6 @@ document.getElementById('fermer').addEventListener("click", event =>
 });
 
 /*** Garage ***/
-document.getElementById('Garage').addEventListener("click", event =>
-{
-    console.log("Nous sommes au garage :)");
-    document.getElementById('stockVelo').style.display='block';
-    socket.emit("garage");
-});
 
 socket.on("probVelo", () => {
     document.getElementById("noStress").hidden = true;
@@ -203,12 +178,6 @@ document.getElementById('quitter').addEventListener("click", event =>
 });
 
 /*** Atelier ***/
-document.getElementById('Atelier').addEventListener("click", event =>
-{
-    console.log("Nous sommes à l'atelier :)");
-    document.getElementById('reparationMetro').style.display='block';
-    socket.emit("atelier");
-});
 
 socket.on("probMetro", () => {
     document.getElementById("relax").hidden = true;
@@ -233,12 +202,6 @@ document.getElementById('partir').addEventListener("click", event =>
 });
 
 /*** Gare ***/
-document.getElementById('Gare').addEventListener("click", event =>
-{
-    console.log("Nous sommes à la gare :)");
-    document.getElementById('horaireTrain').style.display='block';
-    socket.emit("gare");
-});
 
 socket.on("prochainTrain", (temps) => {
     document.getElementById("prochainTrain").hidden=false;
@@ -299,6 +262,7 @@ socket.on("boutonsPersonnes", personnes =>
 
     }
     document.getElementById("Personnes").innerHTML = chaine;
+    console.log("cc")
 });
 
 document.getElementById('Personnes').addEventListener("click", event =>
@@ -341,6 +305,7 @@ document.getElementById("transport").addEventListener("click", event =>
     let pers = document.getElementById("Personne" + numberPersonne);
     document.getElementById("Personnes").removeChild(pers);
     document.getElementById('DestinationPersonne').style.display='none';
+    socket.emit("GetMove", numberPersonne, typeTransport);
     socket.emit("SupprimePersonne", numberPersonne);
 });
 
