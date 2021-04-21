@@ -165,8 +165,49 @@ function init()
         socket.emit("gare");
     });
 
+    /**------StationVelo1-----**/
+    const geometry8 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube8 = new THREE.Mesh( geometry8, material );
+    cube8.position.set(-11,0,-17)
+    scene.add( cube8 );
+    cube8.cursor = 'pointer';
+    cube8.on('click', function(ev){
+        console.log("Nous sommes à la station de vélo n°1 :)");
+        document.getElementById('veloRestants').style.display='block';
+        socket.emit("velo", 1);
+    });
 
+    /**------StationVelo3-----**/
+    const geometry9 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube9 = new THREE.Mesh( geometry9, material );
+    cube9.position.set(1,0,-15)
+    scene.add( cube9 );
+    cube9.cursor = 'pointer';
+    cube9.on('click', function(ev){
+        console.log("Nous sommes à la station de vélo n°3 :)");
+        document.getElementById('veloRestants').style.display='block';
+        socket.emit("velo", 3);
+    });
 
+    /**------Stationmetro1-----**/
+    const geometry10 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube10 = new THREE.Mesh( geometry10, material );
+    cube10.position.set(-3,0,-15)
+    scene.add( cube10 );
+    cube10.cursor = 'pointer';
+    cube10.on('click', function(ev){
+
+    });
+
+    /**------Stationmetro10-----**/
+    const geometry11 = new THREE.BoxGeometry( 1, 1, 1 );
+    const cube11 = new THREE.Mesh( geometry11, material );
+    cube11.position.set(1,0,-11)
+    scene.add( cube11 );
+    cube11.cursor = 'pointer';
+    cube11.on('click', function(ev){
+
+    });
 
 }
 

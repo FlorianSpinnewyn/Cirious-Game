@@ -103,16 +103,32 @@ for(let i = 0; i < 3; ++i)
     }
     baseDeDonnees.select("SELECT * FROM city WHERE idcity='" + rand1 + "'", destination);
     let rand2 = Math.floor(Math.random() * 2);
-    let rand3 = Math.floor(Math.random() * 3);
-    switch(rand3)
+    let rand3 = 0;
+    if(rand2 == 0)
     {
-        case 0 : rand3 = 7;
-        break;
-        case 1 : rand3 = 9;
-        break;
-        case 2 : rand3 = 11;
-        break;
+        rand3 = Math.floor(Math.random() * 2);
+        switch(rand3)
+        {
+            case 0 : rand3 = 7;
+            break;
+            case 1 : rand3 = 11;
+            break;
+        }
     }
+    else
+    {
+        rand3 = Math.floor(Math.random() * 3);
+        switch(rand3)
+        {
+            case 0 : rand3 = 7;
+            break;
+            case 1 : rand3 = 9;
+            break;
+            case 2 : rand3 = 11;
+            break;
+        }
+    }
+    
     let rand4 = Math.floor(Math.random() * 4);
     switch(rand4)
     {
@@ -308,9 +324,10 @@ io.on('connection', (socket) =>
         socket.emit("prochainMetro", temps);
     });
 
-    socket.on("velo", () => {
+    socket.on("velo", (nbstation) => {
+        
         //on devra récupérer le nombre de vélos
-        let nombreV = 18;
+        let nombreV = myLevel.city.stationsVelo[nbstation].velosLibre;
         socket.emit("nombreVelo", nombreV);
     });  
 
@@ -333,16 +350,16 @@ io.on('connection', (socket) =>
                 {
                     console.log(result3);
                 }
-                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idTransport + "' AND depart='" + myLevel.personnes[numberPersonne].depart + "'");
+                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + myLevel.personnes[numberPersonne].depart + "'", trajet);
             }
-            baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + numberPersonne + "'", idBatiment);
+            baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + myLevel.personnes[numberPersonne].destination + "'", idBatiment);
         }
         baseDeDonnees.select("SELECT * FROM transport WHERE type='" + typeTransport + "'", idTransport);
     });
 
     socket.on("SupprimePersonne", numberPersonne =>
     {
-        myLevel.personnes.splice(numberPersonne, 1, undefined);
+        myLevel.personnes[numberPersonne].envoye = 1;
         console.log(myLevel.personnes);
     });
 });

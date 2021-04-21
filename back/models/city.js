@@ -20,6 +20,8 @@ class City {
         for(let j = 0; j<20;j++) {
             this.stationsVelo.push(stationsVelo);
         }
+        this.stationsVelo[1].velosLibre = 24;
+        this.stationsVelo[3].velosLibre = 17;
 
         /*Initialisation des 10 stations de métro */
         for(let k = 0; k<4;k++) {

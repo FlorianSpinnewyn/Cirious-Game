@@ -1,7 +1,7 @@
 class StationsVelo {
     constructor()
     {
-        this.velosLibre = 0
+        this.velosLibre = 0;
         /*a voir*/
     }
     

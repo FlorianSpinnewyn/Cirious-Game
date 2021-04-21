@@ -4,6 +4,7 @@ class Personne {
         /*a voir*/
         this.destination = "";
         this.depart="";
+        this.envoye = 0;
     }
     
     setDestination(destination)
