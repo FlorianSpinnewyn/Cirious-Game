@@ -5,6 +5,8 @@ class Mairie {
         this.panneTrain = false;
         this.manqueVelo = false;
         this.embouteillage = false;
+        this.x = -10;
+        this.z = -13;
     }
 
     evenementTrain() 

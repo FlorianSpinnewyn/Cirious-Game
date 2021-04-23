@@ -6,8 +6,10 @@ let camera,
     controls,
     renderer,
     stats,
+    mixer,
     light;
     
+const clock = new THREE.Clock();
 
 init()
 animate()
@@ -83,6 +85,9 @@ function init()
         })
 
         scene.add(gltf.scene);
+
+        mixer = new THREE.AnimationMixer( gltf.scene );
+        mixer.clipAction( gltf.animations[ 0 ] ).play();
     });
 
     let interaction = new THREE.Interaction(renderer, scene, camera);
@@ -91,15 +96,22 @@ function init()
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
     const material = new THREE.MeshBasicMaterial( {color: 0xFF0000} );
     const cube = new THREE.Mesh( geometry, material );
-    cube.position.set(-10,0,-11)
+    cube.position.set(-10,0,-13)
     scene.add( cube );
     cube.cursor = 'pointer';
     cube.on('click', function(ev){socket.emit("mairie");});
 
+    /**------notif ---- mairie-----**/
+    const geom = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    const material2 = new THREE.MeshBasicMaterial( {color: 0xef8607} );
+    const notif = new THREE.Mesh( geom, material2 );
+    notif.position.set(-10,2,-13)
+    scene.add( notif );
+
     /**------kiosque-----**/
     const geometry2 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube2 = new THREE.Mesh( geometry2, material );
-    cube2.position.set(17,0,-15)
+    cube2.position.set(17,0,-17)
     scene.add( cube2 );
     cube2.cursor = 'pointer';
     cube2.on('click', function(ev){socket.emit("kiosque");});
@@ -108,7 +120,7 @@ function init()
     /**------Tecnhicentre-----**/
     const geometry3 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube3 = new THREE.Mesh( geometry3, material );
-    cube3.position.set(19,0,11)
+    cube3.position.set(19,0,9)
     scene.add( cube3 );
     cube3.cursor = 'pointer';
     cube3.on('click', function(ev){
@@ -120,7 +132,7 @@ function init()
     /**------Parking-----**/
     const geometry4 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube4 = new THREE.Mesh( geometry4, material );
-    cube4.position.set(-10,0,5)
+    cube4.position.set(-10,0,3)
     scene.add( cube4 );
     cube4.cursor = 'pointer';
     cube4.on('click', function(ev){
@@ -132,7 +144,7 @@ function init()
     /**------Garage-----**/
     const geometry5 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube5 = new THREE.Mesh( geometry5, material );
-    cube5.position.set(-17,0,12)
+    cube5.position.set(-17,0,10)
     scene.add( cube5 );
     cube5.cursor = 'pointer';
     cube5.on('click', function(ev){
@@ -144,7 +156,7 @@ function init()
     /**------Atelier-----**/
     const geometry6 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube6 = new THREE.Mesh( geometry6, material );
-    cube6.position.set(1,0,4)
+    cube6.position.set(1,0,2)
     scene.add( cube6 );
     cube6.cursor = 'pointer';
     cube6.on('click', function(ev){
@@ -156,19 +168,25 @@ function init()
     /**------Gare-----**/
     const geometry7 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube7 = new THREE.Mesh( geometry7, material );
-    cube7.position.set(-1,0,-17)
+    cube7.position.set(-1,0,-19)
     scene.add( cube7 );
     cube7.cursor = 'pointer';
     cube7.on('click', function(ev){
         console.log("Nous sommes à la gare :)");
         document.getElementById('horaireTrain').style.display='block';
-        socket.emit("gare");
+        socket.emit("gare", 1);
     });
+
+    /**------fleche ---- gare-----**/
+    const geom2 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    const fleche = new THREE.Mesh( geom2, material2 );
+    fleche.position.set(-1,2,-19)
+    scene.add( fleche );
 
     /**------StationVelo1-----**/
     const geometry8 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube8 = new THREE.Mesh( geometry8, material );
-    cube8.position.set(-11,0,-17)
+    cube8.position.set(-11,0,-19)
     scene.add( cube8 );
     cube8.cursor = 'pointer';
     cube8.on('click', function(ev){
@@ -177,10 +195,16 @@ function init()
         socket.emit("velo", 1);
     });
 
+    /**------fleche ---- StationVelo1 -----**/
+    const geom3 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    const fleche1 = new THREE.Mesh( geom3, material2 );
+    fleche1.position.set(-11,2,-19)
+    scene.add( fleche1 );
+
     /**------StationVelo3-----**/
     const geometry9 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube9 = new THREE.Mesh( geometry9, material );
-    cube9.position.set(1,0,-15)
+    cube9.position.set(1,0,-17)
     scene.add( cube9 );
     cube9.cursor = 'pointer';
     cube9.on('click', function(ev){
@@ -189,33 +213,68 @@ function init()
         socket.emit("velo", 3);
     });
 
-    /**------Stationmetro1-----**/
+    /**------fleche ---- StationVelo3-----**/
+    const geom4 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    const fleche2 = new THREE.Mesh( geom4, material2 );
+    fleche2.position.set(1,2,-17)
+    scene.add( fleche2 );
+
+    /**------StationMetro1-----**/
     const geometry10 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube10 = new THREE.Mesh( geometry10, material );
-    cube10.position.set(-3,0,-15)
+    cube10.position.set(-3,0,-17)
     scene.add( cube10 );
     cube10.cursor = 'pointer';
     cube10.on('click', function(ev){
-
+        console.log("Nous sommes à la station de métro n°1 :)");
+        document.getElementById('horaireMetro').style.display='block';
+        socket.emit("metro", 1);
     });
 
-    /**------Stationmetro10-----**/
+    /**------fleche ---- StationMetro1 -----**/
+    const geom5 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    const fleche3 = new THREE.Mesh( geom5, material2 );
+    fleche3.position.set(-3,2,-17)
+    scene.add( fleche3 );
+
+    /**------StationMetro10-----**/
     const geometry11 = new THREE.BoxGeometry( 1, 1, 1 );
     const cube11 = new THREE.Mesh( geometry11, material );
-    cube11.position.set(1,0,-11)
+    cube11.position.set(1,0,-9)
     scene.add( cube11 );
     cube11.cursor = 'pointer';
     cube11.on('click', function(ev){
-
+        console.log("Nous sommes à la station de métro n°10 :)");
+        document.getElementById('horaireMetro').style.display='block';
+        socket.emit("metro", 10);
     });
+
+    /**------fleche ---- StationMetro10 -----**/
+    //const geom6 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    //const fleche4 = new THREE.Mesh( geom6, material2 );
+    //fleche4.position.set(1,2,-9)
+    //scene.add( fleche4 );
+
+    /**------fleche ---- Stade -----**/
+    //const geom7 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
+    //const fleche5 = new THREE.Mesh( geom7, material2 );
+    //fleche5.position.set(1,2,-9)
+    //scene.add( fleche5 );
 
 }
 
 function animate()
 {
     stats.begin()
+
     requestAnimationFrame( animate );
-    controls.update();
+    const delta = clock.getDelta();
+
+    mixer.update( delta );    controls.update();
     renderer.render( scene, camera );
     stats.end()
-}
+
+    
+
+}mixer.update( delta );
+

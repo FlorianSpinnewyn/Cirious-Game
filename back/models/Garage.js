@@ -2,6 +2,8 @@ class Garage {
     constructor()
     {
         this.repare = false;
+        this.x = -17;
+        this.z = 10;
     }
     
     evenementRepare(){

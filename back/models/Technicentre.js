@@ -2,6 +2,8 @@ class Technicentre {
     constructor()
     {
         this.repare = false;
+        this.x = 19;
+        this.z = 9;
     }
     
     evenementRepare(){

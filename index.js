@@ -29,8 +29,8 @@ const Garage = require('./back/models/Garage.js');
 const Atelier = require('./back/models/Atelier.js');
 const City = require('./back/models/city.js');
 const Level = require('./back/models/level.js');
-const StationsMetro = require('./back/models/StationsMetro.js');
-const StationsVelo = require('./back/models/StationsVelo.js');
+const StationMetro = require('./back/models/StationMetro.js');
+const StationVelo = require('./back/models/StationVelo.js');
 const Gare = require('./back/models/gare.js');
 const Transport = require('./back/models/Transport.js');
 const Train = require('./back/models/Train.js');
@@ -78,91 +78,90 @@ app.get('/', (req, res) =>
   }
 });
 
-
-let mairie = new Mairie();
-let kiosque = new Kiosque();
-let technicentre = new Technicentre();
-let parking = new Parking();
-let garage = new Garage();
-let atelier = new Atelier();
-let gare = new Gare();
-let stationsMetro = new StationsMetro();
-let stationsVelo = new StationsVelo();
-
-let city = new City(mairie,kiosque,technicentre, parking, garage, atelier, gare, stationsMetro, stationsVelo);
-
-let personnes = [];
-for(let i = 0; i < 3; ++i)
-{
-    let personne = new Personne();
-    let rand1 = Math.floor(Math.random() * 7 + 2);
-    function destination(result)
-    {
-        personne.setDestination(result[0].batiment);
-        personnes.push(personne);
-    }
-    baseDeDonnees.select("SELECT * FROM city WHERE idcity='" + rand1 + "'", destination);
-    let rand2 = Math.floor(Math.random() * 2);
-    let rand3 = 0;
-    if(rand2 == 0)
-    {
-        rand3 = Math.floor(Math.random() * 2);
-        switch(rand3)
-        {
-            case 0 : rand3 = 7;
-            break;
-            case 1 : rand3 = 11;
-            break;
-        }
-    }
-    else
-    {
-        rand3 = Math.floor(Math.random() * 3);
-        switch(rand3)
-        {
-            case 0 : rand3 = 7;
-            break;
-            case 1 : rand3 = 9;
-            break;
-            case 2 : rand3 = 11;
-            break;
-        }
-    }
-    
-    let rand4 = Math.floor(Math.random() * 4);
-    switch(rand4)
-    {
-        case 0 : rand4 = "N";
-        break;
-        case 1 : rand4 = "E";
-        break;
-        case 2 : rand4 = "O";
-        break;
-        case 3 : rand4 = "S";
-    }
-    personne.setDepart(rand2 + "." + rand3 + "." + rand4);
-}
-
-let myLevel = new Level(city, personnes);
+let myLevel = new Level();
 
 io.on('connection', (socket) =>
 {
     /**------------Initialisation des niveaux-----------**/
     socket.on("initialisationLevel", (numeroLevel) => {
-        mylevel.reset();
-        myLevel.InitalisationLevel(numeroLevel);
+        if(socket.handshake.session.levelEnCours)
+        {
+            myLevel.reset();
+        }
+        socket.handshake.session.levelEnCours = true;
 
+        let personnes = [];
+        //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
+        for(let i = 0; i < 3; ++i)
+        {
+            let personne = new Personne();
+            let rand1 = Math.floor(Math.random() * 7 + 2);
+            switch (rand1)
+            {
+                case 2 : personne.setDestination("Ecole");
+                break;
+                case 3 : personne.setDestination("Campagne");
+                break;
+                case 4 : personne.setDestination("Magasins");
+                break;
+                case 5 : personne.setDestination("Musee");
+                break;
+                case 6 : personne.setDestination("Parc");
+                break;
+                case 7 : personne.setDestination("Restaurant");
+                break;
+                case 8: personne.setDestination("Stade");
+                break;
+            }
+            let rand2 = Math.floor(Math.random() * 2);
+            let rand3 = 0;
+            if(rand2 == 0)
+            {
+                rand3 = Math.floor(Math.random() * 2);
+                switch(rand3)
+                {
+                    case 0 : rand3 = 7;
+                    break;
+                    case 1 : rand3 = 11;
+                    break;
+                }
+            }
+            else
+            {
+                rand3 = Math.floor(Math.random() * 3);
+                switch(rand3)
+                {
+                    case 0 : rand3 = 7;
+                    break;
+                    case 1 : rand3 = 9;
+                    break;
+                    case 2 : rand3 = 11;
+                    break;
+                }
+            }
+    
+            let rand4 = Math.floor(Math.random() * 4);
+            switch(rand4)
+            {
+                case 0 : rand4 = "N";
+                break;
+                case 1 : rand4 = "E";
+                break;
+                case 2 : rand4 = "O";
+                break;
+                case 3 : rand4 = "S";
+            }
+            personne.setDepart(rand2 + "." + rand3 + "." + rand4);
+            personnes.push(personne);
+        }
+        myLevel.initalisationLevel(numeroLevel, personnes);
+        /** Affichage plusieurs boutons de personnes **/
+        socket.emit("boutonsPersonnes", myLevel.personnes);
         socket.emit("initialisationViewLevel", myLevel.numLevel);
     });
-
-
-    /** Affichage plusieurs boutons de personnes **/
-    socket.emit("boutonsPersonnes", myLevel.personnes);
-
     
     /**------------Requete des pannes-----------**/
-    socket.on("MiseAJour", () => {
-        
+    function tafonction(){
         if(myLevel.city.mairie.panneMetro == false)
         {
             myLevel.city.mairie.evenementMetro();
@@ -192,7 +191,11 @@ io.on('connection', (socket) =>
         {
             myLevel.city.kiosque.recupBadgeDebloque();
         }
-    });
+
+        setTimeout(tafonction,5000); /* rappel après 5 secondes = 2000 millisecondes */
+    }
+         
+    tafonction();
 
     socket.on("mairie", () => 
     {
@@ -224,7 +227,7 @@ io.on('connection', (socket) =>
         let score = 0;
         let prochainObjectif = '';
         let badgeDebloque = [];
-        if(kiosque.score != 0)
+        if(myLevel.city.kiosque.score != 0)
         {
             score = myLevel.city.kiosque.recupScore();
         }
@@ -311,25 +314,20 @@ io.on('connection', (socket) =>
     });
     
     /*** Gare ***/
-    socket.on("gare", () => {
-        //on devra récupérer dans combien de temps est le prochain train
-        let temps = 10;
-        socket.emit("prochainTrain", temps);  
+    socket.on("gare", (nbgare) => {
+        let tempsTrain = myLevel.city.gares[nbgare - 1].temps;
+        socket.emit("prochainTrain", tempsTrain);  
     });
     
-    
-    socket.on("metro", () => {
-        //on devra récupérer dans combien de temps est le prochain métro
-        let temps = 20;
-        socket.emit("prochainMetro", temps);
+    socket.on("metro", (nbstation) => {
+        let tempsMetro =  myLevel.city.stationsMetro[nbstation - 1].temps;
+        socket.emit("prochainMetro", tempsMetro);
     });
 
     socket.on("velo", (nbstation) => {
-        
-        //on devra récupérer le nombre de vélos
-        let nombreV = myLevel.city.stationsVelo[nbstation].velosLibre;
+        let nombreV = myLevel.city.stationsVelo[nbstation - 1].velosLibre;
         socket.emit("nombreVelo", nombreV);
-    });  
+    });
 
     /*** Personne ****/
     socket.on("CliquePersonne", (idPersonne) => 

@@ -7,19 +7,15 @@
 /*** Demarer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
-    socket.emit("initialisationLevel", Parseint(document.getElementById('level1').id.substr(5)));
+    socket.emit("initialisationLevel", parseInt(document.getElementById('level1').id.substr(5)));
 });
 
 socket.on("initialisationViewLevel", numeroLevel => {
+    document.getElementById("level").style.display = "none";
     document.getElementById("HUD").hidden = false;
-
-    
 });
 
-
-socket.emit("MiseAJour");
 /*** Alertes ***/
-
 
 /*** Mairie ***/
 
@@ -202,7 +198,6 @@ document.getElementById('partir').addEventListener("click", event =>
 });
 
 /*** Gare ***/
-
 socket.on("prochainTrain", (temps) => {
     document.getElementById("prochainTrain").hidden=false;
     document.getElementById('tempsTrain').innerHTML = temps;
@@ -215,14 +210,8 @@ document.getElementById('bye').addEventListener("click", event =>
 });
 
 /*** Métro ***/
-document.getElementById('Metro').addEventListener("click", event =>
-{
-    console.log("Nous sommes à une station de métro :)");
-    document.getElementById('horaireMetro').style.display='block';
-    socket.emit("metro");
-});
-
 socket.on("prochainMetro", (temps) => {
+    console.log(temps);
     document.getElementById("prochainMetro").hidden=false;
     document.getElementById('tempsMetro').innerHTML = temps;
 });
@@ -234,13 +223,6 @@ document.getElementById('ciao').addEventListener("click", event =>
 });
 
 /*** Vélo ***/
-document.getElementById('Velo').addEventListener("click", event =>
-{
-    console.log("Nous sommes à la station de vélo :)");
-    document.getElementById('veloRestants').style.display='block';
-    socket.emit("velo");
-});
-
 socket.on("nombreVelo", (nombreV) => {
     document.getElementById("nombreVelo").hidden=false;
     document.getElementById('resteVelo').innerHTML = nombreV;

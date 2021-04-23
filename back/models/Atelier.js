@@ -2,6 +2,8 @@ class Atelier {
     constructor()
     {
         this.repare = false;
+        this.x = 1;
+        this.z = 2;
     }
     
     evenementRepare(){

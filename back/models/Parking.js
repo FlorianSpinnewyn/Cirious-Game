@@ -2,6 +2,8 @@ class Parking {
     constructor()
     {
         this.repare = false;
+        this.x = -10;
+        this.z = 3;
     }
     
     evenementRepare(){

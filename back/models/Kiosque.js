@@ -1,9 +1,11 @@
 class Kiosque {
     constructor()
     {
-        this.score;
-        this.badgeDebloque;
-        this.prochainObjectif;
+        this.score = 0;
+        this.badgeDebloque = [];
+        this.prochainObjectif = "";
+        this.x = 17;
+        this.z = -17;
     }
 
     recupScore()
@@ -14,7 +16,7 @@ class Kiosque {
 
     recupBadgeDebloque()
     {
-        for(let i = 0; i++; i<3) {
+        for(let i = 0; i<3; ++i) {
             this.badgeDebloque[i] = 'Badge numéro ' + i;
         }
         return this.badgeDebloque;

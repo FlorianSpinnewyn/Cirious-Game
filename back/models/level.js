@@ -1,27 +1,26 @@
+const City = require("./city");
+
 class Level {
 
-    constructor(city, personnes) {
-        this.numLevel=0;
-        this.city = city;
-        this.personnes = personnes;
-        //this.transport = new Transport(/*A voir*/)
-
-
+    constructor() {
+        this.numLevel = 0;
+        this.city = new City();
+        this.personnes = [];
         /*A voir*/
-
     }
 
-    InitalisationLevel(numerosLevel)
+    initalisationLevel(numerosLevel, personnes)
     {
         this.numLevel = numerosLevel;
+        this.personnes = personnes;
+        //this.transport = new Transport(/*A voir*/)
     }
 
     reset()
     {
-        this.numLevel=0;
-        this.city.reset();
+        this.numLevel = 0;
+        this.personnes = [];
     }
-
 }
 
 module.exports = Level;
