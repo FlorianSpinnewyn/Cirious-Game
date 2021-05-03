@@ -15,6 +15,32 @@ socket.on("initialisationViewLevel", numeroLevel => {
     document.getElementById("HUD").hidden = false;
 });
 
+let heure = 16;
+let minute = 0;
+
+
+
+function startTime(){
+
+    var countdownfunction = setInterval(function() {
+    minute=minute+1;
+
+    if(minute==60) {
+        heure = heure + 1;
+        minute = 0;
+    }
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("time").innerHTML = heure + "h "
+    + minute + "m ";
+    
+    }, 2000);
+
+}
+
+
+startTime();
+
 /*** Alertes ***/
 
 /*** Mairie ***/
@@ -244,7 +270,6 @@ socket.on("boutonsPersonnes", personnes =>
 
     }
     document.getElementById("Personnes").innerHTML = chaine;
-    console.log("cc")
 });
 
 document.getElementById('Personnes').addEventListener("click", event =>
@@ -296,18 +321,4 @@ document.getElementById('aplus').addEventListener("click", event =>
     document.getElementById('DestinationPersonne').style.display='none';
 });
 
-function startTime(date) {
-    // Update the count down every 1 second
-    var countdownfunction = setInterval(function() {
 
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor((date % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((date % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((date + 1 % (1000 * 60)) / 1000);
-    
-    // Output the result in an element with id="demo"
-    document.getElementById("time").innerHTML = hours + "h "
-    + minutes + "m " + seconds + "s ";
-    
-  }, 1000);
-}

@@ -270,11 +270,10 @@ function animate()
     requestAnimationFrame( animate );
     const delta = clock.getDelta();
 
-    mixer.update( delta );    controls.update();
+    mixer.update(delta)   
+    controls.update();
     renderer.render( scene, camera );
     stats.end()
 
-    
-
-}mixer.update( delta );
+}
 
