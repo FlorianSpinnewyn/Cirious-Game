@@ -38,7 +38,7 @@ function init()
     light = new THREE.DirectionalLight(0x9a9a9a, 1)
     light.position.set(-300, 750, -300)
     light.rotation.y=Math.PI/4
-    light.castShadow = true
+    light.castShadow = true;           
     light.shadow.mapSize.width = 2048;  // default
     light.shadow.mapSize.height = 2048; // default
     light.shadow.camera.near = .5;       // default
@@ -52,7 +52,7 @@ function init()
     /**------Rendu-----**/
     renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector('canvas'),
-        antialias: false,
+        antialias: true,
     })
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -93,13 +93,21 @@ function init()
     let interaction = new THREE.Interaction(renderer, scene, camera);
     
     /**------mairie-----**/
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( {color: 0xFF0000} );
-    const cube = new THREE.Mesh( geometry, material );
-    cube.position.set(-10,0,-13)
-    scene.add( cube );
-    cube.cursor = 'pointer';
-    cube.on('click', function(ev){socket.emit("mairie");});
+    loader.load('3d/TestBlender/road/mairie.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){socket.emit("mairie");});
+    });
+
+    const material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
 
     /**------notif ---- mairie-----**/
     const geom = new THREE.BoxGeometry( 0.3, 1, 0.3 );
@@ -118,16 +126,24 @@ function init()
 
 
     /**------Tecnhicentre-----**/
-    const geometry3 = new THREE.BoxGeometry( 1, 1, 1 );
-    const cube3 = new THREE.Mesh( geometry3, material );
-    cube3.position.set(19,0,9)
-    scene.add( cube3 );
-    cube3.cursor = 'pointer';
-    cube3.on('click', function(ev){
-        console.log("Nous sommes au Technicentre :)");
-        document.getElementById('reparationTrain').style.display='block';
-        socket.emit("technicentre");
+    loader.load('3d/TestBlender/road/technicentre.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Nous sommes au Technicentre :)");
+            document.getElementById('reparationTrain').style.display='block';
+            socket.emit("technicentre");
+        });
     });
+   
 
     /**------Parking-----**/
     const geometry4 = new THREE.BoxGeometry( 1, 1, 1 );
@@ -166,15 +182,22 @@ function init()
     });
 
     /**------Gare-----**/
-    const geometry7 = new THREE.BoxGeometry( 1, 1, 1 );
-    const cube7 = new THREE.Mesh( geometry7, material );
-    cube7.position.set(-1,0,-19)
-    scene.add( cube7 );
-    cube7.cursor = 'pointer';
-    cube7.on('click', function(ev){
-        console.log("Nous sommes à la gare :)");
-        document.getElementById('horaireTrain').style.display='block';
-        socket.emit("gare", 1);
+    loader.load('3d/TestBlender/road/gare.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Nous sommes à la gare :)");
+            document.getElementById('horaireTrain').style.display='block';
+            socket.emit("gare", 1);
+        });
     });
 
     /**------fleche ---- gare-----**/
