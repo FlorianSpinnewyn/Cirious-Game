@@ -117,12 +117,19 @@ function init()
     scene.add( notif );
 
     /**------kiosque-----**/
-    const geometry2 = new THREE.BoxGeometry( 1, 1, 1 );
-    const cube2 = new THREE.Mesh( geometry2, material );
-    cube2.position.set(17,0,-17)
-    scene.add( cube2 );
-    cube2.cursor = 'pointer';
-    cube2.on('click', function(ev){socket.emit("kiosque");});
+    loader.load('3d/TestBlender/road/kiosque.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){socket.emit("kiosque");});
+    });
 
 
     /**------Tecnhicentre-----**/
