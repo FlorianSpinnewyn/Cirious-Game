@@ -163,7 +163,7 @@ io.on('connection', (socket) =>
                     case 3 : rand4 = "S";
                 }
                 personne.setDepart(rand2 + "." + rand3 + "." + rand4);
-                myLevel.personnesTab.push(personne);
+                myLevel.personnes.push(personne);
             }
 
             console.log(myLevel);
@@ -179,24 +179,7 @@ io.on('connection', (socket) =>
     });
     
     /**------------Requete des pannes-----------**/
-    function tafonction(){
-        if(myLevel.city.mairie.panneMetro == false)
-        {
-            myLevel.city.mairie.evenementMetro();
-        }
-        if(myLevel.city.mairie.panneTrain == false)
-        {
-            myLevel.city.mairie.evenementTrain();
-        }
-        if(myLevel.city.mairie.manqueVelo == false)
-        {
-            myLevel.city.mairie.evenementVelo();
-        }
-        if(myLevel.city.mairie.embouteillage == false)
-        {
-            myLevel.city.mairie.evenementEmbouteillage();
-        }
-
+    function myFunction(){
         if(!myLevel.city.kiosque.score)
         {
             myLevel.city.kiosque.recupScore();
@@ -210,10 +193,10 @@ io.on('connection', (socket) =>
             myLevel.city.kiosque.recupBadgeDebloque();
         }
 
-        setTimeout(tafonction,5000); /* rappel après 5 secondes = 2000 millisecondes */
+        setTimeout(myFunction,5000); /* rappel après 5 secondes = 2000 millisecondes */
     }
          
-    tafonction();
+    myFunction();
 
     socket.on("mairie", () => 
     {
@@ -348,9 +331,42 @@ io.on('connection', (socket) =>
     });
 
     /*** Personne ****/
+    socket.on("ChronoPersonnes", () =>
+    {
+        for(let i = 0; i < myLevel.personnes.length; ++i)
+        {
+            let temps = myLevel.personnes[i].count(15); //La personne disparaît au bout de 15 secondes
+            if(temps == 1) //la personne disparaît et prend la voiture
+            {
+                myLevel.personnes[i].envoye = 1;
+                socket.emit("PersonneDisparait", i);
+            }
+        }
+    });
+
+    socket.on("NouvellePersonne", () =>
+    {
+        for(let i = 0; i < myLevel.personnes.length; ++i) 
+        //pour chaque personne on teste si elle doit apparaître ou pas
+        {
+            if(myLevel.personnes[i].apparue == false)
+            {
+                let isAppeared = Math.floor(Math.random() * 100);
+                if(isAppeared < 90) //20% de chances d'apparaître toutes les 15 minutes
+                {
+                    myLevel.personnes[i].apparue = true;
+                    socket.emit("PersonneApparue", i);
+                }
+            }
+        }
+    });
+
     socket.on("CliquePersonne", (idPersonne) => 
     {
-        socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination);
+        if(myLevel.personnes[idPersonne].envoye != 1)
+        {
+            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination);
+        }
     });
 
     socket.on("GetMove", (numberPersonne, typeTransport) =>
@@ -377,6 +393,28 @@ io.on('connection', (socket) =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;
         console.log(myLevel.personnes);
+    });
+
+    socket.on("DiminueVelo", () => 
+    {
+        myLevel.city.stationsVelo[2].velosLibre -= 1;
+        if(myLevel.city.stationsVelo[2].velosLibre == 0)
+        {
+            myLevel.city.mairie.evenementVelo();
+        }
+    });
+
+    /*** Quitter le niveau en cours : Reset ***/
+    socket.on("Retry", () =>
+    {
+        let level = myLevel.numLevel;
+        myLevel.reset();
+        socket.emit("ReinitialisationLevel", level);
+    });
+
+    socket.on("QuitterJeu", () =>
+    {
+        myLevel.reset();
     });
 });
 

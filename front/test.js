@@ -4,6 +4,48 @@
                             *                                                   *
                             * * * * * * * * * * * * * * * * * * * * * * * * * * *                  */
 
+//variables qui seront dans la base de données et qu'on devra récupérer :
+let heurePanneTrain = 20; //evenement Train tous les 20 min
+let heurePanneMetro = 10;
+let modulo = 15;
+
+chrono = new Chrono();
+
+setInterval(function() {
+    chrono.count();
+    socket.emit("ChronoPersonnes");
+    let heure = "";
+    let minute = "";
+    if(chrono.heure < 10)
+    {
+        heure = '0' + chrono.heure;
+    }
+    else
+    {
+        heure = chrono.heure;
+    }
+    if(chrono.minute < 10)
+    {
+        minute = '0' + chrono.minute;
+    }
+    else
+    {
+        minute = chrono.minute;
+    }
+    document.getElementById("time").innerHTML = heure + "h " + minute + "m ";
+    if((chrono.heure * 60 + chrono.minute) % modulo == 0)
+    {
+        socket.emit("NouvellePersonne");
+    }
+    if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
+    {
+        socket.emit("HeurePanneTrain");
+    }
+    if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
+    {
+        socket.emit("HeurePanneMetro");
+    }
+}, 2000);
 
 /*** Menu ***/
 document.getElementById('play').addEventListener("click", event =>
@@ -25,33 +67,118 @@ socket.on("initialisationViewPlay", (tabLevel) => {
 /*** Demarer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
+    chrono.restart();
+    chrono.continuer();
     socket.emit("initialisationLevel", "1");
 });
 document.getElementById('level2').addEventListener("click", event =>
 {
+    chrono.restart();
+    chrono.continuer();
     socket.emit("initialisationLevel", "2");
 });
 document.getElementById('level3').addEventListener("click", event =>
 {
+    chrono.restart();
+    chrono.continuer();
     socket.emit("initialisationLevel", "3");
 });
 document.getElementById('level4').addEventListener("click", event =>
 {
+    chrono.restart();
+    chrono.continuer();
     socket.emit("initialisationLevel", "4");
 });
 document.getElementById('level5').addEventListener("click", event =>
 {
+    chrono.restart();
+    chrono.continuer();
     socket.emit("initialisationLevel", "5");
 });
 
 socket.on("initialisationViewLevel", numeroLevel => {
     document.getElementById("level").style.display = "none";
+    document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
 });
 
 
+document.getElementById("pause").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'block';
+    document.getElementById("pause").hidden = true;
+    chrono.mettrePause();
+});
+
+document.getElementById("cog").addEventListener("click", event => 
+{
+    document.getElementById("menuPause").style.display = 'none';
+    document.getElementById("level").style.display = 'none';
+    document.getElementById("menuParametre").style.display = 'block';
+});
+
+
+document.getElementById("retour").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'block';
+    document.getElementById("menuParametre").style.display = 'none';
+});
+
+document.getElementById("continuer").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'none';
+    document.getElementById("pause").hidden = false;
+    chrono.continuer();
+});
+
+document.getElementById("quitterJeu").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'none';
+    document.getElementById("alerteQuit").style.display = 'block';
+});
+
+document.getElementById("recommencer").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'none';
+    document.getElementById("alerteRetry").style.display = 'block';
+});
+
+document.getElementById("retry").addEventListener("click", event =>
+{
+    document.getElementById("alerteRetry").style.display = 'none';
+    document.getElementById("pause").hidden = false;
+    chrono.restart();
+    chrono.continuer();
+    socket.emit("Retry");
+});
+
+document.getElementById("quit").addEventListener("click", event =>
+{
+    document.getElementById("level").style.display = 'block';
+    document.getElementById("alerteQuit").style.display = 'none';
+    socket.emit("QuitterJeu");
+});
+
+document.getElementById("annulerRetry").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'block';
+    document.getElementById("alerteRetry").style.display = 'none';
+});
+
+document.getElementById("annulerQuit").addEventListener("click", event =>
+{
+    document.getElementById("menuPause").style.display = 'block';
+    document.getElementById("alerteQuit").style.display = 'none';
+});
+
+socket.on("ReinitialisationLevel", (idlevel) =>
+{
+    socket.emit("initialisationLevel", idlevel);
+});
+
+
 /*** temps ***/
-let heure = 16;
+/*let heure = 16;
 let minute = 0;
 
 function startTime(){
@@ -73,7 +200,7 @@ function startTime(){
 }
 
 
-startTime();
+startTime();*/
 
 /*** Alertes ***/
 
@@ -295,13 +422,26 @@ document.getElementById('aurevoir').addEventListener("click", event =>
 });
 
 /*** Personne ***/
+function evenementClickPersonne(e)
+{
+    console.log("On a cliqué sur une personne.");
+    let id = e.target.id.charAt(8);
+    document.getElementById("idPersonne").innerHTML = id;
+    socket.emit("CliquePersonne", id);
+}
+
+socket.on("PersonneApparue", (idPersonne) =>
+{
+    document.getElementById('Personne' + idPersonne).hidden = false;
+    document.getElementById('Personne' + idPersonne).addEventListener("click", evenementClickPersonne);
+});
+
 socket.on("boutonsPersonnes", personnes => 
 {
     let chaine = "";
     for(let i = 0; i < personnes.length; ++i)
     {
-        chaine += "<button id='Personne" + i + "'>Personnne</button>";
-
+        chaine += "<button id='Personne" + i + "' style='z-index:2;' hidden=true>Personne</button>";
     }
     document.getElementById("Personnes").innerHTML = chaine;
 });
@@ -337,6 +477,12 @@ socket.on("AfficheDestination", (destination) =>
     document.getElementById('DestinationPersonne').style.display='block';
 });
 
+socket.on("PersonneDisparait", idPersonne =>
+{
+    let pers = document.getElementById("Personne" + idPersonne);
+    document.getElementById("Personnes").removeChild(pers);
+});
+
 document.getElementById("transport").addEventListener("click", event =>
 {
     let typeTransport = event.target.id;
@@ -355,4 +501,12 @@ document.getElementById('aplus').addEventListener("click", event =>
     document.getElementById('DestinationPersonne').style.display='none';
 });
 
+/**Menu volume */
+var slider = document.getElementById("myRange");
+var output = document.getElementById("value");
+output.innerHTML = slider.value; // Display the default slider value
 
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+} 

@@ -5,7 +5,7 @@ class Level {
     constructor() {
         this.numLevel = 0;
         this.city = new City();
-        this.personnesTab = [];
+        this.personnes = [];
         this.nbPersonnes=0;
         this.nbVoituresMax=0;
         this.nbSecondsPersonne=0;
@@ -19,7 +19,7 @@ class Level {
     /**
     * Initialise les variables d'un niveaux lorsque le joueur le commence
     * @param { int } numerosLevel = numéro du niveau
-    * @param { personnes } Tabpersonnes = tableaux des personnes a deplace durant le niveaux initialisé préalablement
+    * @param { personnes } personnes = tableaux des personnes a deplace durant le niveaux initialisé préalablement
     * @param { int } nbPersonnes_ = nombre de personnes a deplacé
     * @param { int } nbVoituresMax_ = nombre de voitures max avant de perdre
     * @param { int } nbSecondsPersonne_ = nombre de secondes avant que le joueur prend ca voiture
@@ -40,18 +40,17 @@ class Level {
         this.pollutionMax=pollutionMax_;
     }
 
-    /**
-    * Initialise le tableau de personnes
-    * @param { personnes } tabPersonnes_ = tableaux des personnes a deplace durant le niveaux initialisé préalablement
-    */
-    initialisationTabPersonne(tabPersonnes_) {
-        this.personnesTab = tabPersonnes_;
-    }
+
 
     reset()
     {
         this.numLevel = 0;
         this.personnes = [];
+        this.city.atelier.reset();
+        this.city.garage.reset();
+        this.city.technicentre.reset();
+        this.city.parking.reset();
+        this.city.mairie.reset();
     }
 }
 
