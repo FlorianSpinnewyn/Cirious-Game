@@ -37,6 +37,7 @@ const Train = require('./back/models/Train.js');
 const Velo = require('./back/models/Velo.js');
 const Metro = require('./back/models/Metro.js');
 const Pied = require('./back/models/Pied.js');
+const Game = require('./back/models/Game.js');
 const baseDeDonnees = require('./back/modules/baseDeDonnees.js');
 
 const jsonParser = bodyParser.json();
@@ -79,9 +80,15 @@ app.get('/', (req, res) =>
 });
 
 let myLevel = new Level();
+let myGame = new Game();
+
 
 io.on('connection', (socket) =>
 {
+    /**------------Initialisation du home---------------**/
+    socket.on("initialisationPlay", () => {
+        socket.emit("initialisationViewPlay", myGame.tabLevel);
+    })
     /**------------Initialisation des niveaux-----------**/
     socket.on("initialisationLevel", (numeroLevel) => {
         if(socket.handshake.session.levelEnCours)
@@ -90,74 +97,85 @@ io.on('connection', (socket) =>
         }
         socket.handshake.session.levelEnCours = true;
 
-        let personnes = [];
-        //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
-        for(let i = 0; i < 3; ++i)
-        {
+    //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
+        
+        function findLevel(result4) {
+            myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
+
             let personne = new Personne();
-            let rand1 = Math.floor(Math.random() * 7 + 2);
-            switch (rand1)
-            {
-                case 2 : personne.setDestination("Ecole");
-                break;
-                case 3 : personne.setDestination("Campagne");
-                break;
-                case 4 : personne.setDestination("Magasins");
-                break;
-                case 5 : personne.setDestination("Musee");
-                break;
-                case 6 : personne.setDestination("Parc");
-                break;
-                case 7 : personne.setDestination("Restaurant");
-                break;
-                case 8: personne.setDestination("Stade");
-                break;
-            }
-            let rand2 = Math.floor(Math.random() * 2);
-            let rand3 = 0;
-            if(rand2 == 0)
-            {
-                rand3 = Math.floor(Math.random() * 2);
-                switch(rand3)
+            for(let i = 0; i<myLevel.nbPersonnes;i++) {
+                personne.reset();
+
+                let rand1 = Math.floor(Math.random() * 7 + 2);
+                switch (rand1)
                 {
-                    case 0 : rand3 = 7;
+                    case 2 : personne.setDestination("Ecole");
                     break;
-                    case 1 : rand3 = 11;
+                    case 3 : personne.setDestination("Campagne");
+                    break;
+                    case 4 : personne.setDestination("Magasins");
+                    break;
+                    case 5 : personne.setDestination("Musee");
+                    break;
+                    case 6 : personne.setDestination("Parc");
+                    break;
+                    case 7 : personne.setDestination("Restaurant");
+                    break;
+                    case 8: personne.setDestination("Stade");
                     break;
                 }
-            }
-            else
-            {
-                rand3 = Math.floor(Math.random() * 3);
-                switch(rand3)
+                let rand2 =Math.floor(Math.random() * 2);
+                let rand3=0;
+                if(rand2 == 0)
                 {
-                    case 0 : rand3 = 7;
-                    break;
-                    case 1 : rand3 = 9;
-                    break;
-                    case 2 : rand3 = 11;
-                    break;
+                    rand3 =Math.floor(Math.random() * 2);
+                    switch(rand3)
+                    {
+                        case 0 : rand3 = 7;
+                        break;
+                        case 1 : rand3 = 11;
+                        break;
+                    }
                 }
+                else
+                {
+                    rand3 = Math.floor(Math.random() * 3);
+                    switch(rand3)
+                    {
+                        case 0 : rand3 = 7;
+                        break;
+                        case 1 : rand3 = 9;
+                        break;
+                        case 2 : rand3 = 11;
+                        break;
+                    }
+                }
+        
+                let rand4 = Math.floor(Math.random() * 4);
+                switch(rand4)
+                {
+                    case 0 : rand4 = "N";
+                    break;
+                    case 1 : rand4 = "E";
+                    break;
+                    case 2 : rand4 = "O";
+                    break;
+                    case 3 : rand4 = "S";
+                }
+                personne.setDepart(rand2 + "." + rand3 + "." + rand4);
+                myLevel.personnesTab.push(personne);
             }
+
+            console.log(myLevel);
     
-            let rand4 = Math.floor(Math.random() * 4);
-            switch(rand4)
-            {
-                case 0 : rand4 = "N";
-                break;
-                case 1 : rand4 = "E";
-                break;
-                case 2 : rand4 = "O";
-                break;
-                case 3 : rand4 = "S";
-            }
-            personne.setDepart(rand2 + "." + rand3 + "." + rand4);
-            personnes.push(personne);
+            //myLevel.initialisationTabPersonne(personnes);
+    
+            /** Affichage plusieurs boutons de personnes **/
+            socket.emit("boutonsPersonnes", myLevel.personnes);
+            socket.emit("initialisationViewLevel", myLevel.numLevel);
         }
-        myLevel.initalisationLevel(numeroLevel, personnes);
-        /** Affichage plusieurs boutons de personnes **/
-        socket.emit("boutonsPersonnes", myLevel.personnes);
-        socket.emit("initialisationViewLevel", myLevel.numLevel);
+        baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
+
     });
     
     /**------------Requete des pannes-----------**/

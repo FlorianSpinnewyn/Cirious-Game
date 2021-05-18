@@ -11,8 +11,7 @@ let camera,
     
 const clock = new THREE.Clock();
 
-init()
-animate()
+
 
 function init()
 {
@@ -73,8 +72,19 @@ function init()
     const axesHelper = new THREE.AxesHelper( 5 );
     scene.add( axesHelper );
 
+    const loadingManager = new THREE.LoadingManager( () => {
+	
+		const loadingScreen = document.getElementById( 'loading-screen' );
+		loadingScreen.classList.add( 'fade-out' );
+		document.getElementById("home").style.display = "block";
+        document.getElementById('loading-screen').style.display = "none";
+		// optional: remove loader from DOM via event listener
+		loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+		
+	} );
+    
     /**------map-----**/
-    let loader = new THREE.GLTFLoader();
+    let loader = new THREE.GLTFLoader( loadingManager );
     loader.load('3d/TestBlender/road/roadTexture.glb', function(gltf){
         gltf.scene.traverse(function (child) {
             if (child.isMesh) {
@@ -130,6 +140,7 @@ function init()
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){socket.emit("kiosque");});
     });
+
 
 
     /**------Tecnhicentre-----**/
@@ -306,4 +317,11 @@ function animate()
     stats.end()
 
 }
+
+
+init();
+animate();
+
+
+
 

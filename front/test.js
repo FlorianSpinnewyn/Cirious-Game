@@ -4,10 +4,44 @@
                             *                                                   *
                             * * * * * * * * * * * * * * * * * * * * * * * * * * *                  */
 
+
+/*** Menu ***/
+document.getElementById('play').addEventListener("click", event =>
+{
+    socket.emit("initialisationPlay");
+});
+
+socket.on("initialisationViewPlay", (tabLevel) => {
+
+    document.getElementById("home").style.display = "none";
+    document.getElementById("level").style.display = "block";
+    for(let i = 0; i<6;i++) {
+        if(tabLevel[i]==false) {
+            document.getElementById("level" + i).disabled = true;
+        }
+    }
+});
+
 /*** Demarer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
-    socket.emit("initialisationLevel", parseInt(document.getElementById('level1').id.substr(5)));
+    socket.emit("initialisationLevel", "1");
+});
+document.getElementById('level2').addEventListener("click", event =>
+{
+    socket.emit("initialisationLevel", "2");
+});
+document.getElementById('level3').addEventListener("click", event =>
+{
+    socket.emit("initialisationLevel", "3");
+});
+document.getElementById('level4').addEventListener("click", event =>
+{
+    socket.emit("initialisationLevel", "4");
+});
+document.getElementById('level5').addEventListener("click", event =>
+{
+    socket.emit("initialisationLevel", "5");
 });
 
 socket.on("initialisationViewLevel", numeroLevel => {
@@ -15,10 +49,10 @@ socket.on("initialisationViewLevel", numeroLevel => {
     document.getElementById("HUD").hidden = false;
 });
 
+
+/*** temps ***/
 let heure = 16;
 let minute = 0;
-
-
 
 function startTime(){
 
