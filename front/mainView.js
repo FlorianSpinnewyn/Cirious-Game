@@ -1,4 +1,3 @@
-import { MapControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
 
 
 let camera,
@@ -60,7 +59,7 @@ function init()
     renderer.setSize(window.innerWidth, window.innerHeight)
 
     
-    controls = new MapControls( camera, renderer.domElement );
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.enableDamping = true; 
     controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
@@ -302,7 +301,302 @@ function init()
     //fleche5.position.set(1,2,-9)
     //scene.add( fleche5 );
 
+     /**------Perso-----**/
+
+     //BLOC 1
+    const geometry12 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+    const cube12 = new THREE.Mesh( geometry12, material );
+    cube12.name="0.7.N"
+    cube12.visible=false;
+    cube12.position.set(-5,0,-19-0.82);
+    scene.add( cube12 );
+    cube12.cursor = 'pointer';
+    cube12.on('click', function(ev){
+        
+    });
+
+    const cube13 = new THREE.Mesh( geometry12, material );
+    cube13.name="0.7.S"
+    cube13.visible=false;
+    cube13.position.set(-5,0,-19+0.82);
+    scene.add( cube13 );
+    cube13.cursor = 'pointer';
+    cube13.on('click', function(ev){
+        
+    });
+
+    const cube14 = new THREE.Mesh( geometry12, material );
+    cube14.name="0.7.E"
+    cube14.visible=false;
+    cube14.position.set(-5+0.82 ,0,-19);
+    scene.add( cube14 );
+    cube14.cursor = 'pointer';
+    cube14.on('click', function(ev){
+        
+    });
+
+    const cube15 = new THREE.Mesh( geometry12, material );
+    cube15.name="0.7.O"
+    cube15.visible=false;
+    cube15.position.set(-5-0.82 ,0,-19);
+    scene.add( cube15 );
+    cube15.cursor = 'pointer';
+    cube15.on('click', function(ev){
+        
+    });
+
+     //BLOC 2
+     const cube16 = new THREE.Mesh( geometry12, material );
+     cube16.name="1.7.N"
+     cube16.visible=false;
+     cube16.position.set(-5,0,-17-0.82);
+     scene.add( cube16 );
+     cube16.cursor = 'pointer';
+     cube16.on('click', function(ev){
+         
+     });
+ 
+     const cube17 = new THREE.Mesh( geometry12, material );
+     cube17.name="1.7.S"
+     cube17.visible=false;
+     cube17.position.set(-5,0,-17+0.82);
+     scene.add( cube17 );
+     cube17.cursor = 'pointer';
+     cube17.on('click', function(ev){
+         
+     });
+ 
+     const cube18 = new THREE.Mesh( geometry12, material );
+     cube18.name="1.7.E"
+     cube18.visible=false;
+     cube18.position.set(-5+0.82 ,0,-17);
+     scene.add( cube18 );
+     cube18.cursor = 'pointer';
+     cube18.on('click', function(ev){
+         
+     });
+ 
+     const cube19 = new THREE.Mesh( geometry12, material );
+     cube19.name="1.7.O"
+     cube19.visible=false;
+     cube19.position.set(-5-0.82 ,0,-17);
+     scene.add( cube19 );
+     cube19.cursor = 'pointer';
+     cube19.on('click', function(ev){
+         
+     });
+
+     //BLOC 3
+     const cube20 = new THREE.Mesh( geometry12, material );
+     cube20.name="1.8.N"
+     cube20.visible=false;
+     cube20.position.set(-3,0,-17-0.82);
+     scene.add( cube20 );
+     cube20.cursor = 'pointer';
+     cube20.on('click', function(ev){
+         
+     });
+ 
+     const cube21 = new THREE.Mesh( geometry12, material );
+     cube21.name="1.8.S"
+     cube21.visible=false;
+     cube21.position.set(-3,0,-17+0.82);
+     scene.add( cube21 );
+     cube21.cursor = 'pointer';
+     cube21.on('click', function(ev){
+         
+     });
+ 
+     const cube22 = new THREE.Mesh( geometry12, material );
+     cube22.name="1.8.E"
+     cube22.visible=false;
+     cube22.position.set(-3+0.82 ,0,-17);
+     scene.add( cube22 );
+     cube22.cursor = 'pointer';
+     cube22.on('click', function(ev){
+         
+     });
+ 
+     const cube23 = new THREE.Mesh( geometry12, material );
+     cube23.name="1.8.O"
+     cube23.visible=false;
+     cube23.position.set(-3-0.82 ,0,-17);
+     scene.add( cube23 );
+     cube23.cursor = 'pointer';
+     cube23.on('click', function(ev){
+         
+     });
+
+
+    
+    //BLOC 4
+     const cube24 = new THREE.Mesh( geometry12, material );
+     cube24.name="1.9.N"
+     cube24.visible=false;
+     cube24.position.set(-1,0,-17-0.82);
+     scene.add( cube24 );
+     cube24.cursor = 'pointer';
+     cube24.on('click', function(ev){
+         
+     });
+ 
+     const cube25 = new THREE.Mesh( geometry12, material );
+     cube25.name="1.9.S"
+     cube25.visible=false;
+     cube25.position.set(-1,0,-17+0.82);
+     scene.add( cube25 );
+     cube25.cursor = 'pointer';
+     cube25.on('click', function(ev){
+         
+     });
+ 
+     const cube26 = new THREE.Mesh( geometry12, material );
+     cube26.name="1.9.E"
+     cube26.visible=false;
+     cube26.position.set(-1+0.82 ,0,-17);
+     scene.add( cube26 );
+     cube26.cursor = 'pointer';
+     cube26.on('click', function(ev){
+         
+     });
+ 
+     const cube27 = new THREE.Mesh( geometry12, material );
+     cube27.name="1.9.O"
+     cube27.visible=false;
+     cube27.position.set(-1-0.82 ,0,-17);
+     scene.add( cube27 );
+     cube27.cursor = 'pointer';
+     cube27.on('click', function(ev){
+         
+     });
+
+    //BLOC 5
+     const cube28 = new THREE.Mesh( geometry12, material );
+     cube28.name="1.10.N"
+     cube28.visible=false;
+     cube28.position.set(1,0,-17-0.82);
+     scene.add( cube28 );
+     cube28.cursor = 'pointer';
+     cube28.on('click', function(ev){
+         
+     });
+ 
+     const cube29 = new THREE.Mesh( geometry12, material );
+     cube29.name="1.10.S"
+     cube29.visible=false;
+     cube29.position.set(1,0,-17+0.82);
+     scene.add( cube29 );
+     cube29.cursor = 'pointer';
+     cube29.on('click', function(ev){
+         
+     });
+ 
+     const cube30 = new THREE.Mesh( geometry12, material );
+     cube30.name="1.10.E"
+     cube30.visible=false;
+     cube30.position.set(1+0.82 ,0,-17);
+     scene.add( cube30 );
+     cube30.cursor = 'pointer';
+     cube30.on('click', function(ev){
+         
+     });
+ 
+     const cube31 = new THREE.Mesh( geometry12, material );
+     cube31.name="1.10.O"
+     cube31.visible=false;
+     cube31.position.set(1-0.82 ,0,-17);
+     scene.add( cube31 );
+     cube31.cursor = 'pointer';
+     cube31.on('click', function(ev){
+         
+     });
+
+    //BLOC 6
+     const cube32 = new THREE.Mesh( geometry12, material );
+     cube32.name="1.11.N"
+     cube32.visible=false;
+     cube32.position.set(3,0,-17-0.82);
+     scene.add( cube32 );
+     cube32.cursor = 'pointer';
+     cube32.on('click', function(ev){
+         
+     });
+ 
+     const cube33 = new THREE.Mesh( geometry12, material );
+     cube33.name="1.11.S"
+     cube33.visible=false;
+     cube33.position.set(3,0,-17+0.82);
+     scene.add( cube33 );
+     cube33.cursor = 'pointer';
+     cube33.on('click', function(ev){
+         
+     });
+ 
+     const cube34 = new THREE.Mesh( geometry12, material );
+     cube34.name="1.11.E"
+     cube34.visible=false;
+     cube34.position.set(3+0.82 ,0,-17);
+     scene.add( cube34 );
+     cube34.cursor = 'pointer';
+     cube34.on('click', function(ev){
+         
+     });
+ 
+     const cube35 = new THREE.Mesh( geometry12, material );
+     cube35.name="1.11.O"
+     cube35.visible=false;
+     cube35.position.set(3-0.82 ,0,-17);
+     scene.add( cube35 );
+     cube35.cursor = 'pointer';
+     cube35.on('click', function(ev){
+         
+     });
+
+    //BLOC 7
+     const cube36 = new THREE.Mesh( geometry12, material );
+     cube36.name="0.11.N"
+     cube36.visible=false;
+     cube36.position.set(3,0,-19-0.82);
+     scene.add( cube36 );
+     cube36.cursor = 'pointer';
+     cube36.on('click', function(ev){
+         
+     });
+ 
+     const cube37 = new THREE.Mesh( geometry12, material );
+     cube37.name="0.11.S"
+     cube37.visible=false;
+     cube37.position.set(3,0,-19+0.82);
+     scene.add( cube37 );
+     cube37.cursor = 'pointer';
+     cube37.on('click', function(ev){
+         
+     });
+ 
+     const cube38 = new THREE.Mesh( geometry12, material );
+     cube38.name="0.11.E"
+     cube38.visible=false;
+     cube38.position.set(3+0.82 ,0,-19);
+     scene.add( cube38 );
+     cube38.cursor = 'pointer';
+     cube38.on('click', function(ev){
+         
+     });
+ 
+     const cube39 = new THREE.Mesh( geometry12, material );
+     cube39.name="0.11.O"
+     cube39.visible=false;
+     cube39.position.set(3-0.82 ,0,-19);
+     scene.add( cube39 );
+     cube39.cursor = 'pointer';
+     cube39 .on('click', function(ev){
+         
+     });
+
+
 }
+
+
 
 function animate()
 {
@@ -318,10 +612,18 @@ function animate()
 
 }
 
+function ajoutPersonne(personne) {
+
+    scene.getObjectByName(personne.depart).visible=true;
+}
+
+function suppPersonne(personne) {
+
+    scene.getObjectByName(personne.depart).visible=false;
+}
 
 init();
 animate();
-
 
 
 

@@ -64,6 +64,15 @@ socket.on("initialisationViewPlay", (tabLevel) => {
     }
 });
 
+/*** parametre ***/
+document.getElementById('myonoffswitch').addEventListener('change', function() {
+    if (this.checked) {
+        activeOmbre();
+    } else {
+        desactiveOmbre();
+    }
+  });
+
 /*** Demarer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
@@ -430,14 +439,17 @@ function evenementClickPersonne(e)
     socket.emit("CliquePersonne", id);
 }
 
-socket.on("PersonneApparue", (idPersonne) =>
+socket.on("PersonneApparue", (idPersonne,personne) =>
 {
+    console.log(personne)
+    ajoutPersonne(personne)
     document.getElementById('Personne' + idPersonne).hidden = false;
     document.getElementById('Personne' + idPersonne).addEventListener("click", evenementClickPersonne);
 });
 
 socket.on("boutonsPersonnes", personnes => 
 {
+    console.log("apppparuuu ")
     let chaine = "";
     for(let i = 0; i < personnes.length; ++i)
     {
@@ -477,8 +489,9 @@ socket.on("AfficheDestination", (destination) =>
     document.getElementById('DestinationPersonne').style.display='block';
 });
 
-socket.on("PersonneDisparait", idPersonne =>
+socket.on("PersonneDisparait", (idPersonne,personne) =>
 {
+    suppPersonne(personne);
     let pers = document.getElementById("Personne" + idPersonne);
     document.getElementById("Personnes").removeChild(pers);
 });
@@ -510,3 +523,13 @@ output.innerHTML = slider.value; // Display the default slider value
 slider.oninput = function() {
   output.innerHTML = this.value;
 } 
+
+function activeOmbre() {
+    light.castShadow = true;
+    scene.add(light);
+}
+
+function desactiveOmbre() {
+    light.castShadow = false;
+    scene.add(light);
+}

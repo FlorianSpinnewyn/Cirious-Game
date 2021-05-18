@@ -102,9 +102,8 @@ io.on('connection', (socket) =>
         function findLevel(result4) {
             myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
 
-            let personne = new Personne();
             for(let i = 0; i<myLevel.nbPersonnes;i++) {
-                personne.reset();
+                let personne = new Personne();
 
                 let rand1 = Math.floor(Math.random() * 7 + 2);
                 switch (rand1)
@@ -164,9 +163,10 @@ io.on('connection', (socket) =>
                 }
                 personne.setDepart(rand2 + "." + rand3 + "." + rand4);
                 myLevel.personnes.push(personne);
+                delete(personne);
             }
 
-            console.log(myLevel);
+            console.log(myLevel.personnes);
     
             //myLevel.initialisationTabPersonne(personnes);
     
@@ -339,7 +339,7 @@ io.on('connection', (socket) =>
             if(temps == 1) //la personne disparaît et prend la voiture
             {
                 myLevel.personnes[i].envoye = 1;
-                socket.emit("PersonneDisparait", i);
+                socket.emit("PersonneDisparait", i,myLevel.personnes[i]);
             }
         }
     });
@@ -355,7 +355,8 @@ io.on('connection', (socket) =>
                 if(isAppeared < 90) //20% de chances d'apparaître toutes les 15 minutes
                 {
                     myLevel.personnes[i].apparue = true;
-                    socket.emit("PersonneApparue", i);
+                    console.log(myLevel.personnes[i])
+                    socket.emit("PersonneApparue", i,myLevel.personnes[i]);
                 }
             }
         }
@@ -453,7 +454,7 @@ http.listen(4235, () =>
     let classement;
     for(let i = 0; i < result.length; ++i)
     {
-        depart = result[i].depart.split('.');
+             = result[i].depart.split('.');
         switch(depart[2]) 
         {
             case 'N': orientation = "nord";

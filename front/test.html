@@ -81,6 +81,13 @@
             <label for="volume" class="form-label">Volume : <span id="value"></span>%</label> <br>
             <input type="range" style="width:20%" class="form-range" id="myRange">
         </div>
+        <br><br>
+        <p>Ombres :</p>
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" checked>
+            <label class="onoffswitch-label" for="myonoffswitch"></label>
+        </div>
+        <br><br>
         <button id="retour">Retour</button>
     </div>
 
@@ -258,12 +265,13 @@
     <script>
         let socket = io();
     </script>
-    <script src="../models/Chrono.js"></script>
-    <script src="test.js"></script>
+    <script type="text/javascript" src="../models/Chrono.js"></script>
     <script type="text/javascript" src="build/three.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
     <script type="text/javascript" src="build/stats.min.js"></script>
     <script type="text/javascript" src="build/three.interaction/build/three.interaction.js"></script>
-    <script type="module" src="mainView.js"></script>
+    <script type="text/javascript" src="build/OrbitControls.js"></script>
+    <script type="text/javascript" src="mainView.js"></script>
+    <script type="text/javascript" src="test.js"></script>
 </body>
 </html>

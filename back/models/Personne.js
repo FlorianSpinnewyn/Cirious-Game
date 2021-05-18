@@ -43,6 +43,8 @@ class Personne {
         this.destination = "";
         this.depart="";
         this.envoye = 0;
+        this.apparue = false;
+        this.chrono = 0;
     }
 }
 module.exports = Personne;
