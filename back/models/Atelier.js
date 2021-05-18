@@ -14,4 +14,5 @@ class Atelier {
         this.repare = true;
     }
 }
+
 module.exports = Atelier;

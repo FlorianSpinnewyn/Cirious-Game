@@ -3,7 +3,6 @@ class Train {
     {
         /*a voir*/
     }
-    
-
 }
+
 module.exports = Train;

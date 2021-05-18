@@ -1,7 +1,6 @@
 class Personne {
     constructor()
     {
-        /*a voir*/
         this.destination = "";
         this.depart = "";
         this.envoye = 0;
@@ -41,10 +40,11 @@ class Personne {
 
     reset() {
         this.destination = "";
-        this.depart="";
+        this.depart = "";
         this.envoye = 0;
         this.apparue = false;
         this.chrono = 0;
     }
 }
+
 module.exports = Personne;

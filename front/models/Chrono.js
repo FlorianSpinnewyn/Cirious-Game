@@ -18,7 +18,6 @@ class Chrono
                 this.minute = 0;
             }
         }  
-        console.log(this.heure, this.minute, this.pause);
         return(this.heure * 60 + this.minute);
     }
 
@@ -36,4 +35,4 @@ class Chrono
         this.heure = 16;
         this.minute = 0;
     }
-};
+}

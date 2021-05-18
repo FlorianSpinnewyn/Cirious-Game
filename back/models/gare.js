@@ -6,5 +6,13 @@ class Gare {
         this.z = -19;
     }
     
+    count()
+    {
+        if(this.temps != 0)
+        {
+            this.temps -= 1;
+        }
+    }
 }
+
 module.exports = Gare;

@@ -3,7 +3,6 @@ class Pied {
     {
         /*a voir*/
     }
-    
-
 }
+
 module.exports = Pied;

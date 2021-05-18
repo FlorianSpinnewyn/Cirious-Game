@@ -3,9 +3,7 @@
           *                CIRious Game - Test                *
           *                                                   *
           * * * * * * * * * * * * * * * * * * * * * * * * * * *                  -->
-
-
- 
+          
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,8 +24,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-
-    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body class="fond">
@@ -54,7 +50,7 @@
     </div>
 
 
-    <!-- Demarrer -->
+    <!-- Sélection level -->
     <div id="level" class="menuDemarrer">
         <button id="level0">level0</button>
         <button id="level1">level1</button>
@@ -72,7 +68,7 @@
         <button id="quitterJeu">Quitter le jeu</button>
     </div>
 
-    <!-- Pause -->
+    <!-- Bouton Pause -->
     <button id="pause" class="pause" hidden><i class="fa fa-pause-circle"></i></button>
 
     <!-- Menu Paramètre -->
@@ -207,6 +203,7 @@
                 <h2>Tableau d'affichage des horaires des <strong>Trains</strong> :</h2>
                 <br><br>
                 <div id="prochainTrain" hidden=true>Le prochain train part dans <span id="tempsTrain"></span> minutes.</div> 
+                <div id="attenteTrain" hidden=true>Le train est en panne</div>
             </div>
         </div>
     </div>
@@ -221,6 +218,7 @@
                 <h2>Tableau d'affichage des horaires des <strong>Métros</strong> :</h2>
                 <br><br>
                 <div id="prochainMetro" hidden=true>Le prochain métro part dans <span id="tempsMetro"></span> minutes.</div> 
+                <div id="attenteMetro" hidden=true>Le métro est en panne</div>
             </div>
         </div>
     </div>
@@ -251,7 +249,7 @@
                 <div>Je voudrais aller <span id="dest"></span></div>
                 <div id="transport">
                     <button id="transportPied">Pied</button>
-                    <button id="transportVélo">Vélo</button>
+                    <button id="transportVelo">Vélo</button>
                     <button id="transportMetro">Métro</button>
                     <button id="transportTrain">Train</button>
                 </div>

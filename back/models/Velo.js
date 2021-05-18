@@ -3,7 +3,6 @@ class Velo {
     {
         /*a voir*/
     }
-    
-
 }
+
 module.exports = Velo;

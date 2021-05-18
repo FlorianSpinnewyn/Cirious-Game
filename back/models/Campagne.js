@@ -3,7 +3,7 @@ class Campagne {
     {
         this.x = 0;
         this.z = 12;
-    }
-    
+    } 
 }
+
 module.exports = Campagne;

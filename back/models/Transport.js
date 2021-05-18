@@ -7,7 +7,6 @@ class Transport {
         this.metro = new Metro(/*A voir*/)
 
     }
-    
-
 }
+
 module.exports = Transport;

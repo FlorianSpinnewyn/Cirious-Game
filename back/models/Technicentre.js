@@ -6,7 +6,7 @@ class Technicentre {
         this.z = 9;
     }
     
-    evenementRepare(){
+    evenementRepare() {
         this.repare = true;
     }
 
@@ -14,4 +14,5 @@ class Technicentre {
         this.repare = true;
     }
 }
+
 module.exports = Technicentre;

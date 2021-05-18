@@ -7,4 +7,5 @@ class StationVelo {
         /*a voir*/
     }
 }
+
 module.exports = StationVelo;

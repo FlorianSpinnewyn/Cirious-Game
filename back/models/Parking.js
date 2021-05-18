@@ -14,4 +14,5 @@ class Parking {
         this.repare = true;
     }
 }
+
 module.exports = Parking;

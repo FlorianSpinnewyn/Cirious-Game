@@ -14,4 +14,5 @@ class Garage {
         this.repare = true;
     }
 }
+
 module.exports = Garage;

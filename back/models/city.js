@@ -16,7 +16,6 @@ const StationMetro = require("./StationMetro");
 const StationVelo = require("./StationVelo");
 
 class City {
-
     constructor() {
         this.atelier = new Atelier();
         this.garage = new Garage();
@@ -34,7 +33,7 @@ class City {
         this.gares = []
         let gare;
         /*Initialisation des 4 gares*/
-        for(let i = 0; i<4;i++) {
+        for(let i = 0; i < 4; ++i) {
             gare = new Gare();
             this.gares.push(gare);
         }
@@ -46,7 +45,7 @@ class City {
         this.stationsMetro = [];
         let stationMetro;
         /*Initialisation des 10 stations de métro */
-        for(let k = 0; k<10;k++) {
+        for(let k = 0; k < 10; ++k) {
             stationMetro = new StationMetro();
             this.stationsMetro.push(stationMetro);
         }
@@ -56,7 +55,7 @@ class City {
         /*Initialisation des 20 stations de vélo */
         this.stationsVelo = [];
         let stationVelo;
-        for(let j = 0; j<20;j++) {
+        for(let j = 0; j < 20; ++j) {
             stationVelo = new StationVelo();
             this.stationsVelo.push(stationVelo);
         }

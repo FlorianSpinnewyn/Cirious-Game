@@ -3,7 +3,6 @@ class Metro {
     {
         /*a voir*/
     }
-    
-
 }
+
 module.exports = Metro;

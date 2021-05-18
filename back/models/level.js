@@ -1,25 +1,22 @@
 const City = require("./city");
 
 class Level {
-
     constructor() {
         this.numLevel = 0;
         this.city = new City();
         this.personnes = [];
-        this.nbPersonnes=0;
-        this.nbVoituresMax=0;
-        this.nbSecondsPersonne=0;
-        this.nbBadges=0;
-        this.nbEvenements=0;
-        this.pasContentMax=0;
-        this.pollutionMax=0;
-        /*A voir*/
+        this.nbPersonnes = 0;
+        this.nbVoituresMax = 0;
+        this.nbSecondsPersonne = 0;
+        this.nbBadges = 0;
+        this.nbEvenements = 0;
+        this.pasContentMax = 0;
+        this.pollutionMax = 0;
     }
 
     /**
     * Initialise les variables d'un niveaux lorsque le joueur le commence
     * @param { int } numerosLevel = numéro du niveau
-    * @param { personnes } personnes = tableaux des personnes a deplace durant le niveaux initialisé préalablement
     * @param { int } nbPersonnes_ = nombre de personnes a deplacé
     * @param { int } nbVoituresMax_ = nombre de voitures max avant de perdre
     * @param { int } nbSecondsPersonne_ = nombre de secondes avant que le joueur prend ca voiture
@@ -32,15 +29,13 @@ class Level {
     {
         this.numLevel = numerosLevel;
         this.nbPersonnes = nbPersonnes_;
-        this.nbVoituresMax=nbVoituresMax_;
-        this.nbSecondsPersonne=nbSecondsPersonne_;
-        this.nbBadges=nbBadges_;
-        this.nbEvenements=nbEvenements_;
-        this.pasContentMax=pasContentMax_;
-        this.pollutionMax=pollutionMax_;
+        this.nbVoituresMax = nbVoituresMax_;
+        this.nbSecondsPersonne = nbSecondsPersonne_;
+        this.nbBadges = nbBadges_;
+        this.nbEvenements = nbEvenements_;
+        this.pasContentMax = pasContentMax_;
+        this.pollutionMax = pollutionMax_;
     }
-
-
 
     reset()
     {

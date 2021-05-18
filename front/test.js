@@ -13,7 +13,8 @@ chrono = new Chrono();
 
 setInterval(function() {
     chrono.count();
-    socket.emit("ChronoPersonnes");
+    socket.emit("ChronoPersonnes", chrono.pause);
+    socket.emit("ChronoHoraire", chrono.pause);
     let heure = "";
     let minute = "";
     if(chrono.heure < 10)
@@ -37,13 +38,16 @@ setInterval(function() {
     {
         socket.emit("NouvellePersonne");
     }
-    if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
+    if(chrono.heure != 16 || chrono.minute != 0)
     {
-        socket.emit("HeurePanneTrain");
-    }
-    if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
-    {
-        socket.emit("HeurePanneMetro");
+        if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
+        {
+            socket.emit("HeurePanneTrain");
+        }
+        if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
+        {
+            socket.emit("HeurePanneMetro");
+        }
     }
 }, 2000);
 
@@ -64,7 +68,7 @@ socket.on("initialisationViewPlay", (tabLevel) => {
     }
 });
 
-/*** parametre ***/
+/*** Parametre ***/
 document.getElementById('myonoffswitch').addEventListener('change', function() {
     if (this.checked) {
         activeOmbre();
@@ -73,7 +77,7 @@ document.getElementById('myonoffswitch').addEventListener('change', function() {
     }
   });
 
-/*** Demarer un niveau ***/
+/*** Demarrer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
     chrono.restart();
@@ -111,7 +115,6 @@ socket.on("initialisationViewLevel", numeroLevel => {
     document.getElementById("HUD").hidden = false;
 });
 
-
 document.getElementById("pause").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'block';
@@ -125,7 +128,6 @@ document.getElementById("cog").addEventListener("click", event =>
     document.getElementById("level").style.display = 'none';
     document.getElementById("menuParametre").style.display = 'block';
 });
-
 
 document.getElementById("retour").addEventListener("click", event =>
 {
@@ -185,32 +187,6 @@ socket.on("ReinitialisationLevel", (idlevel) =>
     socket.emit("initialisationLevel", idlevel);
 });
 
-
-/*** temps ***/
-/*let heure = 16;
-let minute = 0;
-
-function startTime(){
-
-    var countdownfunction = setInterval(function() {
-    minute=minute+1;
-
-    if(minute==60) {
-        heure = heure + 1;
-        minute = 0;
-    }
-    
-    // Output the result in an element with id="demo"
-    document.getElementById("time").innerHTML = heure + "h "
-    + minute + "m ";
-    
-    }, 2000);
-
-}
-
-
-startTime();*/
-
 /*** Alertes ***/
 
 /*** Mairie ***/
@@ -218,7 +194,6 @@ startTime();*/
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
 {
     console.log("Nous sommes à la Mairie :)");
-    console.log(metro, train, velo, voiture);
     if(!metro && !train && !velo && !voiture)
     {
         document.getElementById("bonheur").hidden = false;
@@ -285,7 +260,6 @@ socket.on("afficheActualite", (score, prochainObjectif, badgeDebloque) =>
     {
         document.getElementById("prochainObjectif").innerHTML = "Maintenant, tente de résoudre cet objectif : <br>" + prochainObjectif;
     }
-    console.log(score, prochainObjectif, badgeDebloque);
     document.getElementById('actualite').style.display='block';
 });
 
@@ -296,7 +270,6 @@ document.getElementById('close').addEventListener("click", event =>
 });
 
 /*** Technicentre ***/
-
 
 socket.on("pasRepTrain", () => {
     document.getElementById("parfait").hidden = false;
@@ -394,9 +367,19 @@ document.getElementById('partir').addEventListener("click", event =>
 });
 
 /*** Gare ***/
-socket.on("prochainTrain", (temps) => {
-    document.getElementById("prochainTrain").hidden=false;
-    document.getElementById('tempsTrain').innerHTML = temps;
+
+socket.on("prochainTrain", (temps, panne) => {
+    if(panne)
+    {
+        document.getElementById("prochainTrain").hidden=true;
+        document.getElementById("attenteTrain").hidden=false;
+    }
+    else
+    {
+        document.getElementById("attenteTrain").hidden=true;
+        document.getElementById("prochainTrain").hidden=false;
+        document.getElementById('tempsTrain').innerHTML = temps;
+    }
 });
 
 document.getElementById('bye').addEventListener("click", event => 
@@ -406,10 +389,19 @@ document.getElementById('bye').addEventListener("click", event =>
 });
 
 /*** Métro ***/
-socket.on("prochainMetro", (temps) => {
-    console.log(temps);
-    document.getElementById("prochainMetro").hidden=false;
-    document.getElementById('tempsMetro').innerHTML = temps;
+
+socket.on("prochainMetro", (temps, panne) => {
+    if(panne)
+    {
+        document.getElementById("prochainMetro").hidden=true;
+        document.getElementById('attenteMetro').hidden = false;
+    }
+    else
+    {
+        document.getElementById('attenteMetro').hidden = true;
+        document.getElementById("prochainMetro").hidden=false;
+        document.getElementById('tempsMetro').innerHTML = temps;
+    }
 });
 
 document.getElementById('ciao').addEventListener("click", event => 
@@ -419,6 +411,7 @@ document.getElementById('ciao').addEventListener("click", event =>
 });
 
 /*** Vélo ***/
+
 socket.on("nombreVelo", (nombreV) => {
     document.getElementById("nombreVelo").hidden=false;
     document.getElementById('resteVelo').innerHTML = nombreV;
@@ -431,6 +424,7 @@ document.getElementById('aurevoir').addEventListener("click", event =>
 });
 
 /*** Personne ***/
+
 function evenementClickPersonne(e)
 {
     console.log("On a cliqué sur une personne.");
@@ -441,8 +435,7 @@ function evenementClickPersonne(e)
 
 socket.on("PersonneApparue", (idPersonne,personne) =>
 {
-    console.log(personne)
-    ajoutPersonne(personne)
+    ajoutPersonne(personne);
     document.getElementById('Personne' + idPersonne).hidden = false;
     document.getElementById('Personne' + idPersonne).addEventListener("click", evenementClickPersonne);
 });
@@ -456,14 +449,6 @@ socket.on("boutonsPersonnes", personnes =>
         chaine += "<button id='Personne" + i + "' style='z-index:2;' hidden=true>Personne</button>";
     }
     document.getElementById("Personnes").innerHTML = chaine;
-});
-
-document.getElementById('Personnes').addEventListener("click", event =>
-{
-    console.log("On a cliqué sur une personne.");
-    let id = event.target.id.charAt(8);
-    document.getElementById("idPersonne").innerHTML = id;
-    socket.emit("CliquePersonne", id);
 });
 
 socket.on("AfficheDestination", (destination) => 
@@ -499,9 +484,11 @@ socket.on("PersonneDisparait", (idPersonne,personne) =>
 document.getElementById("transport").addEventListener("click", event =>
 {
     let typeTransport = event.target.id;
-    console.log(typeTransport);
+    if(typeTransport == "transportVelo")
+    {
+        socket.emit("DiminueVelo");
+    }
     let numberPersonne = document.getElementById("idPersonne").innerHTML;
-    console.log(numberPersonne);
     let pers = document.getElementById("Personne" + numberPersonne);
     document.getElementById("Personnes").removeChild(pers);
     document.getElementById('DestinationPersonne').style.display='none';
@@ -514,7 +501,8 @@ document.getElementById('aplus').addEventListener("click", event =>
     document.getElementById('DestinationPersonne').style.display='none';
 });
 
-/**Menu volume */
+/*** Menu volume ***/
+
 var slider = document.getElementById("myRange");
 var output = document.getElementById("value");
 output.innerHTML = slider.value; // Display the default slider value

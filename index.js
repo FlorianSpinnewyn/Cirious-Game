@@ -88,17 +88,18 @@ io.on('connection', (socket) =>
     /**------------Initialisation du home---------------**/
     socket.on("initialisationPlay", () => {
         socket.emit("initialisationViewPlay", myGame.tabLevel);
-    })
+    });
+
     /**------------Initialisation des niveaux-----------**/
-    socket.on("initialisationLevel", (numeroLevel) => {
+    socket.on("initialisationLevel", (numeroLevel) => 
+    {
         if(socket.handshake.session.levelEnCours)
         {
             myLevel.reset();
         }
         socket.handshake.session.levelEnCours = true;
 
-    //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
-        
+        //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
         function findLevel(result4) {
             myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
 
@@ -165,20 +166,24 @@ io.on('connection', (socket) =>
                 myLevel.personnes.push(personne);
                 delete(personne);
             }
-
-            console.log(myLevel.personnes);
-    
-            //myLevel.initialisationTabPersonne(personnes);
-    
             /** Affichage plusieurs boutons de personnes **/
             socket.emit("boutonsPersonnes", myLevel.personnes);
             socket.emit("initialisationViewLevel", myLevel.numLevel);
         }
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
-
     });
     
     /**------------Requete des pannes-----------**/
+    socket.on("HeurePanneTrain", () =>
+    {
+        myLevel.city.mairie.evenementTrain();
+    });
+
+    socket.on("HeurePanneMetro", () =>
+    {
+        myLevel.city.mairie.evenementMetro();
+    });
+    
     function myFunction(){
         if(!myLevel.city.kiosque.score)
         {
@@ -194,8 +199,7 @@ io.on('connection', (socket) =>
         }
 
         setTimeout(myFunction,5000); /* rappel après 5 secondes = 2000 millisecondes */
-    }
-         
+    }  
     myFunction();
 
     socket.on("mairie", () => 
@@ -244,9 +248,10 @@ io.on('connection', (socket) =>
     });
 
     /*** Technicentre ***/
+
     socket.on("technicentre", () => 
     {
-        if(myLevel.city.mairie.panneTrain == true && myLevel.city.technicentre.repare == false)
+        if(myLevel.city.mairie.panneTrain == true)
         {
             socket.emit("RepTrain");
         }
@@ -263,8 +268,9 @@ io.on('connection', (socket) =>
     });
 
      /*** Parking ***/
+
     socket.on("parking", () => {
-        if(myLevel.city.mairie.embouteillage == true && myLevel.city.parking.repare == false)
+        if(myLevel.city.mairie.embouteillage)
         {
             socket.emit("Embouteillage");
         }
@@ -281,8 +287,9 @@ io.on('connection', (socket) =>
     });
 
     /*** Garage ***/
+
     socket.on("garage", () => {
-        if(myLevel.city.mairie.manqueVelo == true && myLevel.city.garage.repare == false)
+        if(myLevel.city.mairie.manqueVelo == true)
         {
             socket.emit("probVelo");
         }
@@ -295,11 +302,13 @@ io.on('connection', (socket) =>
     socket.on("stockRempli", () => {
         myLevel.city.garage.evenementRepare();
         myLevel.city.mairie.manqueVelo = false;
+        myLevel.city.stationsVelo[2].velosLibre = 17;
     });
 
     /*** Atelier ***/
+
     socket.on("atelier", () => {
-        if(myLevel.city.mairie.panneMetro == true && myLevel.city.atelier.repare == false)
+        if(myLevel.city.mairie.panneMetro == true)
         {
             socket.emit("probMetro");
         }
@@ -314,15 +323,41 @@ io.on('connection', (socket) =>
         myLevel.city.mairie.panneMetro = false;
     });
     
-    /*** Gare ***/
+    /*** Gare et Stations ***/
+
+    socket.on("ChronoHoraire", (pause) =>
+    {
+        if(pause == false)
+        {
+            for(let i = 0; i < myLevel.city.gares.length; ++i)
+            {
+                myLevel.city.gares[i].count();
+                if(myLevel.city.gares[i].temps == 0)
+                {
+                    myLevel.city.gares[i].temps = 15;
+                }
+            }
+        }
+    });
+
     socket.on("gare", (nbgare) => {
         let tempsTrain = myLevel.city.gares[nbgare - 1].temps;
-        socket.emit("prochainTrain", tempsTrain);  
+        let isPanne = false;
+        if(myLevel.city.mairie.panneTrain)
+        {
+            isPanne = true;
+        }
+        socket.emit("prochainTrain", tempsTrain, isPanne);  
     });
     
     socket.on("metro", (nbstation) => {
         let tempsMetro =  myLevel.city.stationsMetro[nbstation - 1].temps;
-        socket.emit("prochainMetro", tempsMetro);
+        let isPanne = false;
+        if(myLevel.city.mairie.panneMetro)
+        {
+            isPanne = true;
+        }
+        socket.emit("prochainMetro", tempsMetro, isPanne);
     });
 
     socket.on("velo", (nbstation) => {
@@ -331,15 +366,19 @@ io.on('connection', (socket) =>
     });
 
     /*** Personne ****/
-    socket.on("ChronoPersonnes", () =>
+
+    socket.on("ChronoPersonnes", (pause) =>
     {
-        for(let i = 0; i < myLevel.personnes.length; ++i)
+        if(pause == false)
         {
-            let temps = myLevel.personnes[i].count(15); //La personne disparaît au bout de 15 secondes
-            if(temps == 1) //la personne disparaît et prend la voiture
+            for(let i = 0; i < myLevel.personnes.length; ++i)
             {
-                myLevel.personnes[i].envoye = 1;
-                socket.emit("PersonneDisparait", i,myLevel.personnes[i]);
+                let temps = myLevel.personnes[i].count(15); //La personne disparaît au bout de 15 secondes
+                if(temps == 1) //la personne disparaît et prend la voiture
+                {
+                    myLevel.personnes[i].envoye = 1;
+                    socket.emit("PersonneDisparait", i, myLevel.personnes[i]);
+                }
             }
         }
     });
@@ -352,10 +391,9 @@ io.on('connection', (socket) =>
             if(myLevel.personnes[i].apparue == false)
             {
                 let isAppeared = Math.floor(Math.random() * 100);
-                if(isAppeared < 90) //20% de chances d'apparaître toutes les 15 minutes
+                if(isAppeared < 50) //50% de chances d'apparaître toutes les 15 minutes
                 {
                     myLevel.personnes[i].apparue = true;
-                    console.log(myLevel.personnes[i])
                     socket.emit("PersonneApparue", i,myLevel.personnes[i]);
                 }
             }
@@ -393,7 +431,6 @@ io.on('connection', (socket) =>
     socket.on("SupprimePersonne", numberPersonne =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;
-        console.log(myLevel.personnes);
     });
 
     socket.on("DiminueVelo", () => 
@@ -406,6 +443,7 @@ io.on('connection', (socket) =>
     });
 
     /*** Quitter le niveau en cours : Reset ***/
+
     socket.on("Retry", () =>
     {
         let level = myLevel.numLevel;

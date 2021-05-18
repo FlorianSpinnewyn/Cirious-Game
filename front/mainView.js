@@ -912,6 +912,3 @@ function suppPersonne(personne) {
 
 init();
 animate();
-
-
-
