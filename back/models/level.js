@@ -12,8 +12,8 @@ class Level {
         this.nbEvenements = 0;
         this.pasContentMax = 0;
         this.pollutionMax = 0;
-        this.personnesEnvoye= 0;
-        this.personnesApparu= 0;
+        this.personnesEnvoye = 0;
+        this.personnesApparu = 0;
     }
 
     /**
@@ -48,8 +48,16 @@ class Level {
         this.city.technicentre.reset();
         this.city.parking.reset();
         this.city.mairie.reset();
-        this.personnesEnvoye= 0;
-        this.personnesApparu= 0;
+        this.personnesEnvoye = 0;
+        this.personnesApparu = 0;
+        this.city.gares[0].temps = 15;
+        this.city.gares[1].temps = 30;
+        this.city.gares[2].temps = 45;
+        this.city.gares[3].temps = 60;
+        this.city.stationsMetro[0].temps = 2;
+        this.city.stationsMetro[9].temps = 7;
+        this.city.stationsVelo[0].velosLibre = 24;
+        this.city.stationsVelo[2].velosLibre = 17;
     }
 }
 

@@ -488,7 +488,6 @@ function init()
         gltf.scene.on('click', function(ev){
             console.log("Nous sommes à la gare :)");
             document.getElementById('horaireTrain').style.display='block';
-            socket.emit("gare", 1);
         });
     });
 
@@ -506,7 +505,7 @@ function init()
     cube8.cursor = 'pointer';
     cube8.on('click', function(ev){
         console.log("Nous sommes à la station de vélo n°1 :)");
-        document.getElementById('veloRestants').style.display='block';
+        document.getElementById('veloRestants1').style.display='block';
         socket.emit("velo", 1);
     });
 
@@ -524,7 +523,7 @@ function init()
     cube9.cursor = 'pointer';
     cube9.on('click', function(ev){
         console.log("Nous sommes à la station de vélo n°3 :)");
-        document.getElementById('veloRestants').style.display='block';
+        document.getElementById('veloRestants2').style.display='block';
         socket.emit("velo", 3);
     });
 
@@ -542,8 +541,7 @@ function init()
     cube10.cursor = 'pointer';
     cube10.on('click', function(ev){
         console.log("Nous sommes à la station de métro n°1 :)");
-        document.getElementById('horaireMetro').style.display='block';
-        socket.emit("metro", 1);
+        document.getElementById('horaireMetro1').style.display='block';
     });
 
     /**------fleche ---- StationMetro1 -----**/
@@ -560,8 +558,7 @@ function init()
     cube11.cursor = 'pointer';
     cube11.on('click', function(ev){
         console.log("Nous sommes à la station de métro n°10 :)");
-        document.getElementById('horaireMetro').style.display='block';
-        socket.emit("metro", 10);
+        document.getElementById('horaireMetro2').style.display='block';
     });
 
     /**------fleche ---- StationMetro10 -----**/

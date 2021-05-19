@@ -8,9 +8,13 @@ class Gare {
     
     count()
     {
-        if(this.temps != 0)
+        if(this.temps != 1)
         {
             this.temps -= 1;
+        }
+        else
+        {
+            this.temps = 15;
         }
     }
 }

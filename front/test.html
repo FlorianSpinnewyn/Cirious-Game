@@ -193,6 +193,12 @@
         </div>
     </div> 
 
+    <!-- mini-jeu atelier -->
+    <div id="miniJeuAtelier" style="z-index:30" class="menuPause">
+        <img src="./pictures/cable.png" id="image">
+        <canvas id="canvas"></canvas>
+    </div>
+
     <!-- bouton gare -->
     <div id="horaireTrain" class="fenetre">
         <div class="gare content">
@@ -208,32 +214,58 @@
         </div>
     </div>
 
-    <!-- bouton station métro-->
-    <div id="horaireMetro" class="fenetre">
+     <!-- bouton station métro-->
+     <div id="horaireMetro1" class="fenetre">
         <div class="stationM content">
             <div class="clearfix">
-                <button id="ciao" class="btn btn-outline-dark cancel" name="ciao" type="button">X</button>
+                <button id="ciao1" class="btn btn-outline-dark cancel" name="ciao" type="button">X</button>
             </div>
             <div class="horaireM">
                 <h2>Tableau d'affichage des horaires des <strong>Métros</strong> :</h2>
                 <br><br>
-                <div id="prochainMetro" hidden=true>Le prochain métro part dans <span id="tempsMetro"></span> minutes.</div> 
-                <div id="attenteMetro" hidden=true>Le métro est en panne</div>
+                <div id="prochainMetro1" hidden=true>Le prochain métro part dans <span id="tempsMetro1"></span> minutes.</div> 
+                <div id="attenteMetro1" hidden=true>Le métro est en panne</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="horaireMetro2" class="fenetre">
+        <div class="stationM content">
+            <div class="clearfix">
+                <button id="ciao2" class="btn btn-outline-dark cancel" name="ciao" type="button">X</button>
+            </div>
+            <div class="horaireM">
+                <h2>Tableau d'affichage des horaires des <strong>Métros</strong> :</h2>
+                <br><br>
+                <div id="prochainMetro2" hidden=true>Le prochain métro part dans <span id="tempsMetro2"></span> minutes.</div> 
+                <div id="attenteMetro2" hidden=true>Le métro est en panne</div>
             </div>
         </div>
     </div>
 
     <!-- bouton station vélo -->
-
-    <div id="veloRestants" class="fenetre">
+    <div id="veloRestants1" class="fenetre">
         <div class="stationV content">
             <div class="clearfix">
-                <button id="aurevoir" class="btn btn-outline-dark cancel" name="aurevoir" type="button">X</button>
+                <button id="aurevoir1" class="btn btn-outline-dark cancel" name="aurevoir" type="button">X</button>
             </div>
             <div class="compteurV">
                 <h2>Stock des <strong>Vélos</strong> restants :</h2>
                 <br><br>
-                <div id="nombreVelo" hidden=true>Il reste <span id="resteVelo"></span> vélos.</div> 
+                <div id="nombreVelo1" hidden=true>Il reste <span id="resteVelo1"></span> vélos.</div> 
+            </div>
+        </div>
+    </div>
+
+    <div id="veloRestants2" class="fenetre">
+        <div class="stationV content">
+            <div class="clearfix">
+                <button id="aurevoir2" class="btn btn-outline-dark cancel" name="aurevoir" type="button">X</button>
+            </div>
+            <div class="compteurV">
+                <h2>Stock des <strong>Vélos</strong> restants :</h2>
+                <br><br>
+                <div id="nombreVelo2" hidden=true>Il reste <span id="resteVelo2"></span> vélos.</div> 
             </div>
         </div>
     </div>
@@ -253,7 +285,6 @@
                     <button id="transportMetro">Métro</button>
                     <button id="transportTrain">Train</button>
                 </div>
-                <div id="idPersonne" hidden=true></div>
             </div>
         </div>
     </div>

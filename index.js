@@ -304,6 +304,7 @@ io.on('connection', (socket) =>
         myLevel.city.garage.evenementRepare();
         myLevel.city.mairie.manqueVelo = false;
         myLevel.city.stationsVelo[2].velosLibre = 17;
+        myLevel.city.stationsVelo[0].velosLibre = 24;
     });
 
     /*** Atelier ***/
@@ -330,40 +331,29 @@ io.on('connection', (socket) =>
     {
         if(pause == false)
         {
-            for(let i = 0; i < myLevel.city.gares.length; ++i)
+            if(myLevel.city.mairie.panneTrain == false)
             {
-                myLevel.city.gares[i].count();
-                if(myLevel.city.gares[i].temps == 0)
-                {
-                    myLevel.city.gares[i].temps = 15;
-                }
+                myLevel.city.gares[0].count();
             }
-        }
-    });
+            socket.emit("HoraireTrain", myLevel.city.gares[0].temps, myLevel.city.mairie.panneTrain);
+            
+            if(myLevel.city.mairie.panneMetro == false)
+            {
+                myLevel.city.stationsMetro[0].count();
+            }
+            socket.emit("HoraireMetro1", myLevel.city.stationsMetro[0].temps, myLevel.city.mairie.panneMetro);
 
-    socket.on("gare", (nbgare) => {
-        let tempsTrain = myLevel.city.gares[nbgare - 1].temps;
-        let isPanne = false;
-        if(myLevel.city.mairie.panneTrain)
-        {
-            isPanne = true;
+            if(myLevel.city.mairie.panneMetro == false)
+            {
+                myLevel.city.stationsMetro[9].count();
+            }
+            socket.emit("HoraireMetro2", myLevel.city.stationsMetro[9].temps, myLevel.city.mairie.panneMetro);
         }
-        socket.emit("prochainTrain", tempsTrain, isPanne);  
-    });
-    
-    socket.on("metro", (nbstation) => {
-        let tempsMetro =  myLevel.city.stationsMetro[nbstation - 1].temps;
-        let isPanne = false;
-        if(myLevel.city.mairie.panneMetro)
-        {
-            isPanne = true;
-        }
-        socket.emit("prochainMetro", tempsMetro, isPanne);
     });
 
     socket.on("velo", (nbstation) => {
         let nombreV = myLevel.city.stationsVelo[nbstation - 1].velosLibre;
-        socket.emit("nombreVelo", nombreV);
+        socket.emit("nombreVelo", nombreV, nbstation);
     });
 
     /*** Personne ****/
@@ -412,7 +402,7 @@ io.on('connection', (socket) =>
         let idPersonne = findPersonne(str)
         if(myLevel.personnes[idPersonne].envoye != 1)
         {
-            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination,idPersonne);
+            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination, idPersonne, myLevel.city.mairie.panneTrain, myLevel.city.mairie.panneMetro, myLevel.city.mairie.manqueVelo);
             myLevel.personnes[idPersonne].fenetre = true;
         }
     });
@@ -452,12 +442,24 @@ io.on('connection', (socket) =>
         socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne],false);
     });
 
-    socket.on("DiminueVelo", () => 
+    socket.on("DiminueVelo", (idPersonne) => 
     {
-        myLevel.city.stationsVelo[2].velosLibre -= 1;
-        if(myLevel.city.stationsVelo[2].velosLibre == 0)
+        let departPersonne = myLevel.personnes[idPersonne].depart;
+        if(departPersonne.charAt(2) == 7)
         {
-            myLevel.city.mairie.evenementVelo();
+            myLevel.city.stationsVelo[0].velosLibre -= 1;
+            if(myLevel.city.stationsVelo[0].velosLibre == 0)
+            {
+                myLevel.city.mairie.evenementVelo();
+            } 
+        }
+        else
+        {
+            myLevel.city.stationsVelo[2].velosLibre -= 1;
+            if(myLevel.city.stationsVelo[2].velosLibre == 0)
+            {
+                myLevel.city.mairie.evenementVelo();
+            }
         }
     });
 

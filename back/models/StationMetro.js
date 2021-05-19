@@ -5,6 +5,18 @@ class StationMetro {
         this.x;
         this.y;
     }
+
+    count()
+    {
+        if(this.temps != 1)
+        {
+            this.temps -= 1;
+        }
+        else
+        {
+            this.temps = 7;
+        }
+    }
 }
 
 module.exports = StationMetro;

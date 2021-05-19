@@ -362,10 +362,137 @@ socket.on("noProbMetro", () =>{
     document.getElementById("probMetro").hidden = true;
 });
 
-document.getElementById('metroRepare').addEventListener("click", event => {
-    console.log("Nous avons réparer le métro.");
-    document.getElementById('reparationMetro').style.display='none';
-    socket.emit("metroRepare");
+/*** Mini-jeu Atelier ***/
+document.getElementById("metroRepare").addEventListener("click", event =>
+{
+    //faire apparaitre le mini-jeu
+    document.getElementById("miniJeuAtelier").style.display = "block";
+
+    const canvas = document.querySelector('#canvas');
+    const contexte = canvas.getContext('2d');
+
+    //changer la taille
+    canvas.height = 725;
+    canvas.width = 810;
+
+    //variables
+    let couleurBleu = "#4A4EFC";
+    let couleurVert = "#659b41";
+    let couleurJaune = "#ffcf33";
+    let couleurRouge = "#FE0000";
+    let epaisseur = 15;
+    let painting = false;
+    let debutX, debutY, finX, finY;
+    let cable;
+    let cableRouge = false;
+    let cableBleu = false;
+    let cableJaune = false;
+    let cableVert = false;
+
+    function startPosition(e){
+        painting = true;
+        debutX = e.clientX;
+        debutY = e.clientY;
+    }
+    function finishedPosition(e){
+        painting = false;
+        finX = e.clientX;
+        finY = e.clientY;
+
+        if (finX > 810 && finX < 900) {
+            if(cable == 'rouge' && finY > 680 && finY < 730) {
+                cableRouge = true;
+            }
+            else if(cable == 'bleu' && finY > 465 && finY < 515){
+                cableBleu = true;
+            }
+            else if(cable == 'jaune' && finY > 45 && finY < 95){
+                cableJaune = true;
+            }
+            else if(cable == 'vert' && finY > 255 && finY < 305){
+                cableVert = true;
+            }
+        }
+        
+        //clear
+        contexte.clearRect(0,0,canvas.width, canvas.height);
+
+        if(cableRouge) {
+            contexte.beginPath();
+            contexte.strokeStyle = couleurRouge;
+            contexte.moveTo(30,50);
+            contexte.lineTo(790,685);
+            contexte.stroke();
+        }
+        if(cableBleu) {
+            contexte.beginPath();
+            contexte.strokeStyle = couleurBleu;
+            contexte.moveTo(30,265);
+            contexte.lineTo(790,470);
+            contexte.stroke();
+        }
+        if(cableJaune) {
+            contexte.beginPath();
+            contexte.strokeStyle = couleurJaune;
+            contexte.moveTo(30,470);
+            contexte.lineTo(790,55);
+            contexte.stroke();
+        }
+        if(cableVert) {
+            contexte.beginPath();
+            contexte.strokeStyle = couleurVert;
+            contexte.moveTo(30,685);
+            contexte.lineTo(790,280);
+            contexte.stroke();
+        }
+
+        if(cableRouge && cableVert && cableBleu && cableJaune)
+        {
+            document.getElementById("miniJeuAtelier").style.display = "none";
+            document.getElementById("probMetro").hidden = true;
+            document.getElementById("jeuAtelierReussi").hidden = false;
+        }
+
+        contexte.beginPath();
+    }
+
+    function debutDraw(e){
+        if(!painting) return;
+        contexte.lineWidth = epaisseur;
+        contexte.lineCap = 'round';
+
+        if (debutX > 95 && debutX < 155) {
+            if( !cableRouge && debutY > 45 && debutY < 95) {
+                contexte.strokeStyle = couleurRouge;
+                suiteDraw(e, 'rouge');
+            }
+            else if( !cableBleu && debutY > 255 && debutY < 305){
+                contexte.strokeStyle = couleurBleu;
+                suiteDraw(e, 'bleu');
+            }
+            else if( !cableJaune && debutY > 465 && debutY < 515){
+                contexte.strokeStyle = couleurJaune;
+                suiteDraw(e, 'jaune');
+            }
+            else if( !cableVert && debutY > 680 && debutY < 730){
+                contexte.strokeStyle = couleurVert;
+                suiteDraw(e, 'vert');
+            }
+        }   
+    }
+
+    function suiteDraw(e, fil) {
+        cable = fil;
+        contexte.lineTo(e.clientX -95, e.clientY-15);
+        contexte.stroke();
+        contexte.beginPath();
+        contexte.moveTo(e.clientX -95, e.clientY-15);
+    }
+
+    //EventListeners
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', finishedPosition);
+    canvas.addEventListener('mousemove', debutDraw);
 });
  
 document.getElementById('partir').addEventListener("click", event => 
@@ -376,17 +503,18 @@ document.getElementById('partir').addEventListener("click", event =>
 
 /*** Gare ***/
 
-socket.on("prochainTrain", (temps, panne) => {
+socket.on("HoraireTrain", (temps, panne) =>
+{
+    document.getElementById('tempsTrain').innerHTML = temps;
     if(panne)
     {
-        document.getElementById("prochainTrain").hidden=true;
-        document.getElementById("attenteTrain").hidden=false;
+        document.getElementById("prochainTrain").hidden = true;
+        document.getElementById("attenteTrain").hidden = false;
     }
     else
     {
-        document.getElementById("attenteTrain").hidden=true;
-        document.getElementById("prochainTrain").hidden=false;
-        document.getElementById('tempsTrain').innerHTML = temps;
+        document.getElementById("prochainTrain").hidden = false;
+        document.getElementById("attenteTrain").hidden = true;
     }
 });
 
@@ -398,36 +526,72 @@ document.getElementById('bye').addEventListener("click", event =>
 
 /*** Métro ***/
 
-socket.on("prochainMetro", (temps, panne) => {
+socket.on("HoraireMetro1", (temps, panne) =>
+{
+    document.getElementById('tempsMetro1').innerHTML = temps;
     if(panne)
     {
-        document.getElementById("prochainMetro").hidden=true;
-        document.getElementById('attenteMetro').hidden = false;
+        document.getElementById("prochainMetro1").hidden = true;
+        document.getElementById("attenteMetro1").hidden = false;
     }
     else
     {
-        document.getElementById('attenteMetro').hidden = true;
-        document.getElementById("prochainMetro").hidden=false;
-        document.getElementById('tempsMetro').innerHTML = temps;
+        document.getElementById("prochainMetro1").hidden = false;
+        document.getElementById("attenteMetro1").hidden = true;
     }
 });
 
-document.getElementById('ciao').addEventListener("click", event => 
+socket.on("HoraireMetro2", (temps, panne) =>
+{
+    document.getElementById('tempsMetro2').innerHTML = temps;
+    if(panne)
+    {
+        document.getElementById("prochainMetro2").hidden = true;
+        document.getElementById("attenteMetro2").hidden = false;
+    }
+    else
+    {
+        document.getElementById("prochainMetro2").hidden = false;
+        document.getElementById("attenteMetro2").hidden = true;
+    }
+});
+
+document.getElementById('ciao1').addEventListener("click", event => 
 { 
-    document.getElementById('horaireMetro').style.display='none';
+    document.getElementById('horaireMetro1').style.display='none';
+    console.log("Nous avons quitté la station de métro.");
+});
+
+document.getElementById('ciao2').addEventListener("click", event => 
+{ 
+    document.getElementById('horaireMetro2').style.display='none';
     console.log("Nous avons quitté la station de métro.");
 });
 
 /*** Vélo ***/
 
-socket.on("nombreVelo", (nombreV) => {
-    document.getElementById("nombreVelo").hidden=false;
-    document.getElementById('resteVelo').innerHTML = nombreV;
+socket.on("nombreVelo", (nombreV, nbstation) => {
+    if(nbstation == 1)
+    {
+        document.getElementById("nombreVelo1").hidden = false;
+        document.getElementById('resteVelo1').innerHTML = nombreV;
+    }
+    if(nbstation == 3)
+    {
+        document.getElementById("nombreVelo2").hidden = false;
+        document.getElementById('resteVelo2').innerHTML = nombreV;
+    }
 });
 
-document.getElementById('aurevoir').addEventListener("click", event => 
+document.getElementById('aurevoir1').addEventListener("click", event => 
 { 
-    document.getElementById('veloRestants').style.display='none';
+    document.getElementById('veloRestants1').style.display='none';
+    console.log("Nous avons quitté la station de vélo.");
+});
+
+document.getElementById('aurevoir2').addEventListener("click", event => 
+{ 
+    document.getElementById('veloRestants2').style.display='none';
     console.log("Nous avons quitté la station de vélo.");
 });
 
@@ -446,8 +610,33 @@ socket.on("PersonneApparue", (idPersonne,personne) =>
 });
 
 
-socket.on("AfficheDestination", (destination, idPerso) => 
+socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
 {
+    if(panneTrain)
+    {
+        document.getElementById("transportTrain").disabled = true;
+    }
+    else
+    {
+        document.getElementById("transportTrain").disabled = false;
+    }
+    if(panneMetro)
+    {
+        document.getElementById("transportMetro").disabled = true;
+    }
+    else
+    {
+        document.getElementById("transportMetro").disabled = false;
+    }
+    if(manqueVelo)
+    {
+        document.getElementById("transportVelo").disabled = true;
+    }
+    else
+    {
+        document.getElementById("transportVelo").disabled = false;
+    }
+
     document.getElementsByClassName("personne content").id=""+idPerso;
     if(destination == "Campagne")
     {
@@ -490,9 +679,8 @@ document.getElementById("transport").addEventListener("click", event =>
     let typeTransport = event.target.id;
     if(typeTransport == "transportVelo")
     {
-        socket.emit("DiminueVelo");
+        socket.emit("DiminueVelo", document.getElementsByClassName("personne content").id);
     }
-
     document.getElementById('DestinationPersonne').style.display='none';
     socket.emit("GetMove", document.getElementsByClassName("personne content").id, typeTransport);
     socket.emit("SupprimePersonne", document.getElementsByClassName("personne content").id);

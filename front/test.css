@@ -145,12 +145,23 @@
   background-image: url("./pictures/atelier.png");
 }
 
-
-
 .affiche {
   margin-left: 6%;
   margin-top: 7.8%;
   width: 50%;
+}
+
+#image {
+  width:1000px;
+  height:750px;
+  position: absolute;
+  z-index: -2;
+}
+
+#canvas {
+  margin-top: 15px;
+  margin-left: 95px;
+  z-index: 3;
 }
 
 .gare {
