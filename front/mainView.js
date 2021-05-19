@@ -587,8 +587,9 @@ function init()
     scene.add( cube12 );
     cube12.cursor = 'pointer';
     cube12.on('click', function(ev){
-        
+        evenementClickPersonne("0.7.N")
     });
+
 
     const cube13 = new THREE.Mesh( geometry12, material );
     cube13.name="0.7.S"
@@ -597,8 +598,9 @@ function init()
     scene.add( cube13 );
     cube13.cursor = 'pointer';
     cube13.on('click', function(ev){
-        
+        evenementClickPersonne("0.7.S")
     });
+
 
     const cube14 = new THREE.Mesh( geometry12, material );
     cube14.name="0.7.E"
@@ -607,7 +609,7 @@ function init()
     scene.add( cube14 );
     cube14.cursor = 'pointer';
     cube14.on('click', function(ev){
-        
+        evenementClickPersonne("0.7.E")
     });
 
     const cube15 = new THREE.Mesh( geometry12, material );
@@ -617,7 +619,45 @@ function init()
     scene.add( cube15 );
     cube15.cursor = 'pointer';
     cube15.on('click', function(ev){
-        
+        evenementClickPersonne("0.7.O")
+    });
+
+    const cube40 = new THREE.Mesh( geometry12, material );
+    cube40.name="0.7.NO"
+    cube40.visible=false;
+    cube40.position.set(-5-0.82,0,-19-0.82);
+    scene.add( cube40 );
+    cube40.cursor = 'pointer';
+    cube40.on('click', function(ev){
+        evenementClickPersonne("0.7.NO")
+    });
+    const cube41 = new THREE.Mesh( geometry12, material );
+    cube41.name="0.7.NE"
+    cube41.visible=false;
+    cube41.position.set(-5+0.82,0,-19-0.82);
+    scene.add( cube41 );
+    cube41.cursor = 'pointer';
+    cube41.on('click', function(ev){
+        evenementClickPersonne("0.7.NE")
+    });
+
+    const cube42 = new THREE.Mesh( geometry12, material );
+    cube42.name="0.7.SO"
+    cube42.visible=false;
+    cube42.position.set(-5-0.82,0,-19+0.82);
+    scene.add( cube42 );
+    cube42.cursor = 'pointer';
+    cube42.on('click', function(ev){
+        evenementClickPersonne("0.7.SO")
+    });
+    const cube43 = new THREE.Mesh( geometry12, material );
+    cube43.name="0.7.SE"
+    cube43.visible=false;
+    cube43.position.set(-5+0.82,0,-19+0.82);
+    scene.add( cube43 );
+    cube43.cursor = 'pointer';
+    cube43.on('click', function(ev){
+        evenementClickPersonne("0.7.SE")
     });
 
      //BLOC 2
@@ -628,7 +668,7 @@ function init()
      scene.add( cube16 );
      cube16.cursor = 'pointer';
      cube16.on('click', function(ev){
-         
+        evenementClickPersonne("1.7.N")
      });
  
      const cube17 = new THREE.Mesh( geometry12, material );
@@ -638,7 +678,7 @@ function init()
      scene.add( cube17 );
      cube17.cursor = 'pointer';
      cube17.on('click', function(ev){
-         
+        evenementClickPersonne("1.7.S")
      });
  
      const cube18 = new THREE.Mesh( geometry12, material );
@@ -648,7 +688,7 @@ function init()
      scene.add( cube18 );
      cube18.cursor = 'pointer';
      cube18.on('click', function(ev){
-         
+        evenementClickPersonne("1.7.E")
      });
  
      const cube19 = new THREE.Mesh( geometry12, material );
@@ -658,7 +698,45 @@ function init()
      scene.add( cube19 );
      cube19.cursor = 'pointer';
      cube19.on('click', function(ev){
-         
+        evenementClickPersonne("1.7.O")
+     });
+
+     const cube44 = new THREE.Mesh( geometry12, material );
+     cube44.name="1.7.NO"
+     cube44.visible=false;
+     cube44.position.set(-5-0.82,0,-17-0.82);
+     scene.add( cube44 );
+     cube44.cursor = 'pointer';
+     cube44.on('click', function(ev){
+        evenementClickPersonne("1.7.NO")
+     });
+     const cube45 = new THREE.Mesh( geometry12, material );
+     cube45.name="1.7.NE"
+     cube45.visible=false;
+     cube45.position.set(-5+0.82,0,-17-0.82);
+     scene.add( cube45 );
+     cube45.cursor = 'pointer';
+     cube45.on('click', function(ev){
+        evenementClickPersonne("1.7.NE")
+     });
+ 
+     const cube46 = new THREE.Mesh( geometry12, material );
+     cube46.name="1.7.SO"
+     cube46.visible=false;
+     cube46.position.set(-5-0.82,0,-17+0.82);
+     scene.add( cube46 );
+     cube46.cursor = 'pointer';
+     cube46.on('click', function(ev){
+        evenementClickPersonne("1.7.SO")
+     });
+     const cube47 = new THREE.Mesh( geometry12, material );
+     cube47.name="1.7.SE"
+     cube47.visible=false;
+     cube47.position.set(-5+0.82,0,-17+0.82);
+     scene.add( cube47 );
+     cube47.cursor = 'pointer';
+     cube47.on('click', function(ev){
+        evenementClickPersonne("1.7.SE")
      });
 
      //BLOC 3
@@ -669,7 +747,7 @@ function init()
      scene.add( cube20 );
      cube20.cursor = 'pointer';
      cube20.on('click', function(ev){
-         
+        evenementClickPersonne("1.8.N")
      });
  
      const cube21 = new THREE.Mesh( geometry12, material );
@@ -679,7 +757,7 @@ function init()
      scene.add( cube21 );
      cube21.cursor = 'pointer';
      cube21.on('click', function(ev){
-         
+        evenementClickPersonne("1.8.S")
      });
  
      const cube22 = new THREE.Mesh( geometry12, material );
@@ -689,7 +767,7 @@ function init()
      scene.add( cube22 );
      cube22.cursor = 'pointer';
      cube22.on('click', function(ev){
-         
+        evenementClickPersonne("1.8.E")
      });
  
      const cube23 = new THREE.Mesh( geometry12, material );
@@ -699,9 +777,46 @@ function init()
      scene.add( cube23 );
      cube23.cursor = 'pointer';
      cube23.on('click', function(ev){
-         
+        evenementClickPersonne("1.8.O")
      });
 
+     const cube48 = new THREE.Mesh( geometry12, material );
+     cube48.name="1.8.NO"
+     cube48.visible=false;
+     cube48.position.set(-3-0.82,0,-17-0.82);
+     scene.add( cube48 );
+     cube48.cursor = 'pointer';
+     cube48.on('click', function(ev){
+        evenementClickPersonne("1.8.NO")
+     });
+     const cube49 = new THREE.Mesh( geometry12, material );
+     cube49.name="1.8.NE"
+     cube49.visible=false;
+     cube49.position.set(-3+0.82,0,-17-0.82);
+     scene.add( cube49 );
+     cube49.cursor = 'pointer';
+     cube49.on('click', function(ev){
+        evenementClickPersonne("1.8.NE")
+     });
+ 
+     const cube50 = new THREE.Mesh( geometry12, material );
+     cube50.name="1.8.SO"
+     cube50.visible=false;
+     cube50.position.set(-3-0.82,0,-17+0.82);
+     scene.add( cube50 );
+     cube50.cursor = 'pointer';
+     cube50.on('click', function(ev){
+        evenementClickPersonne("1.8.SO")
+     });
+     const cube51 = new THREE.Mesh( geometry12, material );
+     cube51.name="1.8.SE"
+     cube51.visible=false;
+     cube51.position.set(-3+0.82,0,-17+0.82);
+     scene.add( cube51 );
+     cube51.cursor = 'pointer';
+     cube51.on('click', function(ev){
+        evenementClickPersonne("1.8.SE")
+     });
 
     
     //BLOC 4
@@ -712,7 +827,7 @@ function init()
      scene.add( cube24 );
      cube24.cursor = 'pointer';
      cube24.on('click', function(ev){
-         
+        evenementClickPersonne("1.9.N")
      });
  
      const cube25 = new THREE.Mesh( geometry12, material );
@@ -722,7 +837,7 @@ function init()
      scene.add( cube25 );
      cube25.cursor = 'pointer';
      cube25.on('click', function(ev){
-         
+        evenementClickPersonne("1.9.S")
      });
  
      const cube26 = new THREE.Mesh( geometry12, material );
@@ -732,7 +847,7 @@ function init()
      scene.add( cube26 );
      cube26.cursor = 'pointer';
      cube26.on('click', function(ev){
-         
+        evenementClickPersonne("1.9.E")
      });
  
      const cube27 = new THREE.Mesh( geometry12, material );
@@ -742,7 +857,45 @@ function init()
      scene.add( cube27 );
      cube27.cursor = 'pointer';
      cube27.on('click', function(ev){
-         
+        evenementClickPersonne("1.9.O")
+     });
+
+     const cube52 = new THREE.Mesh( geometry12, material );
+     cube52.name="1.9.NO"
+     cube52.visible=false;
+     cube52.position.set(-1-0.82,0,-17-0.82);
+     scene.add( cube52 );
+     cube52.cursor = 'pointer';
+     cube52.on('click', function(ev){
+        evenementClickPersonne("1.9.NO")
+     });
+     const cube53 = new THREE.Mesh( geometry12, material );
+     cube53.name="1.9.NE"
+     cube53.visible=false;
+     cube53.position.set(-1+0.82,0,-17-0.82);
+     scene.add( cube53 );
+     cube53.cursor = 'pointer';
+     cube53.on('click', function(ev){
+        evenementClickPersonne("1.9.NE")
+     });
+ 
+     const cube54 = new THREE.Mesh( geometry12, material );
+     cube54.name="1.9.SO"
+     cube54.visible=false;
+     cube54.position.set(-1-0.82,0,-17+0.82);
+     scene.add( cube54 );
+     cube54.cursor = 'pointer';
+     cube54.on('click', function(ev){
+        evenementClickPersonne("1.9.SO")
+     });
+     const cube55 = new THREE.Mesh( geometry12, material );
+     cube55.name="1.9.SE"
+     cube55.visible=false;
+     cube55.position.set(-1+0.82,0,-17+0.82);
+     scene.add( cube55 );
+     cube55.cursor = 'pointer';
+     cube55.on('click', function(ev){
+        evenementClickPersonne("1.9.SE")
      });
 
     //BLOC 5
@@ -753,7 +906,7 @@ function init()
      scene.add( cube28 );
      cube28.cursor = 'pointer';
      cube28.on('click', function(ev){
-         
+        evenementClickPersonne("1.10.N")
      });
  
      const cube29 = new THREE.Mesh( geometry12, material );
@@ -763,7 +916,7 @@ function init()
      scene.add( cube29 );
      cube29.cursor = 'pointer';
      cube29.on('click', function(ev){
-         
+        evenementClickPersonne("1.10.S")
      });
  
      const cube30 = new THREE.Mesh( geometry12, material );
@@ -773,7 +926,7 @@ function init()
      scene.add( cube30 );
      cube30.cursor = 'pointer';
      cube30.on('click', function(ev){
-         
+        evenementClickPersonne("1.10.E")
      });
  
      const cube31 = new THREE.Mesh( geometry12, material );
@@ -783,9 +936,46 @@ function init()
      scene.add( cube31 );
      cube31.cursor = 'pointer';
      cube31.on('click', function(ev){
-         
+        evenementClickPersonne("1.10.O")
      });
 
+     const cube56 = new THREE.Mesh( geometry12, material );
+     cube56.name="1.10.NO"
+     cube56.visible=false;
+     cube56.position.set(1-0.82,0,-17-0.82);
+     scene.add( cube56 );
+     cube56.cursor = 'pointer';
+     cube56.on('click', function(ev){
+        evenementClickPersonne("1.10.NO")
+     });
+     const cube57 = new THREE.Mesh( geometry12, material );
+     cube57.name="1.10.NE"
+     cube57.visible=false;
+     cube57.position.set(1+0.82,0,-17-0.82);
+     scene.add( cube57 );
+     cube57.cursor = 'pointer';
+     cube57.on('click', function(ev){
+        evenementClickPersonne("1.10.NE")
+     });
+ 
+     const cube58 = new THREE.Mesh( geometry12, material );
+     cube58.name="1.10.SO"
+     cube58.visible=false;
+     cube58.position.set(1-0.82,0,-17+0.82);
+     scene.add( cube58 );
+     cube58.cursor = 'pointer';
+     cube58.on('click', function(ev){
+        evenementClickPersonne("1.10.SO")
+     });
+     const cube59 = new THREE.Mesh( geometry12, material );
+     cube59.name="1.10.SE"
+     cube59.visible=false;
+     cube59.position.set(1+0.82,0,-17+0.82);
+     scene.add( cube59 );
+     cube59.cursor = 'pointer';
+     cube59.on('click', function(ev){
+        evenementClickPersonne("1.10.SE")
+     });
     //BLOC 6
      const cube32 = new THREE.Mesh( geometry12, material );
      cube32.name="1.11.N"
@@ -794,7 +984,7 @@ function init()
      scene.add( cube32 );
      cube32.cursor = 'pointer';
      cube32.on('click', function(ev){
-         
+        evenementClickPersonne("1.11.N")
      });
  
      const cube33 = new THREE.Mesh( geometry12, material );
@@ -804,7 +994,7 @@ function init()
      scene.add( cube33 );
      cube33.cursor = 'pointer';
      cube33.on('click', function(ev){
-         
+        evenementClickPersonne("1.11.S")
      });
  
      const cube34 = new THREE.Mesh( geometry12, material );
@@ -814,7 +1004,7 @@ function init()
      scene.add( cube34 );
      cube34.cursor = 'pointer';
      cube34.on('click', function(ev){
-         
+        evenementClickPersonne("1.11.E")
      });
  
      const cube35 = new THREE.Mesh( geometry12, material );
@@ -824,7 +1014,45 @@ function init()
      scene.add( cube35 );
      cube35.cursor = 'pointer';
      cube35.on('click', function(ev){
-         
+        evenementClickPersonne("1.11.O")
+     });
+
+     const cube60 = new THREE.Mesh( geometry12, material );
+     cube60.name="1.11.NO"
+     cube60.visible=false;
+     cube60.position.set(3-0.82,0,-17-0.82);
+     scene.add( cube60 );
+     cube60.cursor = 'pointer';
+     cube60.on('click', function(ev){
+        evenementClickPersonne("1.11.NO")
+     });
+     const cube61 = new THREE.Mesh( geometry12, material );
+     cube61.name="1.11.NE"
+     cube61.visible=false;
+     cube61.position.set(3+0.82,0,-17-0.82);
+     scene.add( cube61 );
+     cube61.cursor = 'pointer';
+     cube61.on('click', function(ev){
+        evenementClickPersonne("1.11.NE")
+     });
+ 
+     const cube62 = new THREE.Mesh( geometry12, material );
+     cube62.name="1.11.SO"
+     cube62.visible=false;
+     cube62.position.set(3-0.82,0,-17+0.82);
+     scene.add( cube62 );
+     cube62.cursor = 'pointer';
+     cube62.on('click', function(ev){
+        evenementClickPersonne("1.11.SO")
+     });
+     const cube63 = new THREE.Mesh( geometry12, material );
+     cube63.name="1.11.SE"
+     cube63.visible=false;
+     cube63.position.set(3+0.82,0,-17+0.82);
+     scene.add( cube63 );
+     cube63.cursor = 'pointer';
+     cube63.on('click', function(ev){
+        evenementClickPersonne("1.11.SE");
      });
 
     //BLOC 7
@@ -835,7 +1063,7 @@ function init()
      scene.add( cube36 );
      cube36.cursor = 'pointer';
      cube36.on('click', function(ev){
-         
+        evenementClickPersonne("0.11.N");
      });
  
      const cube37 = new THREE.Mesh( geometry12, material );
@@ -845,7 +1073,7 @@ function init()
      scene.add( cube37 );
      cube37.cursor = 'pointer';
      cube37.on('click', function(ev){
-         
+        evenementClickPersonne("0.11.S");
      });
  
      const cube38 = new THREE.Mesh( geometry12, material );
@@ -855,7 +1083,7 @@ function init()
      scene.add( cube38 );
      cube38.cursor = 'pointer';
      cube38.on('click', function(ev){
-         
+        evenementClickPersonne("0.11.E");
      });
  
      const cube39 = new THREE.Mesh( geometry12, material );
@@ -865,9 +1093,46 @@ function init()
      scene.add( cube39 );
      cube39.cursor = 'pointer';
      cube39 .on('click', function(ev){
-         
+        evenementClickPersonne("0.11.O");
      });
 
+     const cube64 = new THREE.Mesh( geometry12, material );
+     cube64.name="0.11.NO"
+     cube64.visible=false;
+     cube64.position.set(3-0.82,0,-19-0.82);
+     scene.add( cube64 );
+     cube64.cursor = 'pointer';
+     cube64.on('click', function(ev){
+        evenementClickPersonne("0.11.NO");
+     });
+     const cube65 = new THREE.Mesh( geometry12, material );
+     cube65.name="0.11.NE"
+     cube65.visible=false;
+     cube65.position.set(3+0.82,0,-19-0.82);
+     scene.add( cube65 );
+     cube65.cursor = 'pointer';
+     cube65.on('click', function(ev){
+        evenementClickPersonne("0.11.NE");
+     });
+ 
+     const cube66 = new THREE.Mesh( geometry12, material );
+     cube66.name="0.11.SO"
+     cube66.visible=false;
+     cube66.position.set(3-0.82,0,-19+0.82);
+     scene.add( cube66 );
+     cube66.cursor = 'pointer';
+     cube66.on('click', function(ev){
+        evenementClickPersonne("0.11.SO");
+     });
+     const cube67 = new THREE.Mesh( geometry12, material );
+     cube67.name="0.11.SE"
+     cube67.visible=false;
+     cube67.position.set(3+0.82,0,-19+0.82);
+     scene.add( cube67 );
+     cube67.cursor = 'pointer';
+     cube67.on('click', function(ev){
+        evenementClickPersonne("0.11.SE");
+     });
 
 }
 
@@ -900,15 +1165,7 @@ function animate()
 
 }
 
-function ajoutPersonne(personne) {
 
-    scene.getObjectByName(personne.depart).visible=true;
-}
-
-function suppPersonne(personne) {
-
-    scene.getObjectByName(personne.depart).visible=false;
-}
 
 init();
 animate();

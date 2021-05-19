@@ -6,6 +6,7 @@ class Personne {
         this.envoye = 0;
         this.apparue = false;
         this.chrono = 0;
+        this.fenetre = false;
     }
     
     setDestination(destination)
@@ -44,6 +45,34 @@ class Personne {
         this.envoye = 0;
         this.apparue = false;
         this.chrono = 0;
+    }
+
+    initialisation(tab){
+        let rand1 = Math.floor(Math.random() * 7 + 2);
+        switch (rand1)
+        {
+            case 2 : this.setDestination("Ecole");
+            break;
+            case 3 : this.setDestination("Campagne");
+            break;
+            case 4 : this.setDestination("Magasins");
+            break;
+            case 5 : this.setDestination("Musee");
+            break;
+            case 6 : this.setDestination("Parc");
+            break;
+            case 7 : this.setDestination("Restaurant");
+            break;
+            case 8: this.setDestination("Stade");
+            break;
+        }
+
+        let rand2 =Math.floor(Math.random() * tab.length);
+
+        this.setDepart(tab[rand2]);
+
+        tab = tab.splice(rand2, 1);
+
     }
 }
 

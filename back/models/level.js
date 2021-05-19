@@ -12,6 +12,8 @@ class Level {
         this.nbEvenements = 0;
         this.pasContentMax = 0;
         this.pollutionMax = 0;
+        this.personnesEnvoye= 0;
+        this.personnesApparu= 0;
     }
 
     /**
@@ -46,6 +48,8 @@ class Level {
         this.city.technicentre.reset();
         this.city.parking.reset();
         this.city.mairie.reset();
+        this.personnesEnvoye= 0;
+        this.personnesApparu= 0;
     }
 }
 

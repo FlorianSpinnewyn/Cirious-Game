@@ -103,71 +103,72 @@ io.on('connection', (socket) =>
         function findLevel(result4) {
             myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
 
+            let tab = [
+                "0.7.N",
+                "0.7.S",
+                "0.7.O",
+                "0.7.E",
+                "0.7.NE",
+                "0.7.SE",
+                "0.7.NO",
+                "0.7.SO",
+                "1.7.N",
+                "1.7.S",
+                "1.7.O",
+                "1.7.E",
+                "1.7.NE",
+                "1.7.SE",
+                "1.7.NO",
+                "1.7.SO",
+                "1.8.N",
+                "1.8.S",
+                "1.8.O",
+                "1.8.E",
+                "1.8.NE",
+                "1.8.SE",
+                "1.8.NO",
+                "1.8.SO",
+                "1.9.N",
+                "1.9.S",
+                "1.9.O",
+                "1.9.E",
+                "1.9.NE",
+                "1.9.SE",
+                "1.9.NO",
+                "1.9.SO",
+                "1.10.N",
+                "1.10.S",
+                "1.10.O",
+                "1.10.E",
+                "1.10.NE",
+                "1.10.SE",
+                "1.10.NO",
+                "1.10.SO",
+                "1.11.N",
+                "1.11.S",
+                "1.11.O",
+                "1.11.E",
+                "1.11.NE",
+                "1.11.SE",
+                "1.11.NO",
+                "1.11.SO",
+                "0.11.N",
+                "0.11.S",
+                "0.11.O",
+                "0.11.E",
+                "0.11.NE",
+                "0.11.SE",
+                "0.11.NO",
+                "0.11.SO"
+            ]
+
             for(let i = 0; i<myLevel.nbPersonnes;i++) {
                 let personne = new Personne();
-
-                let rand1 = Math.floor(Math.random() * 7 + 2);
-                switch (rand1)
-                {
-                    case 2 : personne.setDestination("Ecole");
-                    break;
-                    case 3 : personne.setDestination("Campagne");
-                    break;
-                    case 4 : personne.setDestination("Magasins");
-                    break;
-                    case 5 : personne.setDestination("Musee");
-                    break;
-                    case 6 : personne.setDestination("Parc");
-                    break;
-                    case 7 : personne.setDestination("Restaurant");
-                    break;
-                    case 8: personne.setDestination("Stade");
-                    break;
-                }
-                let rand2 =Math.floor(Math.random() * 2);
-                let rand3=0;
-                if(rand2 == 0)
-                {
-                    rand3 =Math.floor(Math.random() * 2);
-                    switch(rand3)
-                    {
-                        case 0 : rand3 = 7;
-                        break;
-                        case 1 : rand3 = 11;
-                        break;
-                    }
-                }
-                else
-                {
-                    rand3 = Math.floor(Math.random() * 3);
-                    switch(rand3)
-                    {
-                        case 0 : rand3 = 7;
-                        break;
-                        case 1 : rand3 = 9;
-                        break;
-                        case 2 : rand3 = 11;
-                        break;
-                    }
-                }
-        
-                let rand4 = Math.floor(Math.random() * 4);
-                switch(rand4)
-                {
-                    case 0 : rand4 = "N";
-                    break;
-                    case 1 : rand4 = "E";
-                    break;
-                    case 2 : rand4 = "O";
-                    break;
-                    case 3 : rand4 = "S";
-                }
-                personne.setDepart(rand2 + "." + rand3 + "." + rand4);
+                personne.initialisation(tab)
                 myLevel.personnes.push(personne);
                 delete(personne);
             }
             /** Affichage plusieurs boutons de personnes **/
-            socket.emit("boutonsPersonnes", myLevel.personnes);
             socket.emit("initialisationViewLevel", myLevel.numLevel);
         }
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
@@ -367,49 +368,65 @@ io.on('connection', (socket) =>
 
     /*** Personne ****/
 
-    socket.on("ChronoPersonnes", (pause) =>
+    socket.on("c", (pause) =>
     {
         if(pause == false)
         {
             for(let i = 0; i < myLevel.personnes.length; ++i)
             {
-                let temps = myLevel.personnes[i].count(15); //La personne disparaît au bout de 15 secondes
+                let temps = myLevel.personnes[i].count(10); //La personne disparaît au bout de 15 secondes
                 if(temps == 1) //la personne disparaît et prend la voiture
                 {
                     myLevel.personnes[i].envoye = 1;
-                    socket.emit("PersonneDisparait", i, myLevel.personnes[i]);
+                    socket.emit("PersonneDisparait", i, myLevel.personnes[i],true);
+                    myLevel.personnesEnvoye++;
                 }
             }
+            if( myLevel.personnesEnvoye==myLevel.nbPersonnes){
+                //console.log("fini");
+            }
         }
+
     });
 
     socket.on("NouvellePersonne", () =>
     {
-        for(let i = 0; i < myLevel.personnes.length; ++i) 
-        //pour chaque personne on teste si elle doit apparaître ou pas
-        {
-            if(myLevel.personnes[i].apparue == false)
-            {
-                let isAppeared = Math.floor(Math.random() * 100);
-                if(isAppeared < 50) //50% de chances d'apparaître toutes les 15 minutes
-                {
-                    myLevel.personnes[i].apparue = true;
-                    socket.emit("PersonneApparue", i,myLevel.personnes[i]);
+        if(myLevel.personnesApparu<myLevel.nbPersonnes) {
+            if(myLevel.personnes.length>0) {
+                
+                let i = 0
+                while(myLevel.personnes[i].apparue == true) {
+                    i++;
+                    
                 }
+                
+                myLevel.personnes[i].apparue = true;
+                socket.emit("PersonneApparue", i,myLevel.personnes[i]);
+                myLevel.personnesApparu++;
             }
         }
     });
 
-    socket.on("CliquePersonne", (idPersonne) => 
+    socket.on("CliquePersonne", (str) => 
     {
+        let idPersonne = findPersonne(str)
         if(myLevel.personnes[idPersonne].envoye != 1)
         {
-            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination);
+            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination,idPersonne);
+            myLevel.personnes[idPersonne].fenetre = true;
         }
     });
 
     socket.on("GetMove", (numberPersonne, typeTransport) =>
     {
+        let departWord;
+        let departtab = myLevel.personnes[numberPersonne].depart.split(".");
+        if(departtab[2].length==2){
+            departWord = myLevel.personnes[numberPersonne].depart.substring(0, myLevel.personnes[numberPersonne].depart.length - 1);
+        }
+        else {
+            departWord = myLevel.personnes[numberPersonne].depart;
+        }
         typeTransport = typeTransport.substring(9).toLowerCase();
         function idTransport(result1)
         {
@@ -421,7 +438,7 @@ io.on('connection', (socket) =>
                 {
                     console.log(result3);
                 }
-                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + myLevel.personnes[numberPersonne].depart + "'", trajet);
+                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + departWord + "'", trajet);
             }
             baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + myLevel.personnes[numberPersonne].destination + "'", idBatiment);
         }
@@ -431,6 +448,8 @@ io.on('connection', (socket) =>
     socket.on("SupprimePersonne", numberPersonne =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;
+        myLevel.personnesEnvoye++;
+        socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne],false);
     });
 
     socket.on("DiminueVelo", () => 
@@ -554,3 +573,9 @@ http.listen(4235, () =>
  
 }
 baseDeDonnees.select("SELECT * FROM move WHERE depart='0.7.N' AND idcity='8'", test);*/
+
+function findPersonne(str){
+    for(let i = 0;i<myLevel.personnes.length;i++){
+        if(myLevel.personnes[i].depart==str) {return i;}
+    }
+}

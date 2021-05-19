@@ -7,14 +7,18 @@
 //variables qui seront dans la base de données et qu'on devra récupérer :
 let heurePanneTrain = 20; //evenement Train tous les 20 min
 let heurePanneMetro = 10;
-let modulo = 15;
+let modulo = 5;
 
 chrono = new Chrono();
 
 setInterval(function() {
     chrono.count();
-    socket.emit("ChronoPersonnes", chrono.pause);
-    socket.emit("ChronoHoraire", chrono.pause);
+    if( chrono.pause==false){
+        console.log("cc",chrono.pause)
+        socket.emit("c", chrono.pause);
+        socket.emit("ChronoHoraire", chrono.pause);
+    }
+
     let heure = "";
     let minute = "";
     if(chrono.heure < 10)
@@ -33,11 +37,15 @@ setInterval(function() {
     {
         minute = chrono.minute;
     }
-    document.getElementById("time").innerHTML = heure + "h " + minute + "m ";
-    if((chrono.heure * 60 + chrono.minute) % modulo == 0)
-    {
-        socket.emit("NouvellePersonne");
+    document.getElementById("time").innerHTML = heure + "h " + minute + "m ";   
+    if((chrono.heure * 60 + chrono.minute) % modulo == 0) {
+        
+        if(chrono.pause==false) {
+            socket.emit("NouvellePersonne");
+        }
+        
     }
+
     if(chrono.heure != 16 || chrono.minute != 0)
     {
         if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
@@ -425,34 +433,22 @@ document.getElementById('aurevoir').addEventListener("click", event =>
 
 /*** Personne ***/
 
-function evenementClickPersonne(e)
+function evenementClickPersonne(str)
 {
     console.log("On a cliqué sur une personne.");
-    let id = e.target.id.charAt(8);
-    document.getElementById("idPersonne").innerHTML = id;
-    socket.emit("CliquePersonne", id);
+    console.log(str);
+    socket.emit("CliquePersonne", str);
 }
 
 socket.on("PersonneApparue", (idPersonne,personne) =>
 {
     ajoutPersonne(personne);
-    document.getElementById('Personne' + idPersonne).hidden = false;
-    document.getElementById('Personne' + idPersonne).addEventListener("click", evenementClickPersonne);
 });
 
-socket.on("boutonsPersonnes", personnes => 
-{
-    console.log("apppparuuu ")
-    let chaine = "";
-    for(let i = 0; i < personnes.length; ++i)
-    {
-        chaine += "<button id='Personne" + i + "' style='z-index:2;' hidden=true>Personne</button>";
-    }
-    document.getElementById("Personnes").innerHTML = chaine;
-});
 
-socket.on("AfficheDestination", (destination) => 
+socket.on("AfficheDestination", (destination, idPerso) => 
 {
+    document.getElementsByClassName("personne content").id=""+idPerso;
     if(destination == "Campagne")
     {
         destination = "à la " + destination;
@@ -469,16 +465,24 @@ socket.on("AfficheDestination", (destination) =>
     {
         destination = "au " + destination;
     }
-    console.log("Cette personne souhaite aller ", destination);
+    console.log("Cette personne qui a pour id = " + idPerso + " souhaite aller ", destination);
     document.getElementById("dest").innerHTML = destination;
     document.getElementById('DestinationPersonne').style.display='block';
 });
 
-socket.on("PersonneDisparait", (idPersonne,personne) =>
+socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
 {
     suppPersonne(personne);
-    let pers = document.getElementById("Personne" + idPersonne);
-    document.getElementById("Personnes").removeChild(pers);
+    if(personne.fenetre==true &&  document.getElementsByClassName("personne content").id==idPersonne){
+        if(louper==true){
+            console.log(louper,"trop taaaar")
+        }
+        else {
+            console.log(louper,"Envoyer")
+        }
+        
+        document.getElementById('DestinationPersonne').style.display='none';
+    }
 });
 
 document.getElementById("transport").addEventListener("click", event =>
@@ -488,12 +492,10 @@ document.getElementById("transport").addEventListener("click", event =>
     {
         socket.emit("DiminueVelo");
     }
-    let numberPersonne = document.getElementById("idPersonne").innerHTML;
-    let pers = document.getElementById("Personne" + numberPersonne);
-    document.getElementById("Personnes").removeChild(pers);
+
     document.getElementById('DestinationPersonne').style.display='none';
-    socket.emit("GetMove", numberPersonne, typeTransport);
-    socket.emit("SupprimePersonne", numberPersonne);
+    socket.emit("GetMove", document.getElementsByClassName("personne content").id, typeTransport);
+    socket.emit("SupprimePersonne", document.getElementsByClassName("personne content").id);
 });
 
 document.getElementById('aplus').addEventListener("click", event => 
@@ -520,4 +522,14 @@ function activeOmbre() {
 function desactiveOmbre() {
     light.castShadow = false;
     scene.add(light);
+}
+
+function ajoutPersonne(personne) {
+    console.log(personne.depart)
+    scene.getObjectByName(personne.depart).visible=true;
+}
+
+function suppPersonne(personne) {
+
+    scene.getObjectByName(personne.depart).visible=false;
 }
