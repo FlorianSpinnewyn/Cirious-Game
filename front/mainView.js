@@ -1,5 +1,3 @@
-
-
 let camera,
     scene,
     controls,
@@ -20,6 +18,13 @@ let camera,
     mixer13,
     mixer14,
     mixer15,
+    mixer16,
+    mixer17,
+    mixer18,
+    mixer19,
+    mixer20,
+    mixer21,
+    mixer22,
     light;
     
 const clock = new THREE.Clock();
@@ -92,7 +97,7 @@ function init()
 		document.getElementById("home").style.display = "block";
         document.getElementById('loading-screen').style.display = "none";
 		// optional: remove loader from DOM via event listener
-		loadingScreen.addEventListener( 'transitionend', onTransitionEnd );
+		loadingScreen.addEventListener( 'transitionend', ()=>{} );
 		
 	} );
     
@@ -393,13 +398,141 @@ function init()
 
     const material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
 
-    /**------notif ---- mairie-----**/
-    const geom = new THREE.BoxGeometry( 0.3, 1, 0.3 );
-    const material2 = new THREE.MeshBasicMaterial( {color: 0xef8607} );
-    const notif = new THREE.Mesh( geom, material2 );
-    notif.position.set(-10,2,-13)
-    scene.add( notif );
+        /**------Fleche ---- mairie-----**/
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Fleche/fleche.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+    
+        scene.add(gltf.scene);
+    
+        mixer16 = new THREE.AnimationMixer( gltf.scene );
+        mixer16.clipAction( gltf.animations[ 0   ] ).play();
+      
+    });
+    //Fleche Gare
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Fleche/fleche.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+            gltf.scene.position.set(9,0,-6);
+        })
+    
+        scene.add(gltf.scene);
+    
+        mixer17 = new THREE.AnimationMixer( gltf.scene );
+        mixer17.clipAction( gltf.animations[ 0   ] ).play();
+      
+    });
 
+     //Fleche Metro1
+     loader = new THREE.GLTFLoader();
+     loader.load('3d/TestBlender/road/animation/Fleche/fleche.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             gltf.scene.scale.set(0.1,0.1, 0.1)
+             gltf.scene.position.set(7,0,-4);
+         })
+     
+         scene.add(gltf.scene);
+     
+         mixer18 = new THREE.AnimationMixer( gltf.scene );
+         mixer18.clipAction( gltf.animations[ 0   ] ).play();
+       
+     });
+
+     //Fleche Metro2
+     loader = new THREE.GLTFLoader();
+     loader.load('3d/TestBlender/road/animation/Fleche/fleche.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             gltf.scene.scale.set(0.1,0.1, 0.1)
+             gltf.scene.position.set(11,0,-4);
+         })
+     
+         scene.add(gltf.scene);
+     
+         mixer19 = new THREE.AnimationMixer( gltf.scene );
+         mixer19.clipAction( gltf.animations[ 0   ] ).play();
+       
+     });
+
+
+     //Fleche Metro3
+     loader = new THREE.GLTFLoader();
+     loader.load('3d/TestBlender/road/animation/Fleche/fleche.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             gltf.scene.scale.set(0.1,0.1, 0.1)
+             gltf.scene.position.set(-1,0,-6);
+         })
+     
+         scene.add(gltf.scene);
+     
+         mixer20 = new THREE.AnimationMixer( gltf.scene );
+         mixer20.clipAction( gltf.animations[ 0 ] ).play();
+       
+     });
+
+     //nuage
+     loader = new THREE.GLTFLoader();
+     loader.load('3d/TestBlender/road/animation/Nuage/nuage.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             gltf.scene.scale.set(0.1,0.1, 0.1)
+         
+         })
+     
+         scene.add(gltf.scene);
+     
+         mixer21 = new THREE.AnimationMixer( gltf.scene );
+         mixer21.clipAction( gltf.animations[ 0   ] ).play();
+       
+     });
+
+     //nuage2
+     loader = new THREE.GLTFLoader();
+     loader.load('3d/TestBlender/road/animation/Nuage/nuage2.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             gltf.scene.scale.set(0.1,0.1, 0.1)
+         
+         })
+     
+         scene.add(gltf.scene);
+     
+         mixer22 = new THREE.AnimationMixer( gltf.scene );
+         mixer22.clipAction( gltf.animations[ 0   ] ).play();
+       
+     });
+
+
+
+  
     /**------kiosque-----**/
     loader.load('3d/TestBlender/road/kiosque.glb', function(gltf){
         gltf.scene.traverse(function (child) {
@@ -491,11 +624,6 @@ function init()
         });
     });
 
-    /**------fleche ---- gare-----**/
-    const geom2 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
-    const fleche = new THREE.Mesh( geom2, material2 );
-    fleche.position.set(-1,2,-19)
-    scene.add( fleche );
 
     /**------StationVelo1-----**/
     const geometry8 = new THREE.BoxGeometry( 1, 1, 1 );
@@ -509,11 +637,6 @@ function init()
         socket.emit("velo", 1);
     });
 
-    /**------fleche ---- StationVelo1 -----**/
-    const geom3 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
-    const fleche1 = new THREE.Mesh( geom3, material2 );
-    fleche1.position.set(-11,2,-19)
-    scene.add( fleche1 );
 
     /**------StationVelo3-----**/
     const geometry9 = new THREE.BoxGeometry( 1, 1, 1 );
@@ -527,11 +650,6 @@ function init()
         socket.emit("velo", 3);
     });
 
-    /**------fleche ---- StationVelo3-----**/
-    const geom4 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
-    const fleche2 = new THREE.Mesh( geom4, material2 );
-    fleche2.position.set(1,2,-17)
-    scene.add( fleche2 );
 
     /**------StationMetro1-----**/
     const geometry10 = new THREE.BoxGeometry( 1, 1, 1 );
@@ -544,11 +662,6 @@ function init()
         document.getElementById('horaireMetro1').style.display='block';
     });
 
-    /**------fleche ---- StationMetro1 -----**/
-    const geom5 = new THREE.BoxGeometry( 0.3, 1, 0.3 );
-    const fleche3 = new THREE.Mesh( geom5, material2 );
-    fleche3.position.set(-3,2,-17)
-    scene.add( fleche3 );
 
     /**------StationMetro10-----**/
     const geometry11 = new THREE.BoxGeometry( 1, 1, 1 );
@@ -574,30 +687,53 @@ function init()
     //scene.add( fleche5 );
 
      /**------Perso-----**/
+     const geometry12 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
 
      //BLOC 1
-    const geometry12 = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-    const cube12 = new THREE.Mesh( geometry12, material );
-    cube12.name="0.7.N"
-    cube12.visible=false;
-    cube12.position.set(-5,0,-19-0.82);
-    scene.add( cube12 );
-    cube12.cursor = 'pointer';
-    cube12.on('click', function(ev){
-        evenementClickPersonne("0.7.N")
-    });
+     let cube12;
+     loader.load('3d/TestBlender/road/personnage.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             cube12=gltf.scene;
+             cube12.scale.set(0.1,0.1, 0.1)
+         })
+ 
+         cube12.name="0.7.N"
+         cube12.visible=true;
+         cube12.position.set(-5,0,-19-0.82);
+         scene.add( cube12 );
+         cube12.cursor = 'pointer';
+         cube12.on('click', function(ev){
+             evenementClickPersonne("0.7.N")
+         });
+     });
 
 
-    const cube13 = new THREE.Mesh( geometry12, material );
-    cube13.name="0.7.S"
-    cube13.visible=false;
-    cube13.position.set(-5,0,-19+0.82);
-    scene.add( cube13 );
-    cube13.cursor = 'pointer';
-    cube13.on('click', function(ev){
-        evenementClickPersonne("0.7.S")
-    });
 
+     let cube13;
+     loader.load('3d/TestBlender/road/personnage.glb', function(gltf){
+         gltf.scene.traverse(function (child) {
+             if (child.isMesh) {
+                 child.receiveShadow = true
+                 child.castShadow = true
+             }
+             cube13=gltf.scene;
+             cube13.scale.set(0.1,0.1, 0.1)
+         })
+ 
+         cube13.name="0.7.S"
+         cube13.visible=true;
+         cube13.position.set(-5,0,-19+0.82);
+         scene.add( cube13 );
+         cube13.cursor = 'pointer';
+         cube13.on('click', function(ev){
+             evenementClickPersonne("0.7.S")
+         });     
+     });
+    
 
     const cube14 = new THREE.Mesh( geometry12, material );
     cube14.name="0.7.E"
@@ -1141,6 +1277,13 @@ function animate()
 
     requestAnimationFrame( animate );
     const delta = clock.getDelta();
+    mixer22.update(delta);
+    mixer21.update(delta);
+    mixer20.update(delta);
+    mixer19.update(delta);
+    mixer18.update(delta);
+    mixer17.update(delta);
+    mixer16.update(delta);
     mixer15.update(delta);
     mixer14.update(delta);
     mixer13.update(delta);
@@ -1153,9 +1296,9 @@ function animate()
     mixer6.update(delta);
     mixer5.update(delta);
     mixer4.update(delta);
-    mixer3.update(delta);   
+    mixer3.update(delta);
     mixer2.update(delta);
-    mixer.update(delta);   
+    mixer.update(delta);
     controls.update();
     renderer.render( scene, camera );
     stats.end()

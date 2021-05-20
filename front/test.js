@@ -4,6 +4,8 @@
                             *                                                   *
                             * * * * * * * * * * * * * * * * * * * * * * * * * * *                  */
 
+let intervalPerson;
+
 //variables qui seront dans la base de données et qu'on devra récupérer :
 let heurePanneTrain = 20; //evenement Train tous les 20 min
 let heurePanneMetro = 10;
@@ -612,6 +614,7 @@ socket.on("PersonneApparue", (idPersonne,personne) =>
 
 socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
 {
+    socket.emit("secondePersonne", idPerso);
     if(panneTrain)
     {
         document.getElementById("transportTrain").disabled = true;
@@ -656,7 +659,14 @@ socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, m
     }
     console.log("Cette personne qui a pour id = " + idPerso + " souhaite aller ", destination);
     document.getElementById("dest").innerHTML = destination;
+    intervalPerson = setInterval(function() {
+        socket.emit("secondePersonne", idPerso);
+    }, 1000);
     document.getElementById('DestinationPersonne').style.display='block';
+});
+
+socket.on("secondePersonne2", (i) => {
+    document.getElementById("sec").innerHTML = 10-i;
 });
 
 socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
@@ -671,6 +681,7 @@ socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
         }
         
         document.getElementById('DestinationPersonne').style.display='none';
+        clearInterval(intervalPerson);
     }
 });
 
@@ -682,6 +693,7 @@ document.getElementById("transport").addEventListener("click", event =>
         socket.emit("DiminueVelo", document.getElementsByClassName("personne content").id);
     }
     document.getElementById('DestinationPersonne').style.display='none';
+    clearInterval(intervalPerson);
     socket.emit("GetMove", document.getElementsByClassName("personne content").id, typeTransport);
     socket.emit("SupprimePersonne", document.getElementsByClassName("personne content").id);
 });
@@ -689,6 +701,7 @@ document.getElementById("transport").addEventListener("click", event =>
 document.getElementById('aplus').addEventListener("click", event => 
 { 
     document.getElementById('DestinationPersonne').style.display='none';
+    clearInterval(intervalPerson);
 });
 
 /*** Menu volume ***/
