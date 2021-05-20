@@ -87,6 +87,193 @@ document.getElementById('myonoffswitch').addEventListener('change', function() {
     }
   });
 
+/*** Tuto ***/
+document.getElementById('level0').addEventListener("click", event =>
+{
+    chrono.restart();
+    socket.emit("DebutTuto");
+    document.getElementById("tuto").style.display = 'block';
+    document.getElementById("level").style.display = 'none';
+    document.getElementById("titreTuto").innerHTML = "Bienvenue !"
+    document.getElementById("phraseTuto").innerHTML = "Ce tuto va vous apprendre tout ce qu'il faut savoir sur le jeu."
+    document.getElementById("commencerTuto").hidden = false;
+    document.getElementById("pagination").style.display = "none";
+    document.getElementById("pagination").innerHTML = "<button id='precedent' hidden=true>&laquo;</button><button id='page1' class='active boutonTuto1'>1</button><button id='page2' class='boutonTuto2'>2</button><button id='page3' class='boutonTuto3'>3</button><button id='page4' class='boutonTuto4'>4</button><button id='page5' class='boutonTuto5'>5</button><button id='suivant'>&raquo;</button>";
+});
+
+document.getElementById("commencerTuto").addEventListener("click", event =>
+{
+    document.getElementById("titreTuto").innerHTML = "But du jeu"
+    document.getElementById("phraseTuto").innerHTML = "Des personnes vont sortir du travail. Elles souhaitent aller à différents endroits : votre mission est de trouver le moyen de transport le plus rapide (en train, en métro, en vélo, à pied) tout en essayant de polluer le moins possible."
+    document.getElementById("commencerTuto").hidden = true;
+    document.getElementById("pagination").style.display = "flex";
+    document.getElementById("finirTuto").hidden = true;
+    document.getElementById("finirTuto").style.display = "inline";
+    document.getElementById("suivant").classList.add("boutonTuto2");
+});
+
+setInterval(function()
+{
+    let boutons1 = document.getElementsByClassName("boutonTuto1");
+
+    for(let i = 0; i < boutons1.length; ++i)
+    {
+        boutons1[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "page1";
+            document.getElementById("phraseTuto").innerHTML = "texte1";
+            document.getElementById("precedent").hidden = true;
+            document.getElementById("suivant").hidden = false;
+            document.getElementById("suivant").removeAttribute("class");
+            document.getElementById("suivant").classList.add("boutonTuto2");
+            document.getElementById("page1").classList.add("active");
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("page3").classList.remove("active");
+            document.getElementById("page4").classList.remove("active");
+            document.getElementById("page5").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = true;
+        });
+    }
+
+    let boutons2 = document.getElementsByClassName("boutonTuto2");
+    for(let i = 0; i < boutons2.length; ++i)
+    {
+        boutons2[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "page2";
+            document.getElementById("phraseTuto").innerHTML = "phrase2";
+            document.getElementById("precedent").hidden = false;
+            document.getElementById("precedent").removeAttribute("class");
+            document.getElementById("precedent").classList.add("boutonTuto1");
+            document.getElementById("suivant").hidden = false;
+            document.getElementById("suivant").removeAttribute("class");
+            document.getElementById("suivant").classList.add("boutonTuto3");
+            document.getElementById("page2").classList.add("active");
+            document.getElementById("page3").classList.remove("active");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page4").classList.remove("active");
+            document.getElementById("page5").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = true;
+        });
+    }
+
+    let boutons3 = document.getElementsByClassName("boutonTuto3");
+    for(let i = 0; i < boutons3.length; ++i)
+    { 
+        boutons3[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "page3";
+            document.getElementById("phraseTuto").innerHTML = "phrase3";
+            document.getElementById("precedent").hidden = false;
+            document.getElementById("precedent").removeAttribute("class");
+            document.getElementById("precedent").classList.add("boutonTuto2");
+            document.getElementById("suivant").hidden = false;
+            document.getElementById("suivant").removeAttribute("class");
+            document.getElementById("suivant").classList.add("boutonTuto4");
+            document.getElementById("page3").classList.add("active");
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page4").classList.remove("active");
+            document.getElementById("page5").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = true;
+        });
+    }
+
+    let boutons4 = document.getElementsByClassName("boutonTuto4");
+    for(let i = 0; i < boutons4.length; ++i)
+    { 
+        boutons4[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "page4";
+            document.getElementById("phraseTuto").innerHTML = "phrase4";
+            document.getElementById("precedent").hidden = false;
+            document.getElementById("precedent").removeAttribute("class");
+            document.getElementById("precedent").classList.add("boutonTuto3");
+            document.getElementById("suivant").hidden = false;
+            document.getElementById("suivant").removeAttribute("class");
+            document.getElementById("suivant").classList.add("boutonTuto5");
+            document.getElementById("page4").classList.add("active");
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page3").classList.remove("active");
+            document.getElementById("page5").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = true;
+        });
+    }
+
+    let boutons5 = document.getElementsByClassName("boutonTuto5");
+    for(let i = 0; i < boutons5.length; ++i)
+    { 
+        boutons5[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "page5";
+            document.getElementById("phraseTuto").innerHTML = "phrase5";
+            document.getElementById("precedent").hidden = false;
+            document.getElementById("precedent").removeAttribute("class");
+            document.getElementById("precedent").classList.add("boutonTuto4");
+            document.getElementById("suivant").hidden = true;
+            document.getElementById("page5").classList.add("active");
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page4").classList.remove("active");
+            document.getElementById("page3").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = false;
+        });
+    }
+
+    document.getElementById("finirTuto").addEventListener("click", event =>
+    {
+        document.getElementById("titreTuto").innerHTML = "Fin du tuto";
+        document.getElementById("phraseTuto").innerHTML = "Vous savez tout ce qu'il y a à savoir. Maintenant c'est à vous de jouer ! Cliquez sur Jouer pour pouvoir vérifier que vous avez compris le fonctionnement du jeu. Vous pouvez relire ce tuto à tout moment en cliquant sur l'icone en haut à droite.";
+        document.getElementById("pagination").style.display = "none";
+        document.getElementById("finTuto").hidden = false;
+        document.getElementById("finirTuto").style.display = "none";
+    });
+}, 100);
+
+document.getElementById("finTuto").addEventListener("click", event =>
+{
+    document.getElementById("tuto").style.display = 'none';
+    document.getElementById("relireTuto").hidden = false;
+    chrono.restart();
+    chrono.continuer();
+    socket.emit("initialisationLevel", 1);
+});
+
+document.getElementById("relireTuto").addEventListener("click", event =>
+{
+    chrono.mettrePause();
+    document.getElementById("tuto").style.display = "block";
+    document.getElementById("titreTuto").innerHTML = "page1";
+    document.getElementById("phraseTuto").innerHTML = "texte1";
+    document.getElementById("precedent").hidden = true;
+    document.getElementById("suivant").hidden = false;
+    document.getElementById("suivant").removeAttribute("class");
+    document.getElementById("suivant").classList.add("boutonTuto2");
+    document.getElementById("page1").classList.add("active");
+    document.getElementById("page2").classList.remove("active");
+    document.getElementById("page3").classList.remove("active");
+    document.getElementById("page4").classList.remove("active");
+    document.getElementById("page5").classList.remove("active");
+    document.getElementById("finTuto").hidden = true;
+    document.getElementById("pagination").style.display = "flex";
+    document.getElementById("relireTuto").hidden = true;
+    document.getElementById("closeTuto").hidden = false;
+});
+
+document.getElementById("closeTuto").addEventListener("click", event =>
+{
+    document.getElementById("relireTuto").hidden = false;
+    document.getElementById("closeTuto").hidden = true;
+    document.getElementById("tuto").style.display = "none";
+    chrono.continuer();
+});
+
 /*** Demarrer un niveau ***/
 document.getElementById('level1').addEventListener("click", event =>
 {
@@ -129,6 +316,8 @@ document.getElementById("pause").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'block';
     document.getElementById("pause").hidden = true;
+    document.getElementById("relireTuto").hidden = true;
+    
     chrono.mettrePause();
 });
 
@@ -149,6 +338,7 @@ document.getElementById("continuer").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'none';
     document.getElementById("pause").hidden = false;
+    document.getElementById("relireTuto").hidden = false;
     chrono.continuer();
 });
 
@@ -167,6 +357,7 @@ document.getElementById("recommencer").addEventListener("click", event =>
 document.getElementById("retry").addEventListener("click", event =>
 {
     document.getElementById("alerteRetry").style.display = 'none';
+    document.getElementById("relireTuto").hidden = false;
     document.getElementById("pause").hidden = false;
     chrono.restart();
     chrono.continuer();
@@ -308,24 +499,107 @@ document.getElementById('croix').addEventListener("click", event =>
 
 socket.on("Embouteillage", () => {
     document.getElementById("joie").hidden = true;
+    document.getElementById("jeuParkingReussi").hidden = true;
     document.getElementById("probVoiture").hidden = false;
 });
 
 socket.on("noEmbouteillage", () =>{
     document.getElementById("joie").hidden = false;
+    document.getElementById("jeuParkingReussi").hidden = true;
     document.getElementById("probVoiture").hidden = true;
-});
-
-document.getElementById('traficOk').addEventListener("click", event => {
-    console.log("Nous avons fludifié le trafic.");
-    document.getElementById('reparationVoiture').style.display='none';
-    socket.emit("traficFluide");
 });
  
 document.getElementById('fermer').addEventListener("click", event => 
 { 
     document.getElementById('reparationVoiture').style.display='none';
     console.log("Nous avons quitté le Parking.");
+});
+
+/*** Mini-jeu Parking ***/
+document.getElementById("traficOk").addEventListener("click", event =>
+{
+    document.getElementById("miniJeuParking").style.display = "block";
+    document.getElementById("reparationVoiture").style.display = "none";
+    const draggableElements = document.querySelectorAll(".draggable");
+    const droppableElements = document.querySelectorAll(".droppable");
+    let score = 0;
+
+    draggableElements.forEach(elem => {
+    elem.addEventListener("dragstart", dragStart); // Fires as soon as the user starts dragging an item - This is where we can define the drag data
+    // elem.addEventListener("drag", drag); // Fires when a dragged item (element or text selection) is dragged
+    // elem.addEventListener("dragend", dragEnd); // Fires when a drag operation ends (such as releasing a mouse button or hitting the Esc key) - After the dragend event, the drag and drop operation is complete
+    });
+
+    droppableElements.forEach(elem => {
+        elem.addEventListener("dragenter", dragEnter); // Fires when a dragged item enters a valid drop target
+        elem.addEventListener("dragover", dragOver); // Fires when a dragged item is being dragged over a valid drop target, repeatedly while the draggable item is within the drop zone
+        elem.addEventListener("dragleave", dragLeave); // Fires when a dragged item leaves a valid drop target
+        elem.addEventListener("drop", drop); // Fires when an item is dropped on a valid drop target
+    });
+
+    // Drag and Drop Functions
+
+    //Events fired on the drag target
+
+    function dragStart(event) {
+        event.dataTransfer.setData("text", event.target.id); // or "text/plain" but just "text" would also be fine since we are not setting any other type/format for data value
+    }
+
+    //Events fired on the drop target
+
+    function dragEnter(event) {
+        if(!event.target.classList.contains("dropped")) {
+            event.target.classList.add("droppable-hover");
+        }
+    }
+
+    function dragOver(event) {
+        if(!event.target.classList.contains("dropped")) {
+            event.preventDefault(); // Prevent default to allow drop
+        }
+    }
+
+    function dragLeave(event) {
+        if(!event.target.classList.contains("dropped")) {
+            event.target.classList.remove("droppable-hover");
+        }
+    }
+
+    function drop(event) {
+
+        event.preventDefault(); // This is in order to prevent the browser default handling of the data
+        event.target.classList.remove("droppable-hover");
+        const draggableElementData = event.dataTransfer.getData("text"); // Get the dragged data. This method will return any data that was set to the same type in the setData() method
+        const droppableElementData = event.target.getAttribute("data-draggable-id");
+        const isCorrectMatching = draggableElementData === droppableElementData;
+ 
+        if(isCorrectMatching) {
+            const draggableElement = document.getElementById(draggableElementData);
+            event.target.classList.add("dropped");
+            //event.target.style.backgroundColor = draggableElement.style.color; // This approach works only for inline styles. A more general approach would be the following: 
+            //event.target.style.backgroundColor = window.getComputedStyle(draggableElement).color;
+            //event.target.style.background = draggableElement.style;
+
+            draggableElement.classList.add("dragged");
+            draggableElement.setAttribute("draggable", "false");
+            event.target.innerHTML= `<img class="${draggableElementData}" src="./pictures/${draggableElementData}.png" alt="jaune">`;
+            score++;
+        }
+  
+        if(score == 4){
+            console.log("Nous avons fludifié le trafic.");
+            document.getElementById("miniJeuParking").style.display = "none";
+            document.getElementById("reparationVoiture").style.display = "block";
+            document.getElementById("probVoiture").hidden = true;
+            document.getElementById("jeuParkingReussi").hidden = false;
+            socket.emit("traficFluide");
+        }
+    }
+});
+
+document.getElementById("parkingClose").addEventListener("click", event =>
+{
+    document.getElementById("miniJeuParking").style.display = "none";
 });
 
 /*** Garage ***/
@@ -356,11 +630,13 @@ document.getElementById('quitter').addEventListener("click", event =>
 
 socket.on("probMetro", () => {
     document.getElementById("relax").hidden = true;
+    document.getElementById("jeuAtelierReussi").hidden = true;
     document.getElementById("probMetro").hidden = false;
 });
 
 socket.on("noProbMetro", () =>{
     document.getElementById("relax").hidden = false;
+    document.getElementById("jeuAtelierReussi").hidden = true;
     document.getElementById("probMetro").hidden = true;
 });
 
@@ -369,7 +645,8 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 {
     //faire apparaitre le mini-jeu
     document.getElementById("miniJeuAtelier").style.display = "block";
-
+    document.getElementById("reparationMetro").style.display = "none";
+    
     const canvas = document.querySelector('#canvas');
     const contexte = canvas.getContext('2d');
 
@@ -450,11 +727,13 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 
         if(cableRouge && cableVert && cableBleu && cableJaune)
         {
+            console.log("Nous avons réparé le métro");
             document.getElementById("miniJeuAtelier").style.display = "none";
+            document.getElementById("reparationMetro").style.display = "block";
             document.getElementById("probMetro").hidden = true;
             document.getElementById("jeuAtelierReussi").hidden = false;
+            socket.emit("metroRepare");
         }
-
         contexte.beginPath();
     }
 
@@ -496,6 +775,11 @@ document.getElementById("metroRepare").addEventListener("click", event =>
     canvas.addEventListener('mouseup', finishedPosition);
     canvas.addEventListener('mousemove', debutDraw);
 });
+
+document.getElementById("atelierClose").addEventListener("click", event =>
+{
+    document.getElementById("miniJeuAtelier").style.display = "none";
+});
  
 document.getElementById('partir').addEventListener("click", event => 
 { 
@@ -505,18 +789,30 @@ document.getElementById('partir').addEventListener("click", event =>
 
 /*** Gare ***/
 
-socket.on("HoraireTrain", (temps, panne) =>
+socket.on("HoraireTrain", (temps, attente, panne) =>
 {
-    document.getElementById('tempsTrain').innerHTML = temps;
     if(panne)
     {
         document.getElementById("prochainTrain").hidden = true;
+        document.getElementById("trainEnGare").hidden = true;
         document.getElementById("attenteTrain").hidden = false;
     }
     else
     {
-        document.getElementById("prochainTrain").hidden = false;
-        document.getElementById("attenteTrain").hidden = true;
+        if(temps == 0)
+        {
+            document.getElementById("tempsTrainAttente").innerHTML = attente;
+            document.getElementById("prochainTrain").hidden = true;
+            document.getElementById("trainEnGare").hidden = false;
+            document.getElementById("attenteTrain").hidden = true;
+        }
+        else
+        {
+            document.getElementById("tempsTrainArrive").innerHTML = temps;
+            document.getElementById("prochainTrain").hidden = false;
+            document.getElementById("trainEnGare").hidden = true;
+            document.getElementById("attenteTrain").hidden = true;
+        }
     }
 });
 
@@ -726,8 +1022,6 @@ function activeOmbre() {
 function desactiveOmbre() {
     light.castShadow = false;
     //scene.add(light);
-    
-
 }
 
 function ajoutPersonne(personne) {

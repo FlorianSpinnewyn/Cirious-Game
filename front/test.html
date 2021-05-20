@@ -49,7 +49,6 @@
         <button id="play">Play</button>
     </div>
 
-
     <!-- Sélection level -->
     <div id="level" class="menuDemarrer">
         <button id="level0">level0</button>
@@ -98,6 +97,20 @@
         <button id="annulerQuit">Annuler</button>
         <button id="quit">Quitter le niveau</button>
     </div>
+
+    <!-- Tuto -->
+    <div id="tuto" class="tuto">
+        <h1 id="titreTuto">Bienvenue !</h1><br><br>
+        <p id="phraseTuto">Ce tuto va vous apprendre tout ce qu'il faut savoir sur le jeu.</p><br><br>
+        <button  id="commencerTuto">Commencer le tuto</button>
+        <button  id="finTuto" hidden=true>Jouer</button>
+        <button  id="finirTuto" hidden=true>Fin du tuto</button>
+        <div id="pagination" class="pagination" style="display:none; width:1600px; justify-content: center;">
+        </div>
+    </div>
+
+    <button id="relireTuto" class="relireTuto" hidden=true>Tuto</button>
+    <button id="closeTuto" class="relireTuto" hidden=true>X</button>
 
     <!-- bouton mairie -->
     <div id="information" class="fenetre">
@@ -159,7 +172,33 @@
                 <br><br>
                 <div id="joie" hidden=false>Le trafic est fluide pour le moment.</div> 
                 <div id="probVoiture" hidden=true><button id="traficOk">Fluidifier le trafic</button></div> 
+                <div id="jeuParkingReussi" hidden=true>Vous avez fluidifier le trafic.</div> 
             </div>
+        </div>
+    </div>
+
+    <!-- mini-jeu parking -->
+    <div id="miniJeuParking" class="menuPause" style="padding-left: 32%; text-align:left;">
+        <button id="parkingClose" class="btn btn-outline-dark cancel">X</button>
+        <div class="box un">
+            <section class="droppable-elements">
+                <div class="droppable voitureJaune"  data-draggable-id="voitureJaune" ><span></span></div>
+                <div class="droppable voitureRouge" style="background-color:#CD6155;" data-draggable-id="voitureRouge"><span></span></div>
+                </section>
+        </div>
+        <div class="box deux">
+            <section class="draggable-elements">
+                <img class="voitureJaune draggable" src="./pictures/voitureJaune.png" draggable="true" id="voitureJaune" width="150" height="150" style="color:#F7DC6F;">
+                <img class="voitureRouge draggable" src="./pictures/voitureRouge.png" draggable="true" id="voitureRouge" width="90" height="90">
+                <img class="voitureJaune draggable" src="./pictures/voitureBleu.png" draggable="true" id="voitureBleu" width="90" height="90" >
+                <img class="voitureRouge draggable" src="./pictures/voitureVert.png" draggable="true" id="voitureVert" width="90" height="90" >
+            </section>
+        </div> 
+        <div class="box trois">
+            <section class="droppable-elements">
+                <div class="droppable voitureBleu" style="background-color:#5DADE2;" data-draggable-id="voitureBleu"><span></span></div>
+                <div class="droppable voitureVert" style="background-color:#58D68D;" data-draggable-id="voitureVert"><span></span></div>
+            </section>
         </div>
     </div>
 
@@ -189,12 +228,14 @@
                 <br><br>
                 <div id="relax" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les métros.</div> 
                 <div id="probMetro" hidden=true><button id="metroRepare">Réparer le métro</button></div> 
+                <div id="jeuAtelierReussi">Vous avez réparé le métro.</div>
             </div>
         </div>
     </div> 
 
     <!-- mini-jeu atelier -->
     <div id="miniJeuAtelier" style="z-index:30" class="menuPause">
+        <button id="atelierClose" class="btn btn-outline-dark cancel">X</button>
         <img src="./pictures/cable.png" id="image">
         <canvas id="canvas"></canvas>
     </div>
@@ -208,8 +249,9 @@
             <div class="tabAff">
                 <h2>Tableau d'affichage des horaires des <strong>Trains</strong> :</h2>
                 <br><br>
-                <div id="prochainTrain" hidden=true>Le prochain train part dans <span id="tempsTrain"></span> minutes.</div> 
-                <div id="attenteTrain" hidden=true>Le train est en panne</div>
+                <div id="prochainTrain" hidden=true>Le prochain train arrive à la gare Nord dans <span id="tempsTrainArrive"></span> minutes.</div> 
+                <div id="trainEnGare" hidden=true>Le train est en gare. Il part dans <span id="tempsTrainAttente"></span> minutes.</div> 
+                <div id="attenteTrain" hidden=true>Le train est en panne.</div>
             </div>
         </div>
     </div>

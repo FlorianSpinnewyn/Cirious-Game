@@ -4,7 +4,7 @@ class Mairie {
         this.panneMetro = false;
         this.panneTrain = false;
         this.manqueVelo = false;
-        this.embouteillage = false;
+        this.embouteillage = true;
         this.x = -10;
         this.z = -13;
     }
@@ -42,7 +42,7 @@ class Mairie {
         this.panneMetro = false;
         this.panneTrain = false;
         this.manqueVelo = false;
-        this.embouteillage = false;
+        this.embouteillage = true;
     }
 }
 

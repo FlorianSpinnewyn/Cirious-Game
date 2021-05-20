@@ -174,6 +174,12 @@ io.on('connection', (socket) =>
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
     });
     
+    /**------------- Tuto -------------------- **/
+    socket.on("DebutTuto", () =>
+    {
+        myLevel.reset();
+    });
+    
     /**------------Requete des pannes-----------**/
     socket.on("HeurePanneTrain", () =>
     {
@@ -335,7 +341,7 @@ io.on('connection', (socket) =>
             {
                 myLevel.city.gares[0].count();
             }
-            socket.emit("HoraireTrain", myLevel.city.gares[0].temps, myLevel.city.mairie.panneTrain);
+            socket.emit("HoraireTrain", myLevel.city.gares[0].temps, myLevel.city.gares[0].attente, myLevel.city.mairie.panneTrain);
             
             if(myLevel.city.mairie.panneMetro == false)
             {
