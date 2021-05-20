@@ -614,6 +614,8 @@ socket.on("PersonneApparue", (idPersonne,personne) =>
 
 socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
 {
+    removeFlecheDest();
+    scene.getObjectByName(destination).visible=true;
     socket.emit("secondePersonne", idPerso);
     if(panneTrain)
     {
@@ -663,6 +665,7 @@ socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, m
         socket.emit("secondePersonne", idPerso);
     }, 1000);
     document.getElementById('DestinationPersonne').style.display='block';
+    
 });
 
 socket.on("secondePersonne2", (i) => {
@@ -722,7 +725,9 @@ function activeOmbre() {
 
 function desactiveOmbre() {
     light.castShadow = false;
-    scene.add(light);
+    //scene.add(light);
+    
+
 }
 
 function ajoutPersonne(personne) {
@@ -733,4 +738,14 @@ function ajoutPersonne(personne) {
 function suppPersonne(personne) {
 
     scene.getObjectByName(personne.depart).visible=false;
+}
+
+function  removeFlecheDest(){
+    scene.getObjectByName("Ecole").visible=false;
+    scene.getObjectByName("Campagne").visible=false;
+    scene.getObjectByName("Magasins").visible=false;
+    scene.getObjectByName("Musee").visible=false;
+    scene.getObjectByName("Parc").visible=false;
+    scene.getObjectByName("Restaurant").visible=false;
+    scene.getObjectByName("Stade").visible=false;
 }
