@@ -652,26 +652,39 @@ function init()
 
 
     /**------StationMetro1-----**/
-    const geometry10 = new THREE.BoxGeometry( 1, 1, 1 );
-    const cube10 = new THREE.Mesh( geometry10, material );
-    cube10.position.set(-3,0,-17)
-    scene.add( cube10 );
-    cube10.cursor = 'pointer';
-    cube10.on('click', function(ev){
-        console.log("Nous sommes à la station de métro n°1 :)");
-        document.getElementById('horaireMetro1').style.display='block';
+    loader.load('3d/TestBlender/road/metro1.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Nous sommes à la station de métro n°1 :)");
+            document.getElementById('horaireMetro1').style.display='block';
+        });
     });
-
-
+    
     /**------StationMetro10-----**/
-    const geometry11 = new THREE.BoxGeometry( 1, 1, 1 );
-    const cube11 = new THREE.Mesh( geometry11, material );
-    cube11.position.set(1,0,-9)
-    scene.add( cube11 );
-    cube11.cursor = 'pointer';
-    cube11.on('click', function(ev){
-        console.log("Nous sommes à la station de métro n°10 :)");
-        document.getElementById('horaireMetro2').style.display='block';
+    loader.load('3d/TestBlender/road/metro10.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Nous sommes à la station de métro n°10 :)");
+            document.getElementById('horaireMetro2').style.display='block';
+        });
     });
 
     /**------fleche ---- StationMetro10 -----**/
