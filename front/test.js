@@ -48,17 +48,17 @@ setInterval(function() {
         
     }
 
-    if(chrono.heure != 16 || chrono.minute != 0)
-    {
-        if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
-        {
-            socket.emit("HeurePanneTrain");
-        }
-        if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
-        {
-            socket.emit("HeurePanneMetro");
-        }
-    }
+    // if(chrono.heure != 16 || chrono.minute != 0)
+    // {
+    //     if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
+    //     {
+    //         socket.emit("HeurePanneTrain");
+    //     }
+    //     if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
+    //     {
+    //         socket.emit("HeurePanneMetro");
+    //     }
+    // }
 }, 2000);
 
 /*** Menu ***/
@@ -307,6 +307,7 @@ document.getElementById('level5').addEventListener("click", event =>
 });
 
 socket.on("initialisationViewLevel", numeroLevel => {
+    mixer.timeScale =0.95;
     document.getElementById("level").style.display = "none";
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
@@ -317,7 +318,7 @@ document.getElementById("pause").addEventListener("click", event =>
     document.getElementById("menuPause").style.display = 'block';
     document.getElementById("pause").hidden = true;
     document.getElementById("relireTuto").hidden = true;
-    
+    mixer.timeScale =0.95;
     chrono.mettrePause();
 });
 
@@ -340,6 +341,7 @@ document.getElementById("continuer").addEventListener("click", event =>
     document.getElementById("pause").hidden = false;
     document.getElementById("relireTuto").hidden = false;
     chrono.continuer();
+    mixer.timeScale =0.95;
 });
 
 document.getElementById("quitterJeu").addEventListener("click", event =>
@@ -369,6 +371,7 @@ document.getElementById("quit").addEventListener("click", event =>
     document.getElementById("level").style.display = 'block';
     document.getElementById("alerteQuit").style.display = 'none';
     socket.emit("QuitterJeu");
+    mixer.setTime (0)
 });
 
 document.getElementById("annulerRetry").addEventListener("click", event =>
@@ -391,6 +394,14 @@ socket.on("ReinitialisationLevel", (idlevel) =>
 /*** Alertes ***/
 
 /*** Mairie ***/
+
+socket.on("afficheFlechePanne", (str) => {
+    scene.getObjectByName(str).visible=true;
+});
+
+socket.on("pauseAnimationTrain", () => {
+    mixer.timeScale =0.95;
+});
 
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
 {
@@ -487,6 +498,8 @@ document.getElementById("trainRepare").addEventListener("click", () =>
     console.log("Nous réparons le train.");
     document.getElementById('reparationTrain').style.display='none';
     socket.emit("trainRepare");
+    mixer.timeScale =0.95;
+    scene.getObjectByName("flecheTechnicentre").visible=false;
 });
 
 document.getElementById('croix').addEventListener("click", event => 
@@ -593,6 +606,7 @@ document.getElementById("traficOk").addEventListener("click", event =>
             document.getElementById("probVoiture").hidden = true;
             document.getElementById("jeuParkingReussi").hidden = false;
             socket.emit("traficFluide");
+            scene.getObjectByName("flecheParking").visible=false;
         }
     }
 });
@@ -733,6 +747,7 @@ document.getElementById("metroRepare").addEventListener("click", event =>
             document.getElementById("probMetro").hidden = true;
             document.getElementById("jeuAtelierReussi").hidden = false;
             socket.emit("metroRepare");
+            scene.getObjectByName("flecheAtelier").visible=false;
         }
         contexte.beginPath();
     }
@@ -908,9 +923,13 @@ socket.on("PersonneApparue", (idPersonne,personne) =>
 });
 
 
-socket.on("AfficheDestination", (destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
+socket.on("AfficheDestination", (depart,destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
 {
+    clearInterval(intervalPerson);
+    RemoveFlecheTransport()
+    DisplayFlecheTransport(depart);
     removeFlecheDest();
+    console.log(destination);
     scene.getObjectByName(destination).visible=true;
     socket.emit("secondePersonne", idPerso);
     if(panneTrain)
@@ -970,6 +989,8 @@ socket.on("secondePersonne2", (i) => {
 
 socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
 {
+    RemoveFlecheTransport();
+    removeFlecheDest();
     suppPersonne(personne);
     if(personne.fenetre==true &&  document.getElementsByClassName("personne content").id==idPersonne){
         if(louper==true){
@@ -1042,4 +1063,43 @@ function  removeFlecheDest(){
     scene.getObjectByName("Parc").visible=false;
     scene.getObjectByName("Restaurant").visible=false;
     scene.getObjectByName("Stade").visible=false;
+}
+
+function DisplayFlecheTransport(depart){
+    scene.getObjectByName("flecheGare").visible=true;
+    let tab = depart.split(".");
+    console.log(tab);
+    if((tab[0]=="0") && (tab[1]=="7")) {
+        console.log("iciii1")
+        scene.getObjectByName("flecheVelo2").visible=true;
+        scene.getObjectByName("flecheMetro1").visible=true;
+    }
+    else if((tab[0]=="1") && (tab[1]=="7")) {
+        console.log("iciii2")
+        scene.getObjectByName("flecheVelo1").visible=true;
+        scene.getObjectByName("flecheMetro1").visible=true;
+    }
+    else if((tab[0]=="1") && (tab[1]=="8")) {
+        console.log("iciii3")
+        scene.getObjectByName("flecheVelo1").visible=true;
+        scene.getObjectByName("flecheMetro1").visible=true;
+    }
+    else if((tab[0]=="1") && (tab[1]=="9")) {
+        console.log("iciii4")
+        scene.getObjectByName("flecheVelo1").visible=true;
+        scene.getObjectByName("flecheMetro1").visible=true;
+    }
+    else {
+        console.log("iciii")
+        scene.getObjectByName("flecheVelo1").visible=true;
+        scene.getObjectByName("flecheMetro3").visible=true;
+    }
+}
+
+function RemoveFlecheTransport(){
+    scene.getObjectByName("flecheGare").visible=false;
+    scene.getObjectByName("flecheMetro1").visible=false;
+    scene.getObjectByName("flecheMetro3").visible=false;
+    scene.getObjectByName("flecheVelo1").visible=false;
+    scene.getObjectByName("flecheVelo2").visible=false;
 }

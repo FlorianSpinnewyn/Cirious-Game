@@ -98,7 +98,7 @@ io.on('connection', (socket) =>
             myLevel.reset();
         }
         socket.handshake.session.levelEnCours = true;
-
+        
         //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
         function findLevel(result4) {
             myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
@@ -376,6 +376,12 @@ io.on('connection', (socket) =>
                     myLevel.personnes[i].envoye = 1;
                     socket.emit("PersonneDisparait", i, myLevel.personnes[i],true);
                     myLevel.personnesEnvoye++;
+                    myLevel.personneVoiture++;
+                    console.log(myLevel.personneVoiture)
+                    if(myLevel.city.mairie.evenementEmbouteillage(myLevel.personneVoiture)){
+                        socket.emit("afficheFlechePanne", "flecheParking");
+                        myLevel.personneVoiture=0;
+                    }
                 }
             }
             if( myLevel.personnesEnvoye==myLevel.nbPersonnes){
@@ -399,6 +405,25 @@ io.on('connection', (socket) =>
                 myLevel.personnes[i].apparue = true;
                 socket.emit("PersonneApparue", i,myLevel.personnes[i]);
                 myLevel.personnesApparu++;
+                console.log( myLevel.personnesApparu);
+                for(let k = 0;k<myLevel.tabEvenement.length;k++){
+                    if(myLevel.tabEvenement[k]==myLevel.personnesApparu) {
+                        if(myLevel.city.mairie.panneMetro==false){
+                            myLevel.city.mairie.evenementMetro();
+                            if(myLevel.city.mairie.panneMetro==true){
+                                socket.emit("afficheFlechePanne", "flecheAtelier");
+                            }
+                        }
+                        if(myLevel.city.mairie.panneTrain==false){
+                            myLevel.city.mairie.evenementTrain();
+                            if(myLevel.city.mairie.panneTrain==true){
+                                socket.emit("afficheFlechePanne", "flecheTechnicentre");
+                                socket.emit("pauseAnimationTrain");
+                            }
+                        }
+                        
+                    }
+                }
             }
         }
     });
@@ -412,7 +437,7 @@ io.on('connection', (socket) =>
         let idPersonne = findPersonne(str)
         if(myLevel.personnes[idPersonne].envoye != 1)
         {
-            socket.emit("AfficheDestination", myLevel.personnes[idPersonne].destination, idPersonne, myLevel.city.mairie.panneTrain, myLevel.city.mairie.panneMetro, myLevel.city.mairie.manqueVelo);
+            socket.emit("AfficheDestination",myLevel.personnes[idPersonne].depart, myLevel.personnes[idPersonne].destination, idPersonne, myLevel.city.mairie.panneTrain, myLevel.city.mairie.panneMetro, myLevel.city.mairie.manqueVelo);
             myLevel.personnes[idPersonne].fenetre = true;
         }
     });

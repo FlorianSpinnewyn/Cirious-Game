@@ -14,6 +14,8 @@ class Level {
         this.pollutionMax = 0;
         this.personnesEnvoye = 0;
         this.personnesApparu = 0;
+        this.tabEvenement = [];
+        this.personneVoiture = 0;
     }
 
     /**
@@ -37,6 +39,11 @@ class Level {
         this.nbEvenements = nbEvenements_;
         this.pasContentMax = pasContentMax_;
         this.pollutionMax = pollutionMax_;
+        let inter = (this.nbPersonnes/this.nbEvenements)-2;
+        for(let i = 0;i<this.nbEvenements;i++){
+            this.tabEvenement.push((i+1)*inter);
+        }
+        console.log(this.tabEvenement);
     }
 
     reset()

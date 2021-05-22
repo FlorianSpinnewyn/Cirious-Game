@@ -2,7 +2,7 @@ class Gare {
     constructor()
     {
         this.temps = 0;
-        this.attente = 7;
+        this.attente = 8;
         this.x = -1;
         this.z = -19;
     }
@@ -22,7 +22,7 @@ class Gare {
             else
             {
                 this.temps = 15;
-                this.attente = 7;
+                this.attente = 8;
             }
         }
     }

@@ -94,6 +94,11 @@ let camera,
     mixer89,
     mixer90,
     mixer91,
+    mixer92,
+    mixer93,
+    mixer94,
+    mixer95,
+    mixer96,
     light;
 
 const clock = new THREE.Clock();
@@ -128,7 +133,7 @@ function init()
     light.shadow.mapSize.width = 2048;  // default
     light.shadow.mapSize.height = 2048; // default
     light.shadow.camera.near = .5;       // default
-    light.shadow.camera.far = 1000     // default
+    light.shadow.camera.far = 1000    // default
     light.shadow.camera.left = light.shadow.camera.bottom = -32
     light.shadow.camera.right = light.shadow.camera.top = 32
     light.shadow.bias = -0.00005
@@ -185,6 +190,7 @@ function init()
 
         mixer = new THREE.AnimationMixer( gltf.scene );
         mixer.clipAction( gltf.animations[ 0 ] ).play();
+        mixer.timeScale =0;
     });
 
         /**------Voiture1-----*/
@@ -486,7 +492,6 @@ function init()
       
     });
     //Fleche Gare
-    let flecheGare;
     loader = new THREE.GLTFLoader();
     loader.load('3d/TestBlender/road/animation/Fleche/fleche_jaune.glb', function(gltf){
         gltf.scene.traverse(function (child) {
@@ -494,20 +499,19 @@ function init()
                 child.receiveShadow = true
                 child.castShadow = true
             }
-            flecheGare= gltf.scene;
+            gltf.scene.name="flecheGare";
             gltf.scene.scale.set(0.1,0.1, 0.1)
             gltf.scene.position.set(9,0,-6);
         })
-        flecheGare.name="flecheGare";
+        gltf.scene.name="flecheGare";
         scene.add(gltf.scene);
-    
+        gltf.scene.visible=false;
         mixer17 = new THREE.AnimationMixer( gltf.scene );
         mixer17.clipAction( gltf.animations[ 0   ] ).play();
       
     });
 
      //Fleche Metro1
-     let flecheMetro1;
      loader = new THREE.GLTFLoader();
      loader.load('3d/TestBlender/road/animation/Fleche/fleche_jaune.glb', function(gltf){
          gltf.scene.traverse(function (child) {
@@ -518,10 +522,10 @@ function init()
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(7,0,-4);
          })
-        flecheMetro1 = gltf.scene;
-        flecheMetro1.name="flecheMetro1";
+
+         gltf.scene.name="flecheMetro1";
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer18 = new THREE.AnimationMixer( gltf.scene );
          mixer18.clipAction( gltf.animations[ 0   ] ).play();
        
@@ -535,12 +539,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheVelo1";
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(11,0,-4);
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer19 = new THREE.AnimationMixer( gltf.scene );
          mixer19.clipAction( gltf.animations[ 0   ] ).play();
        
@@ -555,12 +560,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheVelo2";
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(-1,0,-6);
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer20 = new THREE.AnimationMixer( gltf.scene );
          mixer20.clipAction( gltf.animations[ 0 ] ).play();
        
@@ -573,12 +579,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheMetro3";
              gltf.scene.scale.set(0.1,0.1, 0.1)
-             gltf.scene.position.set(11,0,0);
+             gltf.scene.position.set(11,0,0);   
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer90 = new THREE.AnimationMixer( gltf.scene );
          mixer90.clipAction( gltf.animations[ 0 ] ).play();
        
@@ -586,7 +593,6 @@ function init()
 
 
      //Réparation
-
      loader = new THREE.GLTFLoader();
      loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gltf){
          gltf.scene.traverse(function (child) {
@@ -594,12 +600,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheAtelier";
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(11,0,15);
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer80 = new THREE.AnimationMixer( gltf.scene );
          mixer80.clipAction( gltf.animations[ 0 ] ).play();
        
@@ -612,12 +619,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheTechnicentre";
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(29,0,22);
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer79 = new THREE.AnimationMixer( gltf.scene );
          mixer79.clipAction( gltf.animations[ 0 ] ).play();
        
@@ -630,12 +638,13 @@ function init()
                  child.receiveShadow = true
                  child.castShadow = true
              }
+             gltf.scene.name="flecheGarage";
              gltf.scene.scale.set(0.1,0.1, 0.1)
              gltf.scene.position.set(-7,0,23);
          })
      
          scene.add(gltf.scene);
-     
+         gltf.scene.visible=false;
          mixer81 = new THREE.AnimationMixer( gltf.scene );
          mixer81.clipAction( gltf.animations[ 0 ] ).play();
        
@@ -649,12 +658,13 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
             child.receiveShadow = true
             child.castShadow = true
         }
+        gltf.scene.name="flecheParking";
         gltf.scene.scale.set(0.1,0.1, 0.1)
         gltf.scene.position.set(0,0,16);
     })
 
     scene.add(gltf.scene);
-
+    gltf.scene.visible=false;
     mixer88 = new THREE.AnimationMixer( gltf.scene );
     mixer88.clipAction( gltf.animations[ 0 ] ).play();
   
@@ -796,44 +806,196 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
      });
 
 
+    //nuage
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
 
-     //nuage
-     loader = new THREE.GLTFLoader();
-     loader.load('3d/TestBlender/road/animation/Nuage/nuage.glb', function(gltf){
-         gltf.scene.traverse(function (child) {
-             if (child.isMesh) {
-                 child.receiveShadow = true
-                 child.castShadow = true
-             }
-             gltf.scene.scale.set(0.1,0.1, 0.1)
-         
-         })
-     
-         scene.add(gltf.scene);
-     
-         mixer21 = new THREE.AnimationMixer( gltf.scene );
-         mixer21.clipAction( gltf.animations[ 0   ] ).play();
-       
-     });
+        scene.add(gltf.scene);
 
-     //nuage2
-     loader = new THREE.GLTFLoader();
-     loader.load('3d/TestBlender/road/animation/Nuage/nuage2.glb', function(gltf){
-         gltf.scene.traverse(function (child) {
-             if (child.isMesh) {
-                 child.receiveShadow = true
-                 child.castShadow = true
-             }
-             gltf.scene.scale.set(0.1,0.1, 0.1)
-         
-         })
-     
-         scene.add(gltf.scene);
-     
-         mixer22 = new THREE.AnimationMixer( gltf.scene );
-         mixer22.clipAction( gltf.animations[ 0   ] ).play();
-       
-     });
+        mixer21 = new THREE.AnimationMixer( gltf.scene );
+        mixer21.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage2
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage2.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+
+        mixer22 = new THREE.AnimationMixer( gltf.scene );
+        mixer22.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage3
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage3.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+
+        mixer92 = new THREE.AnimationMixer( gltf.scene );
+        mixer92.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage4
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage4.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+
+        mixer93 = new THREE.AnimationMixer( gltf.scene );
+        mixer93.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage5
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage5.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+
+        mixer94 = new THREE.AnimationMixer( gltf.scene );
+        mixer94.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage6
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage6.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+
+        mixer95 = new THREE.AnimationMixer( gltf.scene );
+        mixer95.clipAction( gltf.animations[ 0   ] ).play();
+    
+    });
+
+    //nuage7
+    loader = new THREE.GLTFLoader();
+    loader.load('3d/TestBlender/road/animation/Nuage/nuage7.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        
+        })
+
+        scene.add(gltf.scene);
+        
+
+        
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+        console.log("Tu as trouvé le nuage");
+        
+    });
+    mixer96 = new THREE.AnimationMixer( gltf.scene );
+    mixer96.clipAction( gltf.animations[ 0] ).play();
+
+    });
+    //fleur
+    loader.load('3d/TestBlender/road/fleur/pleindefleurs.glb', function(gltf){
+    gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+            child.receiveShadow = true
+            child.castShadow = true
+        }
+        gltf.scene.scale.set(0.1,0.1, 0.1)
+    })
+
+    scene.add(gltf.scene);
+    gltf.scene.cursor = 'pointer';
+    gltf.scene.on('click', function(ev){
+        console.log("Tu as trouvé une fleur");
+        
+    });
+    });
+    //mouton
+    loader.load('3d/TestBlender/road/Mouton/petitmouton.glb', function(gltf){
+    gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+            child.receiveShadow = true
+            child.castShadow = true
+        }
+        gltf.scene.scale.set(0.1,0.1, 0.1)
+    })
+
+    scene.add(gltf.scene);
+    gltf.scene.cursor = 'pointer';
+    gltf.scene.on('click', function(ev){
+        console.log("Tu as trouvé le mouton");
+        
+    });
+    });
+    //ballot
+    loader.load('3d/TestBlender/road/ballot.glb', function(gltf){
+    gltf.scene.traverse(function (child) {
+        if (child.isMesh) {
+            child.receiveShadow = true
+            child.castShadow = true
+        }
+        gltf.scene.scale.set(0.1,0.1, 0.1)
+    })
+
+    scene.add(gltf.scene);
+    gltf.scene.cursor = 'pointer';
+    gltf.scene.on('click', function(ev){
+        console.log("Tu as trouvé le ballot");
+        
+    });
+    });
 
 
 
@@ -2477,18 +2639,126 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
          mixer77.clipAction( gltf.animations[ 0   ] ).play();
      });
 
+    /**------plot-----**/
+    loader.load('3d/TestBlender/road/plot/plot.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
 
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le plot");
+            
+        });
+    });
+
+    loader.load('3d/TestBlender/road/plot/plot_2.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le plot 2");
+            
+        });
+    });
+
+    loader.load('3d/TestBlender/road/plot/plot_3.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le plot 3");
+            
+        });
+    });
+
+    loader.load('3d/TestBlender/road/plot/plot_4.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le plot 4");
+            
+        });
+    });
+
+    loader.load('3d/TestBlender/road/plot/plot_5.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le plot 5");
+            
+        });
+    });
+
+    //Chien
+    loader.load('3d/TestBlender/road/chien.glb', function(gltf){
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
+                child.receiveShadow = true
+                child.castShadow = true
+            }
+            gltf.scene.scale.set(0.1,0.1, 0.1)
+        })
+
+        scene.add(gltf.scene);
+        gltf.scene.cursor = 'pointer';
+        gltf.scene.on('click', function(ev){
+            console.log("Tu as trouvé le Chien");
+            
+        });
+    });
      
 }
 
 
+let delta;
 
 function animate()
 {
     stats.begin()
 
     requestAnimationFrame( animate );
-    const delta = clock.getDelta();
+    delta = clock.getDelta();
+    mixer96.update(delta);
+    mixer95.update(delta);
+    mixer94.update(delta);
+    mixer93.update(delta);
+    mixer92.update(delta);
     mixer91.update(delta);
     mixer90.update(delta);
     mixer89.update(delta);
@@ -2583,9 +2853,8 @@ function animate()
     controls.update();
     renderer.render( scene, camera );
     stats.end()
-
+    console.log(mixer.time)
 }
-
 
 
 init();

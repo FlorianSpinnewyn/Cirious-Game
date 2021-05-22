@@ -4,7 +4,7 @@ class Mairie {
         this.panneMetro = false;
         this.panneTrain = false;
         this.manqueVelo = false;
-        this.embouteillage = true;
+        this.embouteillage = false;
         this.x = -10;
         this.z = -13;
     }
@@ -27,9 +27,15 @@ class Mairie {
         }
     }
 
-    evenementEmbouteillage()
+    evenementEmbouteillage(personnesVoitures)
     {
-        this.embouteillage = true;
+       if(personnesVoitures>=8){
+           this.embouteillage=true;
+           return true;
+       }
+       else {
+           return false;
+       }
     }
 
     evenementVelo()

@@ -12,6 +12,14 @@
   right: 100px;
 }
 
+#DestinationPersonne {
+  position : absolute;
+  width: 500px; 
+  height: 500px;
+  display: none;
+  background-color: rgba(191, 191, 191, 0.50);
+}
+
 .fenetre {
   display: none;
   position: fixed;

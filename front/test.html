@@ -34,6 +34,25 @@
             <div id=time>
                 <p>16h 00m</p>
             </div>
+                <!-- bouton personne -->
+            <div id="DestinationPersonne" >
+                <div class="personne content" id="">
+                    <div class="clearfix">
+                        <button id="aplus" class="btn btn-outline-dark cancel" name="aplus" type="button">X</button>
+                    </div>
+                    <div class="destPersonne">
+                        <br><br>
+                        <div>Je voudrais aller <span id="dest"></span></div>
+                        <div>Attention ! Cette personne va prendre ca voiture dans <span id="sec"></span> minutes !</div>
+                        <div id="transport">
+                            <button id="transportPied">Pied</button>
+                            <button id="transportVelo">Vélo</button>
+                            <button id="transportMetro">Métro</button>
+                            <button id="transportTrain">Train</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <canvas></canvas>
     </div>
@@ -237,7 +256,7 @@
     <div id="miniJeuAtelier" style="z-index:30" class="menuPause">
         <button id="atelierClose" class="btn btn-outline-dark cancel">X</button>
         <img src="./pictures/cable.png" id="image">
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas" allow="autoplay"></canvas>
     </div>
 
     <!-- bouton gare -->
@@ -312,25 +331,6 @@
         </div>
     </div>
 
-    <!-- bouton personne -->
-    <div id="DestinationPersonne" class="fenetre">
-        <div class="personne content" id="">
-            <div class="clearfix">
-                <button id="aplus" class="btn btn-outline-dark cancel" name="aplus" type="button">X</button>
-            </div>
-            <div class="destPersonne">
-                <br><br>
-                <div>Je voudrais aller <span id="dest"></span></div>
-                <div>Attention ! Cette personne va prendre ca voiture dans <span id="sec"></span> minutes !</div>
-                <div id="transport">
-                    <button id="transportPied">Pied</button>
-                    <button id="transportVelo">Vélo</button>
-                    <button id="transportMetro">Métro</button>
-                    <button id="transportTrain">Train</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id='Personnes' style="position: absolute; z-index:2; width: 100%; margin-top:50px;"></div>
     
