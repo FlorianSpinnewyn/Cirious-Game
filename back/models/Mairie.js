@@ -48,7 +48,7 @@ class Mairie {
         this.panneMetro = false;
         this.panneTrain = false;
         this.manqueVelo = false;
-        this.embouteillage = true;
+        this.embouteillage = false;
     }
 }
 

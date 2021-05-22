@@ -4,7 +4,6 @@ class StationVelo {
         this.velosLibre = 0;
         this.x;
         this.z;
-        /*a voir*/
     }
 }
 

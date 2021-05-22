@@ -16,7 +16,6 @@ chrono = new Chrono();
 setInterval(function() {
     chrono.count();
     if( chrono.pause==false){
-        console.log("cc",chrono.pause)
         socket.emit("c", chrono.pause);
         socket.emit("ChronoHoraire", chrono.pause);
     }
@@ -318,7 +317,7 @@ document.getElementById("pause").addEventListener("click", event =>
     document.getElementById("menuPause").style.display = 'block';
     document.getElementById("pause").hidden = true;
     document.getElementById("relireTuto").hidden = true;
-    mixer.timeScale =0.95;
+    mixer.timeScale = 0.95;
     chrono.mettrePause();
 });
 
@@ -359,7 +358,6 @@ document.getElementById("recommencer").addEventListener("click", event =>
 document.getElementById("retry").addEventListener("click", event =>
 {
     document.getElementById("alerteRetry").style.display = 'none';
-    document.getElementById("relireTuto").hidden = false;
     document.getElementById("pause").hidden = false;
     chrono.restart();
     chrono.continuer();
@@ -388,6 +386,10 @@ document.getElementById("annulerQuit").addEventListener("click", event =>
 
 socket.on("ReinitialisationLevel", (idlevel) =>
 {
+    if(idlevel == 0)
+    {
+        document.getElementById("relireTuto").hidden = false;
+    }
     socket.emit("initialisationLevel", idlevel);
 });
 
@@ -485,27 +487,95 @@ document.getElementById('close').addEventListener("click", event =>
 
 socket.on("pasRepTrain", () => {
     document.getElementById("parfait").hidden = false;
+    document.getElementById("jeuTechnicentreReussi").hidden = true;
     document.getElementById("probTrain").hidden = true;
 });
 
 socket.on("RepTrain", () => { 
     document.getElementById("parfait").hidden = true;
+    document.getElementById("jeuTechnicentreReussi").hidden = true;
     document.getElementById("probTrain").hidden = false;
-});
-
-document.getElementById("trainRepare").addEventListener("click", () =>
-{
-    console.log("Nous réparons le train.");
-    document.getElementById('reparationTrain').style.display='none';
-    socket.emit("trainRepare");
-    mixer.timeScale =0.95;
-    scene.getObjectByName("flecheTechnicentre").visible=false;
 });
 
 document.getElementById('croix').addEventListener("click", event => 
 {
     document.getElementById('reparationTrain').style.display='none';
     console.log("Nous avons quitté le Technicentre");
+});
+
+/*** Mini-Jeu Technicentre ***/
+const draggableElementsT = document.querySelectorAll(".draggableT");
+const droppableElementsT = document.querySelectorAll(".droppableT");
+let scoreT = 0;
+
+draggableElementsT.forEach(elem => {
+  elem.addEventListener("dragstart", dragStartT);
+});
+
+droppableElementsT.forEach(elem => {
+  elem.addEventListener("dragenter", dragEnterT);
+  elem.addEventListener("dragover", dragOverT);
+  elem.addEventListener("dragleave", dragLeaveT);
+  elem.addEventListener("drop", dropT); 
+});
+
+function dragStartT(event) {
+    event.dataTransfer.setData("text", event.target.id); 
+}
+
+function dragEnterT(event) {
+    event.target.classList.add("droppableT-hover");
+}
+
+function dragOverT(event) {
+    event.preventDefault();
+}
+
+function dragLeaveT(event) {
+    event.target.classList.remove("droppableT-hover");
+}
+
+function dropT(event) {
+    event.preventDefault(); 
+    event.target.classList.remove("droppableT-hover");
+    let draggableElementDataT = event.dataTransfer.getData("text");
+    let draggableElementT = document.getElementById(draggableElementDataT);
+    draggableElementT.classList.add("draggedT"); 
+    scoreT++;
+  
+    if(scoreT == 4){
+        console.log("Nous avons réparé le train.");
+        technicentreReset();
+        document.getElementById("miniJeuTechnicentre").style.display = "none";
+        document.getElementById("reparationTrain").style.display = "block";
+        document.getElementById("probTrain").hidden = true;
+        document.getElementById("jeuTechnicentreReussi").hidden = false;
+        mixer.timeScale = 0.95;
+        scene.getObjectByName("flecheTechnicentre").visible = false;
+        socket.emit("trainRepare");
+    }
+}
+
+function technicentreReset()
+{
+    scoreT = 0;
+    let elementsDraggableT = document.getElementsByClassName("draggableT");
+    for(let i = 0; i < elementsDraggableT.length; ++i)
+    {
+        elementsDraggableT[i].classList.remove("draggedT");
+    }
+}
+
+document.getElementById("trainRepare").addEventListener("click", event =>
+{
+    document.getElementById("miniJeuTechnicentre").style.display = "block";
+    document.getElementById("reparationTrain").style.display = "none";
+});
+
+document.getElementById("technicentreClose").addEventListener("click", event =>
+{
+    technicentreReset();
+    document.getElementById("miniJeuTechnicentre").style.display = "none";
 });
 
 /*** Parking ***/
@@ -529,90 +599,99 @@ document.getElementById('fermer').addEventListener("click", event =>
 });
 
 /*** Mini-jeu Parking ***/
+let scoreP = 0;
+const draggableElementsP = document.querySelectorAll(".draggableP");
+const droppableElementsP = document.querySelectorAll(".droppableP");
+
+draggableElementsP.forEach(elem => {
+    elem.addEventListener("dragstart", dragStartP);
+});
+
+droppableElementsP.forEach(elem => {
+    elem.addEventListener("dragenter", dragEnterP); 
+    elem.addEventListener("dragover", dragOverP);
+    elem.addEventListener("dragleave", dragLeaveP); 
+    elem.addEventListener("drop", dropP);
+});
+
+function dragStartP(event) {
+    event.dataTransfer.setData("text", event.target.id);
+}
+
+function dragEnterP(event) {
+    if(!event.target.classList.contains("droppedP")) {
+        event.target.classList.add("droppableP-hover");
+    }
+}
+
+function dragOverP(event) {
+    if(!event.target.classList.contains("droppedP")) {
+        event.preventDefault();
+    }
+}
+
+function dragLeaveP(event) {
+    if(!event.target.classList.contains("droppedP")) {
+        event.target.classList.remove("droppableP-hover");
+    }
+}
+
+function dropP(event) {
+
+    event.preventDefault();
+    event.target.classList.remove("droppableP-hover");
+    let draggableElementDataP = event.dataTransfer.getData("text");
+    let droppableElementDataP = event.target.getAttribute("data-draggable-id");
+    let isCorrectMatchingP = draggableElementDataP === droppableElementDataP;
+
+    if(isCorrectMatchingP) {
+        let draggableElementP = document.getElementById(draggableElementDataP);
+        event.target.classList.add("droppedP");
+        draggableElementP.classList.add("draggedP");
+        draggableElementP.setAttribute("draggable", "false");
+        event.target.innerHTML= `<img class="${draggableElementDataP}" src="./pictures/${draggableElementDataP}.png" alt="jaune">`;
+        scoreP++;
+    }
+
+    if(scoreP == 4){
+        console.log("Nous avons fludifié le trafic.");
+        parkingReset();
+        document.getElementById("miniJeuParking").style.display = "none";
+        document.getElementById("reparationVoiture").style.display = "block";
+        document.getElementById("probVoiture").hidden = true;
+        document.getElementById("jeuParkingReussi").hidden = false;
+        scene.getObjectByName("flecheParking").visible = false;
+        socket.emit("traficFluide");
+    }
+}
+
 document.getElementById("traficOk").addEventListener("click", event =>
 {
     document.getElementById("miniJeuParking").style.display = "block";
     document.getElementById("reparationVoiture").style.display = "none";
-    const draggableElements = document.querySelectorAll(".draggable");
-    const droppableElements = document.querySelectorAll(".droppable");
-    let score = 0;
-
-    draggableElements.forEach(elem => {
-    elem.addEventListener("dragstart", dragStart); // Fires as soon as the user starts dragging an item - This is where we can define the drag data
-    // elem.addEventListener("drag", drag); // Fires when a dragged item (element or text selection) is dragged
-    // elem.addEventListener("dragend", dragEnd); // Fires when a drag operation ends (such as releasing a mouse button or hitting the Esc key) - After the dragend event, the drag and drop operation is complete
-    });
-
-    droppableElements.forEach(elem => {
-        elem.addEventListener("dragenter", dragEnter); // Fires when a dragged item enters a valid drop target
-        elem.addEventListener("dragover", dragOver); // Fires when a dragged item is being dragged over a valid drop target, repeatedly while the draggable item is within the drop zone
-        elem.addEventListener("dragleave", dragLeave); // Fires when a dragged item leaves a valid drop target
-        elem.addEventListener("drop", drop); // Fires when an item is dropped on a valid drop target
-    });
-
-    // Drag and Drop Functions
-
-    //Events fired on the drag target
-
-    function dragStart(event) {
-        event.dataTransfer.setData("text", event.target.id); // or "text/plain" but just "text" would also be fine since we are not setting any other type/format for data value
-    }
-
-    //Events fired on the drop target
-
-    function dragEnter(event) {
-        if(!event.target.classList.contains("dropped")) {
-            event.target.classList.add("droppable-hover");
-        }
-    }
-
-    function dragOver(event) {
-        if(!event.target.classList.contains("dropped")) {
-            event.preventDefault(); // Prevent default to allow drop
-        }
-    }
-
-    function dragLeave(event) {
-        if(!event.target.classList.contains("dropped")) {
-            event.target.classList.remove("droppable-hover");
-        }
-    }
-
-    function drop(event) {
-
-        event.preventDefault(); // This is in order to prevent the browser default handling of the data
-        event.target.classList.remove("droppable-hover");
-        const draggableElementData = event.dataTransfer.getData("text"); // Get the dragged data. This method will return any data that was set to the same type in the setData() method
-        const droppableElementData = event.target.getAttribute("data-draggable-id");
-        const isCorrectMatching = draggableElementData === droppableElementData;
- 
-        if(isCorrectMatching) {
-            const draggableElement = document.getElementById(draggableElementData);
-            event.target.classList.add("dropped");
-            //event.target.style.backgroundColor = draggableElement.style.color; // This approach works only for inline styles. A more general approach would be the following: 
-            //event.target.style.backgroundColor = window.getComputedStyle(draggableElement).color;
-            //event.target.style.background = draggableElement.style;
-
-            draggableElement.classList.add("dragged");
-            draggableElement.setAttribute("draggable", "false");
-            event.target.innerHTML= `<img class="${draggableElementData}" src="./pictures/${draggableElementData}.png" alt="jaune">`;
-            score++;
-        }
-  
-        if(score == 4){
-            console.log("Nous avons fludifié le trafic.");
-            document.getElementById("miniJeuParking").style.display = "none";
-            document.getElementById("reparationVoiture").style.display = "block";
-            document.getElementById("probVoiture").hidden = true;
-            document.getElementById("jeuParkingReussi").hidden = false;
-            socket.emit("traficFluide");
-            scene.getObjectByName("flecheParking").visible=false;
-        }
-    }
+    parkingReset();
 });
+
+function parkingReset()
+{
+    scoreP = 0;
+    let elementsDroppableP = document.getElementsByClassName("droppableP");
+    for(let i = 0; i < elementsDroppableP.length; ++i)
+    {
+        elementsDroppableP[i].classList.remove("droppedP");
+        elementsDroppableP[i].innerHTML = "<span></span>";
+    }
+    let elementsDraggableP = document.getElementsByClassName("draggableP");
+    for(let i = 0; i < elementsDraggableP.length; ++i)
+    {
+        elementsDraggableP[i].classList.remove("draggedP");
+        elementsDraggableP[i].draggable = true;
+    }
+}
 
 document.getElementById("parkingClose").addEventListener("click", event =>
 {
+    parkingReset();
     document.getElementById("miniJeuParking").style.display = "none";
 });
 
@@ -620,24 +699,159 @@ document.getElementById("parkingClose").addEventListener("click", event =>
 
 socket.on("probVelo", () => {
     document.getElementById("noStress").hidden = true;
+    document.getElementById("jeuGarageReussi").hidden = true;
     document.getElementById("probVelo").hidden = false;
 });
 
 socket.on("noProbVelo", () =>{
     document.getElementById("noStress").hidden = false;
+    document.getElementById("jeuGarageReussi").hidden = true;
     document.getElementById("probVelo").hidden = true;
-});
-
-document.getElementById('veloRempli').addEventListener("click", event => {
-    console.log("Nous avons remis des vélos.");
-    document.getElementById('stockVelo').style.display='none';
-    socket.emit("stockRempli");
 });
  
 document.getElementById('quitter').addEventListener("click", event => 
 { 
     document.getElementById('stockVelo').style.display='none';
     console.log("Nous avons quitté le garage.");
+});
+
+
+/*** Mini-Jeu Garage ***/
+const draggableElementsG = document.querySelectorAll(".draggableG");
+const droppableElementsG = document.querySelectorAll(".droppableG");
+
+let rouge = 0;
+let bleu = 0;
+let jaune = 0;
+let vert = 0;
+
+draggableElementsG.forEach(elem => {
+    elem.addEventListener("dragstart", dragStartG);
+});
+
+droppableElementsG.forEach(elem => {
+    elem.addEventListener("dragenter", dragEnterG); 
+    elem.addEventListener("dragover", dragOverG); 
+    elem.addEventListener("dragleave", dragLeaveG); 
+    elem.addEventListener("drop", dropG);
+});
+
+function dragStartG(event) {
+    event.dataTransfer.setData("text", event.target.id);
+}
+
+function dragEnterG(event) {
+    if(!event.target.classList.contains("droppedG")) {
+        event.target.classList.add("droppableG-hover");
+    }
+}
+
+function dragOverG(event) {
+    if(!event.target.classList.contains("droppedG")) {
+        event.preventDefault();
+    }
+}
+
+function dragLeaveG(event) {
+    if(!event.target.classList.contains("droppedG")) {
+        event.target.classList.remove("droppableG-hover");
+    }
+}
+
+function dropG(event) {
+    event.preventDefault(); 
+    event.target.classList.remove("droppableG-hover");
+    const draggableElementDataG = event.dataTransfer.getData("text");
+    const droppableElementDataG = event.target.getAttribute("data-draggable-id");
+    const isCorrectMatchingG = draggableElementDataG === droppableElementDataG;
+    if(isCorrectMatchingG) {
+        const draggableElementG = document.getElementById(draggableElementDataG);
+        switch (draggableElementDataG) {
+            case 'roueRouge':
+            rouge ++;
+            if(rouge == 1){
+                draggableElementG.classList.add("draggedG");
+                draggableElementG.draggable = false;
+            } else if (rouge == 2) {
+            document.getElementsByClassName('aledRouge')[0].classList.add("draggedG");
+        }
+        break;
+        case 'roueBleu':
+            bleu ++;
+            if(bleu == 1){
+                draggableElementG.classList.add("draggedG");
+                draggableElementG.draggable = false;
+            } else if (bleu == 2) {
+            document.getElementsByClassName('aledBleu')[0].classList.add("draggedG");
+            }
+        break;
+        case 'roueJaune':
+            jaune ++;
+            if(jaune == 1){
+                draggableElementG.classList.add("draggedG");
+                draggableElementG.draggable = false;
+            } else if (jaune == 2) {
+                document.getElementsByClassName('aledJaune')[0].classList.add("draggedG");
+            }
+        break;
+        case 'roueVert':
+            vert ++;
+            if(vert == 1){
+                draggableElementG.classList.add("draggedG");
+                draggableElementG.draggable = false;
+            } else if (vert == 2) {
+                document.getElementsByClassName('aledVert')[0].classList.add("draggedG");
+            }
+            break;
+        }
+        event.target.classList.add("droppedG");
+        draggableElementG.setAttribute("draggableG", "false");
+        event.target.insertAdjacentHTML("afterbegin", `<img class="${draggableElementDataG} draggableG" draggable="true" src="./pictures/${draggableElementDataG}.png" id="${draggableElementDataG}" width="90" height="90">`);
+    
+        if(rouge == 2 && bleu == 2 && vert == 2 && jaune == 2)
+        {
+            console.log("Nous avons remis des vélos.");
+            garageReset();
+            document.getElementById("miniJeuGarage").style.display = 'none';
+            document.getElementById("stockVelo").style.display = 'block';
+            document.getElementById("jeuGarageReussi").hidden = false;
+            document.getElementById("probVelo").hidden = true;
+            scene.getObjectByName("flecheGarage").visible = false;
+            socket.emit("stockRempli");
+        }
+    }
+}
+
+function garageReset()
+{
+    rouge = 0; 
+    bleu = 0;
+    vert = 0;
+    jaune = 0;
+    let elementsDraggableG = document.getElementsByClassName("draggableG");
+    for(let i = 0; i < elementsDraggableG.length; ++i)
+    {
+        elementsDraggableG[i].classList.remove("draggedG");
+        elementsDraggableG[i].draggable = true;
+    }
+    let elementsDroppableG = document.getElementsByClassName("droppableG");
+    for(let i = 0; i < elementsDroppableG.length; ++i)
+    {
+        elementsDroppableG[i].classList.remove("droppedG");
+        elementsDroppableG[i].innerHTML = "";
+    }
+}
+
+document.getElementById("veloRempli").addEventListener("click", event =>
+{
+    document.getElementById("miniJeuGarage").style.display = 'block';
+    document.getElementById("stockVelo").style.display = "none";
+});
+
+document.getElementById("garageClose").addEventListener("click", event =>
+{
+    garageReset();
+    document.getElementById("miniJeuGarage").style.display = 'none';
 });
 
 /*** Atelier ***/
@@ -655,59 +869,62 @@ socket.on("noProbMetro", () =>{
 });
 
 /*** Mini-jeu Atelier ***/
+
+let couleurBleu = "#4A4EFC";
+let couleurVert = "#659b41";
+let couleurJaune = "#ffcf33";
+let couleurRouge = "#FE0000";
+let epaisseur = 15;
+let painting = false;
+let debutX, debutY, finX, finY;
+let cable;
+let cableRouge;
+let cableBleu;
+let cableJaune;
+let cableVert;
+
 document.getElementById("metroRepare").addEventListener("click", event =>
 {
-    //faire apparaitre le mini-jeu
     document.getElementById("miniJeuAtelier").style.display = "block";
     document.getElementById("reparationMetro").style.display = "none";
     
     const canvas = document.querySelector('#canvas');
     const contexte = canvas.getContext('2d');
 
-    //changer la taille
+    cableRouge = false;
+    cableBleu = false;
+    cableJaune = false;
+    cableVert = false;
+
     canvas.height = 725;
     canvas.width = 810;
 
-    //variables
-    let couleurBleu = "#4A4EFC";
-    let couleurVert = "#659b41";
-    let couleurJaune = "#ffcf33";
-    let couleurRouge = "#FE0000";
-    let epaisseur = 15;
-    let painting = false;
-    let debutX, debutY, finX, finY;
-    let cable;
-    let cableRouge = false;
-    let cableBleu = false;
-    let cableJaune = false;
-    let cableVert = false;
-
-    function startPosition(e){
+    function startPosition(e) {
         painting = true;
         debutX = e.clientX;
         debutY = e.clientY;
     }
-    function finishedPosition(e){
+
+    function finishedPosition(e) {
         painting = false;
         finX = e.clientX;
         finY = e.clientY;
 
-        if (finX > 810 && finX < 900) {
-            if(cable == 'rouge' && finY > 680 && finY < 730) {
+        if (finX > 1265 && finX < 1370) {
+            if(cable == 'rouge' && finY > 765 && finY < 835) {
                 cableRouge = true;
             }
-            else if(cable == 'bleu' && finY > 465 && finY < 515){
+            else if(cable == 'bleu' && finY > 550 && finY < 615) {
                 cableBleu = true;
             }
-            else if(cable == 'jaune' && finY > 45 && finY < 95){
+            else if(cable == 'jaune' && finY > 130 && finY < 190) {
                 cableJaune = true;
             }
-            else if(cable == 'vert' && finY > 255 && finY < 305){
+            else if(cable == 'vert' && finY > 340 && finY < 400) {
                 cableVert = true;
             }
         }
         
-        //clear
         contexte.clearRect(0,0,canvas.width, canvas.height);
 
         if(cableRouge) {
@@ -742,35 +959,39 @@ document.getElementById("metroRepare").addEventListener("click", event =>
         if(cableRouge && cableVert && cableBleu && cableJaune)
         {
             console.log("Nous avons réparé le métro");
+            cableRouge = false;
+            cableVert = false;
+            cableBleu = false;
+            cableJaune = false;
             document.getElementById("miniJeuAtelier").style.display = "none";
             document.getElementById("reparationMetro").style.display = "block";
             document.getElementById("probMetro").hidden = true;
             document.getElementById("jeuAtelierReussi").hidden = false;
             socket.emit("metroRepare");
-            scene.getObjectByName("flecheAtelier").visible=false;
+            scene.getObjectByName("flecheAtelier").visible = false;
         }
         contexte.beginPath();
     }
 
-    function debutDraw(e){
+    function debutDraw(e) {
         if(!painting) return;
         contexte.lineWidth = epaisseur;
         contexte.lineCap = 'round';
 
-        if (debutX > 95 && debutX < 155) {
-            if( !cableRouge && debutY > 45 && debutY < 95) {
+        if (debutX > 555 && debutX < 630) {
+            if( !cableRouge && debutY > 130 && debutY < 190) {
                 contexte.strokeStyle = couleurRouge;
                 suiteDraw(e, 'rouge');
             }
-            else if( !cableBleu && debutY > 255 && debutY < 305){
+            else if(!cableBleu && debutY > 340 && debutY < 410) {
                 contexte.strokeStyle = couleurBleu;
                 suiteDraw(e, 'bleu');
             }
-            else if( !cableJaune && debutY > 465 && debutY < 515){
+            else if(!cableJaune && debutY > 550 && debutY < 615) {
                 contexte.strokeStyle = couleurJaune;
                 suiteDraw(e, 'jaune');
             }
-            else if( !cableVert && debutY > 680 && debutY < 730){
+            else if(!cableVert && debutY > 765 && debutY < 835) {
                 contexte.strokeStyle = couleurVert;
                 suiteDraw(e, 'vert');
             }
@@ -779,13 +1000,12 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 
     function suiteDraw(e, fil) {
         cable = fil;
-        contexte.lineTo(e.clientX -95, e.clientY-15);
+        contexte.lineTo(e.clientX -555, e.clientY-110);
         contexte.stroke();
         contexte.beginPath();
-        contexte.moveTo(e.clientX -95, e.clientY-15);
+        contexte.moveTo(e.clientX -555, e.clientY-110);
     }
 
-    //EventListeners
     canvas.addEventListener('mousedown', startPosition);
     canvas.addEventListener('mouseup', finishedPosition);
     canvas.addEventListener('mousemove', debutDraw);
@@ -793,6 +1013,10 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 
 document.getElementById("atelierClose").addEventListener("click", event =>
 {
+    cableRouge = false;
+    cableVert = false;
+    cableBleu = false;
+    cableJaune = false;
     document.getElementById("miniJeuAtelier").style.display = "none";
 });
  
@@ -992,8 +1216,8 @@ socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
     RemoveFlecheTransport();
     removeFlecheDest();
     suppPersonne(personne);
-    if(personne.fenetre==true &&  document.getElementsByClassName("personne content").id==idPersonne){
-        if(louper==true){
+    if(personne.fenetre == true &&  document.getElementsByClassName("personne content").id == idPersonne){
+        if(louper == true){
             console.log(louper,"trop taaaar")
         }
         else {
@@ -1020,7 +1244,7 @@ document.getElementById("transport").addEventListener("click", event =>
 
 document.getElementById('aplus').addEventListener("click", event => 
 { 
-    document.getElementById('DestinationPersonne').style.display='none';
+    document.getElementById('DestinationPersonne').style.display = 'none';
     clearInterval(intervalPerson);
 });
 
@@ -1042,64 +1266,62 @@ function activeOmbre() {
 
 function desactiveOmbre() {
     light.castShadow = false;
-    //scene.add(light);
 }
 
 function ajoutPersonne(personne) {
-    console.log(personne.depart)
-    scene.getObjectByName(personne.depart).visible=true;
+    console.log(personne.depart);
+    scene.getObjectByName(personne.depart).visible = true;
 }
 
 function suppPersonne(personne) {
-
-    scene.getObjectByName(personne.depart).visible=false;
+    scene.getObjectByName(personne.depart).visible = false;
 }
 
-function  removeFlecheDest(){
-    scene.getObjectByName("Ecole").visible=false;
-    scene.getObjectByName("Campagne").visible=false;
-    scene.getObjectByName("Magasins").visible=false;
-    scene.getObjectByName("Musee").visible=false;
-    scene.getObjectByName("Parc").visible=false;
-    scene.getObjectByName("Restaurant").visible=false;
-    scene.getObjectByName("Stade").visible=false;
+function  removeFlecheDest() {
+    scene.getObjectByName("Ecole").visible = false;
+    scene.getObjectByName("Campagne").visible = false;
+    scene.getObjectByName("Magasins").visible = false;
+    scene.getObjectByName("Musee").visible = false;
+    scene.getObjectByName("Parc").visible = false;
+    scene.getObjectByName("Restaurant").visible = false;
+    scene.getObjectByName("Stade").visible = false;
 }
 
-function DisplayFlecheTransport(depart){
-    scene.getObjectByName("flecheGare").visible=true;
+function DisplayFlecheTransport(depart) {
+    scene.getObjectByName("flecheGare").visible = true;
     let tab = depart.split(".");
     console.log(tab);
-    if((tab[0]=="0") && (tab[1]=="7")) {
-        console.log("iciii1")
-        scene.getObjectByName("flecheVelo2").visible=true;
-        scene.getObjectByName("flecheMetro1").visible=true;
+    if((tab[0] == "0") && (tab[1] == "7")) {
+        console.log("iciii1");
+        scene.getObjectByName("flecheVelo2").visible = true;
+        scene.getObjectByName("flecheMetro1").visible = true;
     }
-    else if((tab[0]=="1") && (tab[1]=="7")) {
-        console.log("iciii2")
-        scene.getObjectByName("flecheVelo1").visible=true;
-        scene.getObjectByName("flecheMetro1").visible=true;
+    else if((tab[0] == "1") && (tab[1] == "7")) {
+        console.log("iciii2");
+        scene.getObjectByName("flecheVelo1").visible = true;
+        scene.getObjectByName("flecheMetro1").visible = true;
     }
-    else if((tab[0]=="1") && (tab[1]=="8")) {
-        console.log("iciii3")
-        scene.getObjectByName("flecheVelo1").visible=true;
-        scene.getObjectByName("flecheMetro1").visible=true;
+    else if((tab[0] == "1") && (tab[1] == "8")) {
+        console.log("iciii3");
+        scene.getObjectByName("flecheVelo1").visible = true;
+        scene.getObjectByName("flecheMetro1").visible = true;
     }
-    else if((tab[0]=="1") && (tab[1]=="9")) {
-        console.log("iciii4")
-        scene.getObjectByName("flecheVelo1").visible=true;
-        scene.getObjectByName("flecheMetro1").visible=true;
+    else if((tab[0] == "1") && (tab[1] == "9")) {
+        console.log("iciii4");
+        scene.getObjectByName("flecheVelo1").visible = true;
+        scene.getObjectByName("flecheMetro1").visible = true;
     }
     else {
-        console.log("iciii")
-        scene.getObjectByName("flecheVelo1").visible=true;
-        scene.getObjectByName("flecheMetro3").visible=true;
+        console.log("iciii");
+        scene.getObjectByName("flecheVelo1").visible = true;
+        scene.getObjectByName("flecheMetro3").visible = true;
     }
 }
 
-function RemoveFlecheTransport(){
-    scene.getObjectByName("flecheGare").visible=false;
-    scene.getObjectByName("flecheMetro1").visible=false;
-    scene.getObjectByName("flecheMetro3").visible=false;
-    scene.getObjectByName("flecheVelo1").visible=false;
-    scene.getObjectByName("flecheVelo2").visible=false;
+function RemoveFlecheTransport() {
+    scene.getObjectByName("flecheGare").visible = false;
+    scene.getObjectByName("flecheMetro1").visible = false;
+    scene.getObjectByName("flecheMetro3").visible = false;
+    scene.getObjectByName("flecheVelo1").visible = false;
+    scene.getObjectByName("flecheVelo2").visible = false;
 }

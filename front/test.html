@@ -176,8 +176,27 @@
                 <br><br>
                 <div id="parfait" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les trains.</div> 
                 <div id="probTrain" hidden=true><button id="trainRepare">Réparer le train</button></div> 
+                <div id="jeuTechnicentreReussi" hidden=true>Vous avez réparé le train.</div> 
             </div>
         </div>
+    </div>
+
+     <!--Mini-Jeu Technicentre-->
+     <div id="miniJeuTechnicentre" class="menuPause">
+        <button id="technicentreClose" class="btn btn-outline-dark cancel">X</button>
+        <div class="box unT">
+            <section class="droppableT-elements">
+                <div class="droppableT poubellebuche"  data-draggable-id="buche1" ><img class="poubelle" src="./pictures/poubelle.png" width="200" height="200"></div>
+            </section>
+        </div>
+        <div class="box deuxT">
+            <section class="draggableT-elements">
+                <img class="buche1 draggableT" src="./pictures/buche1.png" draggable="true" id="buche1">
+                <img class="buche2 draggableT" src="./pictures/buche2.png" draggable="true" id="buche2">
+                <img class="buche3 draggableT" src="./pictures/buche3.png" draggable="true" id="buche3">
+                <img class="buche4 draggableT" src="./pictures/buche4.png" draggable="true" id="buche4">
+            </section>
+        </div> 
     </div>
 
     <!--bouton parking -->
@@ -196,27 +215,27 @@
         </div>
     </div>
 
-    <!-- mini-jeu parking -->
-    <div id="miniJeuParking" class="menuPause" style="padding-left: 32%; text-align:left;">
+    <!-- Mini-Jeu Parking -->
+    <div id="miniJeuParking" class="menuPause" style="padding-left: 33.8%; padding-top:8.4%; text-align:left;">
         <button id="parkingClose" class="btn btn-outline-dark cancel">X</button>
-        <div class="box un">
-            <section class="droppable-elements">
-                <div class="droppable voitureJaune"  data-draggable-id="voitureJaune" ><span></span></div>
-                <div class="droppable voitureRouge" style="background-color:#CD6155;" data-draggable-id="voitureRouge"><span></span></div>
+        <div class="box unP">
+            <section class="droppableP-elements">
+                <div class="droppableP voitureJaune" style="background-color:#ffcf33;" data-draggable-id="voitureJaune" ><span></span></div>
+                <div class="droppableP voitureRouge" style="background-color:#FE0000;" data-draggable-id="voitureRouge"><span></span></div>
                 </section>
         </div>
-        <div class="box deux">
-            <section class="draggable-elements">
-                <img class="voitureJaune draggable" src="./pictures/voitureJaune.png" draggable="true" id="voitureJaune" width="150" height="150" style="color:#F7DC6F;">
-                <img class="voitureRouge draggable" src="./pictures/voitureRouge.png" draggable="true" id="voitureRouge" width="90" height="90">
-                <img class="voitureJaune draggable" src="./pictures/voitureBleu.png" draggable="true" id="voitureBleu" width="90" height="90" >
-                <img class="voitureRouge draggable" src="./pictures/voitureVert.png" draggable="true" id="voitureVert" width="90" height="90" >
+        <div class="box deuxP">
+            <section class="draggableP-elements">
+                <img class="voitureJaune draggableP" src="./pictures/voitureJaune.png" draggable="true" id="voitureJaune">
+                <img class="voitureRouge draggableP" src="./pictures/voitureRouge.png" draggable="true" id="voitureRouge">
+                <img class="voitureJaune draggableP" src="./pictures/voitureBleu.png" draggable="true" id="voitureBleu">
+                <img class="voitureRouge draggableP" src="./pictures/voitureVert.png" draggable="true" id="voitureVert">
             </section>
         </div> 
-        <div class="box trois">
-            <section class="droppable-elements">
-                <div class="droppable voitureBleu" style="background-color:#5DADE2;" data-draggable-id="voitureBleu"><span></span></div>
-                <div class="droppable voitureVert" style="background-color:#58D68D;" data-draggable-id="voitureVert"><span></span></div>
+        <div class="box troisP">
+            <section class="droppableP-elements">
+                <div class="droppableP voitureBleu" style="background-color:#4A4EFC;" data-draggable-id="voitureBleu"><span></span></div>
+                <div class="droppableP voitureVert" style="background-color:#659b41;" data-draggable-id="voitureVert"><span></span></div>
             </section>
         </div>
     </div>
@@ -232,9 +251,61 @@
                 <br><br>
                 <div id="noStress" hidden=false>Il y a assez de vélo.</div> 
                 <div id="probVelo" hidden=true><button id="veloRempli">Remettre des vélos</button></div> 
+                <div id="jeuGarageReussi" hidden=true>Vous avez remis des vélos.</div>
             </div>
         </div>
     </div> 
+
+    <!-- Mini-Jeu Garage -->
+    <div id="miniJeuGarage" class="menuPause">
+        <button id="garageClose" class="btn btn-outline-dark cancel">X</button>
+        <div class="grid-container">
+            <div class="grid-item item1"></div>
+            <div class="grid-item item2">
+                <div class="veloRouge img"><img  src="./pictures/veloRouge.png" width="200" height="130"></div>
+            </div>
+            <div class="grid-item item3">
+                <div class="veloBleu img"><img  src="./pictures/veloBleu.png" width="200" height="130">  </div>                       
+            </div>
+            <div class="grid-item item4"></div>
+            <div class="grid-item item5"></div>
+            <div class="grid-item item6">
+                <div class="veloJaune img"><img  src="./pictures/veloJaune.png" width="200" height="130">  </div>
+            </div>  
+            <div class="grid-item item7">
+                <div class="veloVert img"><img  src="./pictures/veloVert.png" width="200" height="130">  </div>
+            </div>
+            <div class="grid-item item8"></div>
+            <div class="grid-item item9"></div>
+            <div class="grid-item item10">
+                <img class="pioche" draggable="true" src="./pictures/pioche.png" width="320" height="190">
+    
+                <section class="draggableG-elements" style="margin:-179px 17px 13px 0; width: 100%;">
+                    <img class="roueBleu draggableG" draggable="true" src="./pictures/roueBleu.png" id="roueBleu" width="90" height="90">
+                    <img class="roueJaune draggableG" draggable="true" src="./pictures/roueJaune.png" id="roueJaune" width="90" height="90">
+                    <img class="roueRouge draggableG" draggable="true" src="./pictures/roueRouge.png" id="roueRouge" width="90" height="90">
+                    <img class="roueVert draggableG" draggable="true" src="./pictures/roueVert.png" id="roueVert" width="90" height="90">
+                </section>
+                <section class="draggableG-elements">
+                    <img class="roueRouge draggableG aledRouge" draggable="true" src="./pictures/roueRouge.png" id="roueRouge" width="90" height="90">
+                    <img class="roueVert draggableG aledVert" draggable="true" src="./pictures/roueVert.png" id="roueVert" width="90" height="90">
+                    <img class="roueBleu draggableG aledBleu" draggable="true" src="./pictures/roueBleu.png" id="roueBleu" width="90" height="90">
+                    <img class="roueJaune draggableG aledJaune" draggable="true" src="./pictures/roueJaune.png" id="roueJaune" width="90" height="90">
+                </section>
+            </div>
+        </div>                
+    
+        <section class="droppableG-elements">
+            <div class="droppableG rouge1" data-draggable-id="roueRouge"></div>
+            <div class="droppableG rouge2" data-draggable-id="roueRouge"></div>
+            <div class="droppableG bleu1" data-draggable-id="roueBleu"></div>
+            <div class="droppableG bleu2" data-draggable-id="roueBleu"></div>
+            <div class="droppableG jaune1" data-draggable-id="roueJaune"></div>
+            <div class="droppableG jaune2" data-draggable-id="roueJaune"></div>
+            <div class="droppableG vert1" data-draggable-id="roueVert"></div>
+            <div class="droppableG vert2" data-draggable-id="roueVert"></div>
+        </section-->
+    </div>
 
     <!-- bouton atelier -->
     <div id="reparationMetro" class="fenetre">

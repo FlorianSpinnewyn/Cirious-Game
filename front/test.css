@@ -206,6 +206,8 @@
   width: 50%;
 }
 
+/*Mini Jeu Atelier*/
+
 #image {
   width:1000px;
   height:750px;
@@ -219,33 +221,33 @@
   z-index: 3;
 }
 
+/*Mini Jeu Parking*/
+
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 #miniJeuParking {
   font-family: 'Montserrat', sans-serif;
-  /*background-color: #eee;*/
   color: #111;
   background: url("./pictures/parkingminijeu.png") no-repeat;
   background-size: 628px 652px;
   background-position: center;
 }
 
-.box{
+.box {
   display: inline-block;
 }
 
-.un{
+.unP {
   position:fixed;
   margin-left:2rem;
-
 }
-.trois{
+
+.troisP {
   position:fixed;
-  margin-left:2.8rem;
+  margin-left:4.1rem;
 }
 
-/*places de parking*/
-.droppable {
+.droppableP {
   display:block;
   justify-content: center;
   align-items: center;
@@ -254,86 +256,362 @@
   font-size: 4rem;
   font-weight: bold;
   background-color: #fff;
-  border: 3px dashed #111;
+  border: 2px dashed #111;
   transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+  height: 6.6rem;
+  width: 10rem;
 }
 
-.voitureJaune{
-  height: 7rem;
-  width: 11rem;
-  margin-bottom:7.2rem;
-}
-.voitureRouge{
-  height: 7rem;
-  width: 11rem;
-}
-.voitureVert{
-  height: 7rem;
-  width: 11rem;
-}
-.voitureBleu{
-  height: 7rem;
-  width: 11rem;
-  margin-top:0.5rem;
-}
-.droppable.voitureVert{
- 
-  margin-top:29rem;
+.voitureJaune {
+  margin-bottom:7.9rem;
 }
 
-/*Voitures*/
-.draggable {
-  height: 10rem;
+.droppableP.voitureJaune {
+  margin-top: 0.2rem;
+}
+
+.droppableP.voitureBleu{
+  margin-top: 14.5rem;
+}
+
+.droppableP.voitureVert{
+  margin-top:0.8rem;
+}
+
+.draggableP {
   display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 4rem;
   margin: 1rem auto;
   cursor: move;
   transition: opacity 0.2s;
-  margin-left:15rem;
+  margin-left:17rem;
+  margin-bottom: 7rem;
 }
 
-.draggable:hover {
+.draggableP:hover {
   opacity: 0.5;
 }
 
-.droppable span {
+.droppableP span {
   font-size: 1.25rem;
-  pointer-events: none; /* The element is never the target of pointer events */
+  pointer-events: none; 
 }
 
-/* Drag and Drop Related Styling */
+.draggableP-elements {
+  margin-top: 3rem;
+}
 
-.droppable.droppable-hover {
-  /* background-color: #bee3f0; */
-  border-width: 5px;
+.droppableP.droppableP-hover {
+  border-width: 3px;
   transform: scale(1.1);
 }
-.droppable.dropped {
+
+.droppableP.droppedP {
   border-style: solid;
   color: #fff;
 }
-.droppable.dropped span {
+
+.droppableP.droppedP span {
   font-size: 0.75rem;
   margin-top: 0.5rem;
 }
-.droppable.dropped img {
+
+.droppableP.droppedP img {
+  margin-top: 1rem;
+  justify-content: center;
   pointer-events: none;
 }
-.draggable.dragged {
+
+.droppableP.droppedP.voitureRouge img {
+  margin-top: 0;
+}
+
+.droppableP.droppedP.voitureBleu img {
+  margin-top: 0;
+}
+
+.droppableP.droppedP.voitureVert img {
+  margin-top: 0;
+}
+
+.draggableP.draggedP {
   user-select: none;
   opacity: 0.1;
   cursor: default;
-
 }
-.draggable.dragged:hover {
+
+.draggableP.draggedP:hover {
   opacity: 0.1;
 }
 
 @media (max-width: 600px) {
   html { font-size: 14px; }
-  .draggable-elements { margin: 1.5rem; }
+  .draggableP-elements { margin: 1.5rem; }
+}
+
+/*Mini Jeu Garage*/
+#miniJeuGarage {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.grid-container {
+  display: grid;
+  grid-gap: 15px;
+  padding: 15px;
+}
+  
+.grid-item {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px;
+}
+
+.item1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+  
+.item2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+  
+.item3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.item4 {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.item10 {
+  grid-column: 2 / span 2;
+  grid-row: 3;
+}
+
+.draggableG-elements {
+  display: flex;
+  justify-content: center;
+}
+
+.draggableG {
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  cursor: move;
+  transition: opacity 0.2s;
+}
+
+.draggableG:hover {
+  opacity: 0.5;
+}
+
+.droppableG {
+  position: fixed;
+  height: 5rem;
+  width: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  font-size: 4rem;
+  font-weight: bold;
+  transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+}
+
+.rouge1 {
+  top: 156px;
+  left: 614px;
+}
+
+.rouge2 {
+  top: 156px;
+  left: 730px;
+}
+
+.bleu1 {
+  top: 156px;
+  left: 1024px;
+}
+
+.bleu2 {
+  top: 156px;
+  left: 1139px;
+}
+
+.jaune1 {
+  top: 300px;
+  left: 614px;
+}
+
+.jaune2 {
+  top: 300px;
+  left: 730px;
+}
+
+.vert1 {
+  top: 300px;
+  left: 1024px;
+}
+
+.vert2 {
+  top: 300px;
+  left: 1139px;
+}
+
+.droppableG.droppableG-hover {
+  border-width: 5px;
+  transform: scale(1.1);
+}
+
+.droppableG.droppedG span {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.droppableG.droppedG i {
+  pointer-events: none;
+}
+
+.draggableG.draggedG {
+  user-select: none;
+  cursor: default;
+  opacity:0;
+}
+
+.draggableG.draggedG:hover {
+  opacity: 0.1;
+}
+
+@media (max-width: 600px) {
+  html { font-size: 14px; }
+  .draggableG-elements { margin: 1.5rem; }
+}
+
+/* Mini-Jeu Technicentre */
+#miniJeuTechnicentre {
+  font-family: 'Montserrat', sans-serif;
+  background: url(./pictures/fond.jpg) no-repeat;
+  background-size: 50% 70%;
+  background-position: center;
+  color: #111;
+}
+
+.unT {
+  position:fixed;
+
+}
+
+.deuxT {
+    margin-top: 28rem;
+    margin-left: 5rem;
+}
+
+.troisT {
+  position:fixed;
+  margin-left:2.8rem;
+}
+
+.train {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.droppableT {
+  display:block;
+  justify-content: center;
+  align-items: center;
+  transition: border-width 0.2s, transform 0.2s, background-color 0.4s;
+}
+
+.droppableT-elements {
+  margin-top: 30rem;
+  margin-left: 18rem;
+}
+
+.buche1 {  
+  z-index:2;
+  margin-left: 34rem;
+}
+
+.buche2 {
+  float: left;
+  z-index: 2;
+  margin-left: 35rem;
+}
+
+.buche3 {
+  clear:left;
+  float:left;
+  margin-left: 36rem;
+}
+
+.buche4 {
+  height: 10rem;
+  width: 5rem;
+  margin-left: 36rem;
+}
+
+.buche1, .buche2, .buche3, .buche4 {
+  display: block;
+  width: 10rem;
+}
+
+.draggableT {
+  height: 7rem;
+  font-size: 4rem;
+  cursor: move;
+  transition: opacity 0.2s;
+}
+
+.draggableT-elements {
+  margin-top: 1rem;
+}
+
+.draggableT:hover {
+  opacity: 0.5;
+}
+
+.droppableT span {
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+.poubelle.droppableT-hover {
+  border-width: 5px;
+  transform: scale(1.1);
+}
+
+.droppableT.droppedT {
+  border-style: solid;
+  color: #fff;
+}
+
+.droppableT.droppedT span {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.droppableT.droppedT img {
+  pointer-events: none;
+}
+
+.draggableT.draggedT {
+  user-select: none;
+  opacity: 0.0;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  html { font-size: 14px; }
+  .draggableT-elements { margin: 1.5rem; }
 }
 
 .gare {
@@ -373,7 +651,6 @@
 .cancel {
   letter-spacing:0.3em;
   float:right;
-
   margin-right: 4%;
 }
 
@@ -390,6 +667,7 @@
 #level {
   display: none;
 }
+
 #home {
   display: none;
 }
@@ -407,110 +685,120 @@
 }
 
 #loading-screen.fade-out {
-    opacity: 0;
+  opacity: 0;
 }
 
 #loader {
-    display: block;
-    position: relative;
-    left: 50%;
-    top: 50%;
-    width: 150px;
-    height: 150px;
-    margin: -75px 0 0 -75px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-top-color: #9370DB;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #9370DB;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
 }
-#loader:before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-top-color: #BA55D3;
-    -webkit-animation: spin 3s linear infinite;
-    animation: spin 3s linear infinite;
-}
-#loader:after {
-    content: "";
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-top-color: #FF00FF;
-    -webkit-animation: spin 1.5s linear infinite;
-    animation: spin 1.5s linear infinite;
-}
-@-webkit-keyframes spin {
-    0%   {
-        -webkit-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-@keyframes spin {
-    0%   {
-        -webkit-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-  }
 
-  .onoffswitch {
-    position: relative; width: 55px;
-    left:47%;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #BA55D3;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 3s linear infinite;
 }
+
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #FF00FF;
+  -webkit-animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.onoffswitch {
+  position: relative; width: 55px;
+  left:47%;
+}
+
 .onoffswitch-checkbox {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
+
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    height: 20px; padding: 0; line-height: 20px;
-    border: 0px solid #FFFFFF; border-radius: 30px;
-    background-color: #9E9E9E;
+  display: block; overflow: hidden; cursor: pointer;
+  height: 20px; padding: 0; line-height: 20px;
+  border: 0px solid #FFFFFF; border-radius: 30px;
+  background-color: #9E9E9E;
 }
+
 .onoffswitch-label:before {
-    content: "";
-    display: block; width: 30px; margin: -5px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 31px;
-    border-radius: 30px;
-    box-shadow: 0 6px 12px 0px #757575;
+  content: "";
+  display: block; width: 30px; margin: -5px;
+  background: #FFFFFF;
+  position: absolute; top: 0; bottom: 0;
+  right: 31px;
+  border-radius: 30px;
+  box-shadow: 0 6px 12px 0px #757575;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label {
-    background-color: #42A5F5;
+  background-color: #42A5F5;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-   border-color: #42A5F5;
+  border-color: #42A5F5;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
+  margin-left: 0;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-    right: 0px; 
-    background-color: #2196F3; 
-    box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
+  right: 0px; 
+  background-color: #2196F3; 
+  box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
 }
