@@ -1,6 +1,6 @@
 <!--      * * * * * * * * * * * * * * * * * * * * * * * * * * *
           *                                                   *
-          *                CIRious Game - Test                *
+          *                   CHOOSE & GO                     *
           *                                                   *
           * * * * * * * * * * * * * * * * * * * * * * * * * * *                  -->
           
@@ -9,12 +9,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CIRious Game - Test</title>
+    <title>Choose&Go !</title>
     <link rel="stylesheet" href="test.css">
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">   <!-- liens w3 school -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">    <!-- pour la police des titres -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">    <!-- pour la police classique -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Trirong">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  <!-- pour les icônes -->
     <link rel="icon" href="./pictures/favicon.ico"/>    <!--pour la petite icône en haut -->
     <script src="/socket.io/socket.io.js"></script>
@@ -43,7 +42,7 @@
                     <div class="destPersonne">
                         <br><br>
                         <div>Je voudrais aller <span id="dest"></span></div>
-                        <div>Attention ! Cette personne va prendre ca voiture dans <span id="sec"></span> minutes !</div>
+                        <div>Attention ! Cette personne va prendre sa voiture dans <span id="sec"></span> minutes !</div>
                         <div id="transport">
                             <button id="transportPied">Pied</button>
                             <button id="transportVelo">Vélo</button>
@@ -57,25 +56,27 @@
         <canvas></canvas>
     </div>
 
+    <!-- Chargement -->
     <section id="loading-screen">
-
-        <div id="loader"></div>
-    
+        <img class="logoC" src="./pictures/logo.png">
+        <div id="loader"></div> 
+        <img class="trainBouge" src="./pictures/train.png">
     </section>
     
     <!-- Demarrer -->
     <div id="home" class="menuDemarrer">
-        <button id="play">Play</button>
+        <img class="logoD" src="./pictures/logoOmbre.png">
+        <button id="play" class="boutonPlay" data-hover="Destination CirCity"><div>Jouer !</div></button>
     </div>
 
     <!-- Sélection level -->
-    <div id="level" class="menuDemarrer">
-        <button id="level0">level0</button>
-        <button id="level1">level1</button>
-        <button id="level2">level2</button>
-        <button id="level3">level3</button>
-        <button id="level4">level4</button>
-        <button id="level5">level5</button>
+    <div id="level" class="choixNivo">
+        <button class="boutonChoix" id="level0" data-hover="Tutoriel"><div>Niveau 0</div></button>
+        <button class="boutonChoix" id="level1" data-hover="Facile"><div>Niveau 1</div></button>
+        <button class="boutonChoix" id="level2" data-hover="Moyen"><div>Niveau 2</div></button>
+        <button class="boutonChoix" id="level3" data-hover="Moyen"><div>Niveau 3</div></button>
+        <button class="boutonChoix" id="level4" data-hover="Difficile"><div>Niveau 4</div></button>
+        <button class="boutonChoix" id="level5" data-hover="Expert"><div>Niveau 5</div></button>
     </div>
 
     <!-- Menu Pause -->
@@ -119,23 +120,22 @@
 
     <!-- Tuto -->
     <div id="tuto" class="tuto">
-        <h1 id="titreTuto">Bienvenue !</h1><br><br>
-        <p id="phraseTuto">Ce tuto va vous apprendre tout ce qu'il faut savoir sur le jeu.</p><br><br>
-        <button  id="commencerTuto">Commencer le tuto</button>
-        <button  id="finTuto" hidden=true>Jouer</button>
-        <button  id="finirTuto" hidden=true>Fin du tuto</button>
-        <div id="pagination" class="pagination" style="display:none; width:1600px; justify-content: center;">
-        </div>
+                <h1 id="titreTuto"></h1><br><br>
+                <p id="phraseTuto"></p><br><br>
+                <button  class="boutonCoucou" id="commencerTuto">C'est parti <i class="fa fa-smile-o"></i></button>
+                <button  id="finTuto" hidden=true>Accès au jeu</button>
+                <button  class="boutonCoucou" id="finirTuto" hidden=true>Fin du tutoriel</button>
+                <div id="pagination" class="pagination" style="display:none; width:1600px; justify-content: center;"></div>
     </div>
 
-    <button id="relireTuto" class="relireTuto" hidden=true>Tuto</button>
-    <button id="closeTuto" class="relireTuto" hidden=true>X</button>
+    <button id="relireTuto" class="relireTuto" hidden=true>Tutoriel <i class="fa fa-info-circle"></i></button>
+    <button id="closeTuto" class="relireTuto" hidden=true><i class="fa fa-remove"></i></button>
 
     <!-- bouton mairie -->
     <div id="information" class="fenetre">
         <div class="mairie content">
             <div class="clearfix">
-                <button id="cancel" class="btn btn-outline-dark cancel" name="cancel" type="button">X</button>
+                <button id="cancel" class="btn btn-outline-dark cancel" name="cancel" type="button"><i class="fa fa-remove"></i></button>
             </div>
             <div class="panneau">
                 <h2>Panneau d'informations de la <strong>Mairie</strong> :</h2>

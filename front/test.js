@@ -70,7 +70,7 @@ socket.on("initialisationViewPlay", (tabLevel) => {
 
     document.getElementById("home").style.display = "none";
     document.getElementById("level").style.display = "block";
-    for(let i = 0; i<6;i++) {
+    for(let i = 0; i<7;i++) {
         if(tabLevel[i]==false) {
             document.getElementById("level" + i).disabled = true;
         }
@@ -93,8 +93,8 @@ document.getElementById('level0').addEventListener("click", event =>
     socket.emit("DebutTuto");
     document.getElementById("tuto").style.display = 'block';
     document.getElementById("level").style.display = 'none';
-    document.getElementById("titreTuto").innerHTML = "Bienvenue !"
-    document.getElementById("phraseTuto").innerHTML = "Ce tuto va vous apprendre tout ce qu'il faut savoir sur le jeu."
+    document.getElementById("titreTuto").innerHTML = "Bienvenue à CirCity!"
+    document.getElementById("phraseTuto").innerHTML = "Ce tutoriel va vous apprendre tout ce qu'il faut savoir pour jouer à <b>Choose&Go</b>."
     document.getElementById("commencerTuto").hidden = false;
     document.getElementById("pagination").style.display = "none";
     document.getElementById("pagination").innerHTML = "<button id='precedent' hidden=true>&laquo;</button><button id='page1' class='active boutonTuto1'>1</button><button id='page2' class='boutonTuto2'>2</button><button id='page3' class='boutonTuto3'>3</button><button id='page4' class='boutonTuto4'>4</button><button id='page5' class='boutonTuto5'>5</button><button id='suivant'>&raquo;</button>";
@@ -103,7 +103,7 @@ document.getElementById('level0').addEventListener("click", event =>
 document.getElementById("commencerTuto").addEventListener("click", event =>
 {
     document.getElementById("titreTuto").innerHTML = "But du jeu"
-    document.getElementById("phraseTuto").innerHTML = "Des personnes vont sortir du travail. Elles souhaitent aller à différents endroits : votre mission est de trouver le moyen de transport le plus rapide (en train, en métro, en vélo, à pied) tout en essayant de polluer le moins possible."
+    document.getElementById("phraseTuto").innerHTML = "C'est l'heure de la sortie du travail à CirCity. Des salariés arrivent dans la rue, ils souhaitent se rendre à différents endroits de la vile (magasin, école, musée...). <br> Ta mission : leur indiquer le <b>meilleur moyen de transport</b> (en train, en métro, en vélo, à pied) pour leur déplacement. <br><br> Il faut que le choix soit rapide, n'ait pas trop d'attente tout en essayant de polluer le moins possible. <br>Si la demande n'est pas prise en compte assez rapidement, le salarié partira en voiture et donc polluera... <br> <br> Lorsque tous les salariés ont quitté le travail, tu as gagné ! Ton score apparaitra ainsi qu'un conseil écolo pour améliorer et optimiser tes déplacements dans la vraie vie ! <br>Mais attention 2 jauges peuvent te faire perdre la partie : <br> - La <b>jauge de pollution</b> dont le niveau augmente si un salarié part en voiture, si un train part presque vide et il diminue si un salarié se déplace à pied. <br> - La <b>jauge de mécontentement</b> se remplie si ton choix de transport n'est pas en adéquation avec la demande (trop d'attente, trop long, trop polluant), si les imprévus (tutoriel page 3) ne sont pas résolus assez vite et elle se vide si tu remportes des badges (tutoriel page 4). <br><br><br> A toi de jouer pour lutter contre la pollution des transports !"
     document.getElementById("commencerTuto").hidden = true;
     document.getElementById("pagination").style.display = "flex";
     document.getElementById("finirTuto").hidden = true;
@@ -119,8 +119,8 @@ setInterval(function()
     {
         boutons1[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "page1";
-            document.getElementById("phraseTuto").innerHTML = "texte1";
+            document.getElementById("titreTuto").innerHTML = "But du jeu"
+            document.getElementById("phraseTuto").innerHTML = "C'est l'heure de la sortie du travail à CirCity. Des salariés arrivent dans la rue, ils souhaitent se rendre à différents endroits de la vile (magasin, école, musée...). <br> Ta mission : leur indiquer le <b>meilleur moyen de transport</b> (en train, en métro, en vélo, à pied) pour leur déplacement. <br><br> Il faut que le choix soit rapide, n'ait pas trop d'attente tout en essayant de polluer le moins possible. <br>Si la demande n'est pas prise en compte assez rapidement, le salarié partira en voiture et donc polluera... <br> <br> Lorsque tous les salariés ont quitté le travail, tu as gagné ! Ton score apparaitra ainsi qu'un conseil écolo pour améliorer et optimiser tes déplacements dans la vraie vie ! <br>Mais attention 2 jauges peuvent te faire perdre la partie : <br> - La <b>jauge de pollution</b> dont le niveau augmente si un salarié part en voiture, si un train part presque vide et il diminue si un salarié se déplace à pied. <br> - La <b>jauge de mécontentement</b> se remplie si ton choix de transport n'est pas en adéquation avec la demande (trop d'attente, trop long, trop polluant), si les imprévus (tutoriel page 3) ne sont pas résolus assez vite et elle se vide si tu remportes des badges (tutoriel page 4). <br><br><br> A toi de jouer pour lutter contre la pollution des transports !"
             document.getElementById("precedent").hidden = true;
             document.getElementById("suivant").hidden = false;
             document.getElementById("suivant").removeAttribute("class");
@@ -130,6 +130,7 @@ setInterval(function()
             document.getElementById("page3").classList.remove("active");
             document.getElementById("page4").classList.remove("active");
             document.getElementById("page5").classList.remove("active");
+            document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
         });
@@ -140,8 +141,8 @@ setInterval(function()
     {
         boutons2[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "page2";
-            document.getElementById("phraseTuto").innerHTML = "phrase2";
+            document.getElementById("titreTuto").innerHTML = "Les déplacements dans la map";
+            document.getElementById("phraseTuto").innerHTML = "CirCity est une grande ville ! N'hésite pas à te déplacer, c'est tout simple : <br><br> - le clic droit permet de bouger linéarement dans la ville (ta position précise); <br> - le clic gauche gère les rotations (ton angle de vue); <br> - tu peux également zoomer ou dézoomer jusqu'aux nuages (ta hauteur).";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
             document.getElementById("precedent").classList.add("boutonTuto1");
@@ -149,10 +150,11 @@ setInterval(function()
             document.getElementById("suivant").removeAttribute("class");
             document.getElementById("suivant").classList.add("boutonTuto3");
             document.getElementById("page2").classList.add("active");
-            document.getElementById("page3").classList.remove("active");
             document.getElementById("page1").classList.remove("active");
+            document.getElementById("page3").classList.remove("active");
             document.getElementById("page4").classList.remove("active");
             document.getElementById("page5").classList.remove("active");
+            document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
         });
@@ -163,8 +165,8 @@ setInterval(function()
     { 
         boutons3[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "page3";
-            document.getElementById("phraseTuto").innerHTML = "phrase3";
+            document.getElementById("titreTuto").innerHTML = "Les demandes des salariés";
+            document.getElementById("phraseTuto").innerHTML = "Les salariés apparaissent dans la zone de travail autour de la Gare du Nord. Des <b>points d'exclamation rouges</b> marquent leurs emplacements. <br><br> En cliquant sur le salarié, tu découvres sa destination qui est marquée par une <b>flèche verte</b> dans la ville. <br>Pour t'aider, des <b>flèches jaunes</b> t'indiquent la station de métro, de vélo et la gare à proximité. <br>Il y a également un <b>chrono</b> qui te précise dans combien de temps le salarié partira en voiture. <br> Tu n'as plus qu'à évaluer par toi même quel est le meilleur moyen de transport pour satisfaire cette demande et cliquer sur le bouton correspondant.";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
             document.getElementById("precedent").classList.add("boutonTuto2");
@@ -176,6 +178,7 @@ setInterval(function()
             document.getElementById("page1").classList.remove("active");
             document.getElementById("page4").classList.remove("active");
             document.getElementById("page5").classList.remove("active");
+            document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
         });
@@ -186,8 +189,8 @@ setInterval(function()
     { 
         boutons4[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "page4";
-            document.getElementById("phraseTuto").innerHTML = "phrase4";
+            document.getElementById("titreTuto").innerHTML = "Les notifications de la Mairie";
+            document.getElementById("phraseTuto").innerHTML = "<b>Attention!</b> Si tu vois un <b>gros point d'exclamation bleu</b> au dessus de la Mairie, c'est qu'il y a un soucis ! <br>Il te suffit alors de te rendre à la Mairie et de cliquer dessus pour afficher le panneau d'informations. <br>Pour chaque problème, il existe un endroit pour le résoudre qui sera indiqué par une <b>flèche rouge</b> : <br><br> - s'il n'y a plus de vélos à une station, va au Garage à vélos ;<br> - si le métro est en panne, direction l'Atelier ;<br> - s'il y a une panne de train, il faut se rendre au Technicentre ;<br> - s'il y a un embouteillage, le parking est la solution. <br><br><br> <b>Petit conseil</b> : ne laisse pas un imprévu non résolu trop longtemps. <br>Les 3 premiers t'empêche d'utiliser le moyen de transport concerné et en plus les 4 augmentent ta jauge de mécontentement !";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
             document.getElementById("precedent").classList.add("boutonTuto3");
@@ -199,6 +202,7 @@ setInterval(function()
             document.getElementById("page1").classList.remove("active");
             document.getElementById("page3").classList.remove("active");
             document.getElementById("page5").classList.remove("active");
+            document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
         });
@@ -209,17 +213,42 @@ setInterval(function()
     { 
         boutons5[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "page5";
-            document.getElementById("phraseTuto").innerHTML = "phrase5";
+            document.getElementById("titreTuto").innerHTML = "Les badges du Kiosque";
+            document.getElementById("phraseTuto").innerHTML = "Au Kiosque, une liste de badge à débloquer t'attend ! <br>Ce sont des petites missions facilent à réaliser comme par exemple chercher un objet dans CirCity. <br><br>Ces badges sont utiles pour augmenter ton score de fin de jeu et également pour baisser le niveau de la jauge de mécontentement. <br> Si cette dernière est trop élevée, débloquer quelques badges peut éviter la défaite !";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
             document.getElementById("precedent").classList.add("boutonTuto4");
-            document.getElementById("suivant").hidden = true;
+            document.getElementById("suivant").hidden = false;
+            document.getElementById("suivant").removeAttribute("class");
+            document.getElementById("suivant").classList.add("boutonTuto6");
             document.getElementById("page5").classList.add("active");
+            document.getElementById("page2").classList.remove("active");
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page3").classList.remove("active");
+            document.getElementById("page4").classList.remove("active");
+            document.getElementById("page6").classList.remove("active");
+            document.getElementById("finTuto").hidden = true;
+            document.getElementById("finirTuto").hidden = true;
+        });
+    }
+
+    let boutons6 = document.getElementsByClassName("boutonTuto6");
+    for(let i = 0; i < boutons6.length; ++i)
+    { 
+        boutons5[i].addEventListener("click", event =>
+        {
+            document.getElementById("titreTuto").innerHTML = "Vu d'ensemble de CirCity";
+            document.getElementById("phraseTuto").innerHTML = "SUPER MAP DETAILLEE TROP BELLE AVEC DES FLECHES";
+            document.getElementById("precedent").hidden = false;
+            document.getElementById("precedent").removeAttribute("class");
+            document.getElementById("precedent").classList.add("boutonTuto5");
+            document.getElementById("suivant").hidden = true;
+            document.getElementById("page6").classList.add("active");
             document.getElementById("page2").classList.remove("active");
             document.getElementById("page1").classList.remove("active");
             document.getElementById("page4").classList.remove("active");
             document.getElementById("page3").classList.remove("active");
+            document.getElementById("page5").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = false;
         });
@@ -227,8 +256,8 @@ setInterval(function()
 
     document.getElementById("finirTuto").addEventListener("click", event =>
     {
-        document.getElementById("titreTuto").innerHTML = "Fin du tuto";
-        document.getElementById("phraseTuto").innerHTML = "Vous savez tout ce qu'il y a à savoir. Maintenant c'est à vous de jouer ! Cliquez sur Jouer pour pouvoir vérifier que vous avez compris le fonctionnement du jeu. Vous pouvez relire ce tuto à tout moment en cliquant sur l'icone en haut à droite.";
+        document.getElementById("titreTuto").innerHTML = "Tu as toutes les cartes en main !";
+        document.getElementById("phraseTuto").innerHTML = "Le tutoriel est terminé... Maintenant c'est à toi de jouer ! Accède au jeu pour vérifier que tu as bien tout compris à Choose&Go. Tu peux relire ce tutoriel à tout moment en cliquant sur l'icone en haut à droite.";
         document.getElementById("pagination").style.display = "none";
         document.getElementById("finTuto").hidden = false;
         document.getElementById("finirTuto").style.display = "none";
@@ -259,6 +288,7 @@ document.getElementById("relireTuto").addEventListener("click", event =>
     document.getElementById("page3").classList.remove("active");
     document.getElementById("page4").classList.remove("active");
     document.getElementById("page5").classList.remove("active");
+    document.getElementById("page6").classList.remove("active");
     document.getElementById("finTuto").hidden = true;
     document.getElementById("pagination").style.display = "flex";
     document.getElementById("relireTuto").hidden = true;
