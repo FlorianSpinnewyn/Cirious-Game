@@ -1,10 +1,10 @@
 class Mairie {
     constructor()
     {
-        this.panneMetro = false;
-        this.panneTrain = false;
-        this.manqueVelo = false;
-        this.embouteillage = false;
+        this.panneMetro = true;
+        this.panneTrain = true;
+        this.manqueVelo = true;
+        this.embouteillage = true;
         this.x = -10;
         this.z = -13;
     }
@@ -29,8 +29,8 @@ class Mairie {
 
     evenementEmbouteillage(personnesVoitures)
     {
-       if(personnesVoitures>=8){
-           this.embouteillage=true;
+       if(personnesVoitures >= 8) {
+           this.embouteillage = true;
            return true;
        }
        else {

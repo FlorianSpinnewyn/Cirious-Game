@@ -101,7 +101,7 @@ io.on('connection', (socket) =>
         
         //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
         function findLevel(result4) {
-            myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax,result4[0].nbSecondsPersonne,result4[0].nbBadges,result4[0].nbEvenements,result4[0].pasContentMax,result4[0].pollutionMax);
+            myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax, result4[0].nbSecondsPersonne, result4[0].nbBadges, result4[0].nbEvenements, result4[0].pasContentMax, result4[0].pollutionMax);
 
             let tab = [
                 "0.7.N",
@@ -120,14 +120,6 @@ io.on('connection', (socket) =>
                 "1.7.SE",
                 "1.7.NO",
                 "1.7.SO",
-                "1.8.N",
-                "1.8.S",
-                "1.8.O",
-                "1.8.E",
-                "1.8.NE",
-                "1.8.SE",
-                "1.8.NO",
-                "1.8.SO",
                 "1.9.N",
                 "1.9.S",
                 "1.9.O",
@@ -136,14 +128,6 @@ io.on('connection', (socket) =>
                 "1.9.SE",
                 "1.9.NO",
                 "1.9.SO",
-                "1.10.N",
-                "1.10.S",
-                "1.10.O",
-                "1.10.E",
-                "1.10.NE",
-                "1.10.SE",
-                "1.10.NO",
-                "1.10.SO",
                 "1.11.N",
                 "1.11.S",
                 "1.11.O",
@@ -162,14 +146,13 @@ io.on('connection', (socket) =>
                 "0.11.SO"
             ]
 
-            for(let i = 0; i<myLevel.nbPersonnes;i++) {
+            for(let i = 0; i < myLevel.nbPersonnes; ++i) {
                 let personne = new Personne();
                 personne.initialisation(tab)
                 myLevel.personnes.push(personne);
                 delete(personne);
             }
-            /** Affichage plusieurs boutons de personnes **/
-            socket.emit("initialisationViewLevel", myLevel.numLevel);
+            socket.emit("initialisationViewLevel", myLevel.numLevel, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax);
         }
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
     });
@@ -370,53 +353,50 @@ io.on('connection', (socket) =>
         {
             for(let i = 0; i < myLevel.personnes.length; ++i)
             {
-                let temps = myLevel.personnes[i].count(10); //La personne disparaît au bout de 15 secondes
+                let temps = myLevel.personnes[i].count(10); //La personne disparaît au bout de 10 secondes
                 if(temps == 1) //la personne disparaît et prend la voiture
                 {
                     myLevel.personnes[i].envoye = 1;
                     socket.emit("PersonneDisparait", i, myLevel.personnes[i],true);
                     myLevel.personnesEnvoye++;
                     myLevel.personneVoiture++;
-                    console.log(myLevel.personneVoiture)
+                    //console.log(myLevel.personneVoiture)
                     if(myLevel.city.mairie.evenementEmbouteillage(myLevel.personneVoiture)){
                         socket.emit("afficheFlechePanne", "flecheParking");
-                        myLevel.personneVoiture=0;
+                        myLevel.personneVoiture = 0;
                     }
                 }
             }
-            if( myLevel.personnesEnvoye==myLevel.nbPersonnes){
-                //console.log("fini");
+            if(myLevel.personnesEnvoye == myLevel.nbPersonnes) {
+                socket.emit("Finito");
             }
         }
-
     });
 
     socket.on("NouvellePersonne", () =>
     {
-        if(myLevel.personnesApparu<myLevel.nbPersonnes) {
-            if(myLevel.personnes.length>0) {
-                
+        if(myLevel.personnesApparu < myLevel.nbPersonnes) {
+            if(myLevel.personnes.length > 0) {
                 let i = 0
                 while(myLevel.personnes[i].apparue == true) {
-                    i++;
-                    
+                    i++; 
                 }
                 
                 myLevel.personnes[i].apparue = true;
-                socket.emit("PersonneApparue", i,myLevel.personnes[i]);
+                socket.emit("PersonneApparue", i, myLevel.personnes[i]);
                 myLevel.personnesApparu++;
-                console.log( myLevel.personnesApparu);
-                for(let k = 0;k<myLevel.tabEvenement.length;k++){
-                    if(myLevel.tabEvenement[k]==myLevel.personnesApparu) {
-                        if(myLevel.city.mairie.panneMetro==false){
+                //console.log(myLevel.personnesApparu);
+                for(let k = 0; k < myLevel.tabEvenement.length; ++k) {
+                    if(myLevel.tabEvenement[k] == myLevel.personnesApparu) {
+                        if(myLevel.city.mairie.panneMetro == false) {
                             myLevel.city.mairie.evenementMetro();
-                            if(myLevel.city.mairie.panneMetro==true){
+                            if(myLevel.city.mairie.panneMetro == true) {
                                 socket.emit("afficheFlechePanne", "flecheAtelier");
                             }
                         }
-                        if(myLevel.city.mairie.panneTrain==false){
+                        if(myLevel.city.mairie.panneTrain == false) {
                             myLevel.city.mairie.evenementTrain();
-                            if(myLevel.city.mairie.panneTrain==true){
+                            if(myLevel.city.mairie.panneTrain == true) {
                                 socket.emit("afficheFlechePanne", "flecheTechnicentre");
                                 socket.emit("pauseAnimationTrain");
                             }
@@ -429,7 +409,7 @@ io.on('connection', (socket) =>
     });
 
     socket.on("secondePersonne", (i) => {
-        socket.emit("secondePersonne2",myLevel.personnes[i].chrono )
+        socket.emit("secondePersonne2",myLevel.personnes[i].chrono);
     });
 
     socket.on("CliquePersonne", (str) => 
@@ -446,7 +426,7 @@ io.on('connection', (socket) =>
     {
         let departWord;
         let departtab = myLevel.personnes[numberPersonne].depart.split(".");
-        if(departtab[2].length==2){
+        if(departtab[2].length == 2) {
             departWord = myLevel.personnes[numberPersonne].depart.substring(0, myLevel.personnes[numberPersonne].depart.length - 1);
         }
         else {
@@ -461,7 +441,7 @@ io.on('connection', (socket) =>
                 let idbatiment = result2[0].idcity;
                 function trajet(result3)
                 {
-                    console.log(result3);
+                    socket.emit("Choix", result3[0].class);
                 }
                 baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + departWord + "'", trajet);
             }
@@ -474,27 +454,25 @@ io.on('connection', (socket) =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;
         myLevel.personnesEnvoye++;
-        socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne],false);
+        socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne], false);
     });
 
     socket.on("DiminueVelo", (idPersonne) => 
     {
-        let departPersonne = myLevel.personnes[idPersonne].depart;
-        if(departPersonne.charAt(2) == 7)
-        {
+        let departPersonne = myLevel.personnes[idPersonne].depart.split(".");
+        if((departPersonne[0] == "0") && (departPersonne[1] == "7")) {
             myLevel.city.stationsVelo[0].velosLibre -= 1;
             if(myLevel.city.stationsVelo[0].velosLibre == 0)
             {
                 myLevel.city.mairie.evenementVelo();
-            } 
+            }
         }
-        else
-        {
+        else  {
             myLevel.city.stationsVelo[2].velosLibre -= 1;
             if(myLevel.city.stationsVelo[2].velosLibre == 0)
             {
                 myLevel.city.mairie.evenementVelo();
-            }
+            } 
         }
     });
 
@@ -502,6 +480,13 @@ io.on('connection', (socket) =>
 
     socket.on("Retry", () =>
     {
+        for(let i = 0; i < myLevel.personnes.length; ++i)
+        {
+            if(myLevel.personnes[i].apparue == true && myLevel.personnes[i].envoye == 0)
+            {
+                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false);
+            }
+        }
         let level = myLevel.numLevel;
         myLevel.reset();
         socket.emit("ReinitialisationLevel", level);
@@ -509,6 +494,13 @@ io.on('connection', (socket) =>
 
     socket.on("QuitterJeu", () =>
     {
+        for(let i = 0; i < myLevel.personnes.length; ++i)
+        {
+            if(myLevel.personnes[i].apparue == true && myLevel.personnes[i].envoye == 0)
+            {
+                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false);
+            }
+        }
         myLevel.reset();
     });
 });

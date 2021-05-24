@@ -47,7 +47,7 @@ class Personne {
         this.chrono = 0;
     }
 
-    initialisation(tab){
+    initialisation(tab) {
         let rand1 = Math.floor(Math.random() * 7 + 2);
         switch (rand1)
         {
@@ -67,7 +67,7 @@ class Personne {
             break;
         }
 
-        let rand2 =Math.floor(Math.random() * tab.length);
+        let rand2 = Math.floor(Math.random() * tab.length);
 
         this.setDepart(tab[rand2]);
 

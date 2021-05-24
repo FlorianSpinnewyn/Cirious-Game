@@ -29,7 +29,7 @@ class Level {
     * @param { int } pasContentMax_ = nombre de point max pour la jauge de mecontentement
     * @param { int } pollutionMax_ = nombre de point max pour la jauge de pollution
     */
-    initalisationLevel(numerosLevel, nbPersonnes_, nbVoituresMax_,nbSecondsPersonne_,nbBadges_,nbEvenements_,pasContentMax_,pollutionMax_)
+    initalisationLevel(numerosLevel, nbPersonnes_, nbVoituresMax_, nbSecondsPersonne_, nbBadges_, nbEvenements_, pasContentMax_, pollutionMax_)
     {
         this.numLevel = numerosLevel;
         this.nbPersonnes = nbPersonnes_;
@@ -40,7 +40,7 @@ class Level {
         this.pasContentMax = pasContentMax_;
         this.pollutionMax = pollutionMax_;
         let inter = (this.nbPersonnes/this.nbEvenements)-2;
-        for(let i = 0;i<this.nbEvenements;i++){
+        for(let i = 0; i < this.nbEvenements; ++i) {
             this.tabEvenement.push((i+1)*inter);
         }
         console.log(this.tabEvenement);

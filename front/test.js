@@ -15,7 +15,7 @@ chrono = new Chrono();
 
 setInterval(function() {
     chrono.count();
-    if( chrono.pause==false){
+    if(chrono.pause == false){
         socket.emit("c", chrono.pause);
         socket.emit("ChronoHoraire", chrono.pause);
     }
@@ -41,7 +41,7 @@ setInterval(function() {
     document.getElementById("time").innerHTML = heure + "h " + minute + "m ";   
     if((chrono.heure * 60 + chrono.minute) % modulo == 0) {
         
-        if(chrono.pause==false) {
+        if(chrono.pause == false) {
             socket.emit("NouvellePersonne");
         }
         
@@ -58,6 +58,18 @@ setInterval(function() {
     //         socket.emit("HeurePanneMetro");
     //     }
     // }
+
+    if(scoreVoiture == 100 || scoreHumeur == 100)
+    {
+        chrono.mettrePause();
+        let fenetres = document.getElementsByClassName("fenetre");
+        for(let i = 0; i < fenetres.length; ++i)
+        {
+            fenetres[i].style.display = "none";
+        }
+        document.getElementById("gameOver").style.display = 'block';
+        document.getElementById("result").innerHTML = 'perdu';
+    }
 }, 2000);
 
 /*** Menu ***/
@@ -70,8 +82,8 @@ socket.on("initialisationViewPlay", (tabLevel) => {
 
     document.getElementById("home").style.display = "none";
     document.getElementById("level").style.display = "block";
-    for(let i = 0; i<7;i++) {
-        if(tabLevel[i]==false) {
+    for(let i = 0; i < 7; ++i) {
+        if(tabLevel[i] == false) {
             document.getElementById("level" + i).disabled = true;
         }
     }
@@ -97,7 +109,7 @@ document.getElementById('level0').addEventListener("click", event =>
     document.getElementById("phraseTuto").innerHTML = "Ce tutoriel va vous apprendre tout ce qu'il faut savoir pour jouer à <b>Choose&Go</b>."
     document.getElementById("commencerTuto").hidden = false;
     document.getElementById("pagination").style.display = "none";
-    document.getElementById("pagination").innerHTML = "<button id='precedent' hidden=true>&laquo;</button><button id='page1' class='active boutonTuto1'>1</button><button id='page2' class='boutonTuto2'>2</button><button id='page3' class='boutonTuto3'>3</button><button id='page4' class='boutonTuto4'>4</button><button id='page5' class='boutonTuto5'>5</button><button id='suivant'>&raquo;</button>";
+    document.getElementById("pagination").innerHTML = "<button id='precedent' hidden=true>&laquo;</button><button id='page1' class='active boutonTuto1'>1</button><button id='page2' class='boutonTuto2'>2</button><button id='page3' class='boutonTuto3'>3</button><button id='page4' class='boutonTuto4'>4</button><button id='page5' class='boutonTuto5'>5</button><button id='page6' class='boutonTuto6'>6</button><button id='suivant'>&raquo;</button>";
 });
 
 document.getElementById("commencerTuto").addEventListener("click", event =>
@@ -235,7 +247,7 @@ setInterval(function()
     let boutons6 = document.getElementsByClassName("boutonTuto6");
     for(let i = 0; i < boutons6.length; ++i)
     { 
-        boutons5[i].addEventListener("click", event =>
+        boutons6[i].addEventListener("click", event =>
         {
             document.getElementById("titreTuto").innerHTML = "Vu d'ensemble de CirCity";
             document.getElementById("phraseTuto").innerHTML = "SUPER MAP DETAILLEE TROP BELLE AVEC DES FLECHES";
@@ -277,8 +289,8 @@ document.getElementById("relireTuto").addEventListener("click", event =>
 {
     chrono.mettrePause();
     document.getElementById("tuto").style.display = "block";
-    document.getElementById("titreTuto").innerHTML = "page1";
-    document.getElementById("phraseTuto").innerHTML = "texte1";
+    document.getElementById("titreTuto").innerHTML = "But du jeu";
+    document.getElementById("phraseTuto").innerHTML = "C'est l'heure de la sortie du travail à CirCity. Des salariés arrivent dans la rue, ils souhaitent se rendre à différents endroits de la vile (magasin, école, musée...). <br> Ta mission : leur indiquer le <b>meilleur moyen de transport</b> (en train, en métro, en vélo, à pied) pour leur déplacement. <br><br> Il faut que le choix soit rapide, n'ait pas trop d'attente tout en essayant de polluer le moins possible. <br>Si la demande n'est pas prise en compte assez rapidement, le salarié partira en voiture et donc polluera... <br> <br> Lorsque tous les salariés ont quitté le travail, tu as gagné ! Ton score apparaitra ainsi qu'un conseil écolo pour améliorer et optimiser tes déplacements dans la vraie vie ! <br>Mais attention 2 jauges peuvent te faire perdre la partie : <br> - La <b>jauge de pollution</b> dont le niveau augmente si un salarié part en voiture, si un train part presque vide et il diminue si un salarié se déplace à pied. <br> - La <b>jauge de mécontentement</b> se remplie si ton choix de transport n'est pas en adéquation avec la demande (trop d'attente, trop long, trop polluant), si les imprévus (tutoriel page 3) ne sont pas résolus assez vite et elle se vide si tu remportes des badges (tutoriel page 4). <br><br><br> A toi de jouer pour lutter contre la pollution des transports !";
     document.getElementById("precedent").hidden = true;
     document.getElementById("suivant").hidden = false;
     document.getElementById("suivant").removeAttribute("class");
@@ -335,9 +347,24 @@ document.getElementById('level5').addEventListener("click", event =>
     socket.emit("initialisationLevel", "5");
 });
 
-socket.on("initialisationViewLevel", numeroLevel => {
-    mixer.timeScale =0.95;
+let nbSecondsPersonne = 0;
+let nbVoituresMax = 0;
+let pollutionMax = 0;
+let pasContentMax = 0;
+
+socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax, polluMax, mecontentMax) => {
+    nbSecondsPersonne = secondsPersonne;
+    nbVoituresMax = voituresMax;
+    pollutionMax = polluMax;
+    pasContentMax = mecontentMax;
+    personnesDansLeTrain = 0;
+    scoreVoiture = 0;
+    scoreHumeur = 0;
+    barVoiture.style.width = 0;
+    barHumeur.style.width = 0;
+    mixer.timeScale = 0.95;
     document.getElementById("level").style.display = "none";
+    document.getElementById("jauges").style.display = "block";
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
 });
@@ -346,7 +373,6 @@ document.getElementById("pause").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'block';
     document.getElementById("pause").hidden = true;
-    document.getElementById("relireTuto").hidden = true;
     mixer.timeScale = 0.95;
     chrono.mettrePause();
 });
@@ -368,9 +394,8 @@ document.getElementById("continuer").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'none';
     document.getElementById("pause").hidden = false;
-    document.getElementById("relireTuto").hidden = false;
     chrono.continuer();
-    mixer.timeScale =0.95;
+    mixer.timeScale = 0.95;
 });
 
 document.getElementById("quitterJeu").addEventListener("click", event =>
@@ -397,9 +422,10 @@ document.getElementById("retry").addEventListener("click", event =>
 document.getElementById("quit").addEventListener("click", event =>
 {
     document.getElementById("level").style.display = 'block';
+    document.getElementById("jauges").style.display = 'none';
     document.getElementById("alerteQuit").style.display = 'none';
     socket.emit("QuitterJeu");
-    mixer.setTime (0)
+    mixer.setTime(0);
 });
 
 document.getElementById("annulerRetry").addEventListener("click", event =>
@@ -428,11 +454,11 @@ socket.on("ReinitialisationLevel", (idlevel) =>
 /*** Mairie ***/
 
 socket.on("afficheFlechePanne", (str) => {
-    scene.getObjectByName(str).visible=true;
+    scene.getObjectByName(str).visible = true;
 });
 
 socket.on("pauseAnimationTrain", () => {
-    mixer.timeScale =0.95;
+    mixer.timeScale = 0.95;
 });
 
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
@@ -478,12 +504,12 @@ socket.on("afficheEvenement", (metro, train, velo, voiture) =>
     {
         document.getElementById("embouteillage").hidden = true;
     }
-    document.getElementById('information').style.display='block';
+    document.getElementById('information').style.display = 'block';
 });
 
 document.getElementById('cancel').addEventListener("click", event => 
 {
-    document.getElementById('information').style.display='none';
+    document.getElementById('information').style.display = 'none';
     console.log("Nous avons quitté la Mairie");
 });
 
@@ -573,7 +599,7 @@ function dropT(event) {
     draggableElementT.classList.add("draggedT"); 
     scoreT++;
   
-    if(scoreT == 4){
+    if(scoreT == 4) {
         console.log("Nous avons réparé le train.");
         technicentreReset();
         document.getElementById("miniJeuTechnicentre").style.display = "none";
@@ -683,7 +709,7 @@ function dropP(event) {
         scoreP++;
     }
 
-    if(scoreP == 4){
+    if(scoreP == 4) {
         console.log("Nous avons fludifié le trafic.");
         parkingReset();
         document.getElementById("miniJeuParking").style.display = "none";
@@ -1077,6 +1103,30 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
         }
         else
         {
+            if(temps == 15 && (chrono.heure != 16 || chrono.minute != 0))
+            {
+                if(personnesDansLeTrain == 0)
+                {
+                    calcul = Math.round((100 / nbVoituresMax * 20) / 50);
+                    document.getElementById("calculVoiture").innerHTML = '+' + calcul;
+                    document.getElementById("calculVoiture").style.color = "red";
+                    document.getElementById("calculVoiture").style.visibility = "visible";
+                    document.getElementById("calculVoiture").classList.add("augmenteJauge");
+                    setTimeout(function()
+                    {
+                        document.getElementById("calculVoiture").style.visibility = "hidden";
+                        document.getElementById("calculVoiture").classList.remove("augmenteJauge");
+                    }, 2000);
+                    scoreVoiture += calcul;
+                    if(scoreVoiture > 100)
+                    {
+                        scoreVoiture = 100;
+                    }
+                    console.log("scoreVoiture après train vide parti : ", scoreVoiture);
+                    barVoiture.style.width = scoreVoiture + '%';
+                }
+                personnesDansLeTrain = 0;
+            }
             document.getElementById("tempsTrainArrive").innerHTML = temps;
             document.getElementById("prochainTrain").hidden = false;
             document.getElementById("trainEnGare").hidden = true;
@@ -1184,7 +1234,7 @@ socket.on("AfficheDestination", (depart,destination, idPerso, panneTrain, panneM
     DisplayFlecheTransport(depart);
     removeFlecheDest();
     console.log(destination);
-    scene.getObjectByName(destination).visible=true;
+    scene.getObjectByName(destination).visible = true;
     socket.emit("secondePersonne", idPerso);
     if(panneTrain)
     {
@@ -1241,23 +1291,69 @@ socket.on("secondePersonne2", (i) => {
     document.getElementById("sec").innerHTML = 10-i;
 });
 
-socket.on("PersonneDisparait", (idPersonne,personne,louper) =>
+let scoreVoiture = 0;
+let scoreHumeur = 0;
+let barVoiture = document.getElementById("barVoiture");
+let barHumeur = document.getElementById("barHumeur");
+let calcul = 0;
+
+socket.on("PersonneDisparait", (idPersonne, personne, louper) =>
 {
     RemoveFlecheTransport();
     removeFlecheDest();
     suppPersonne(personne);
-    if(personne.fenetre == true &&  document.getElementsByClassName("personne content").id == idPersonne){
-        if(louper == true){
-            console.log(louper,"trop taaaar")
+    if(louper)
+    {
+        console.log(nbVoituresMax);
+        calcul = Math.round(100 / nbVoituresMax);
+        document.getElementById("calculVoiture").innerHTML = '+' + calcul;
+        document.getElementById("calculVoiture").style.color = "red";
+        document.getElementById("calculVoiture").style.visibility = "visible";
+        document.getElementById("calculVoiture").classList.add("augmenteJauge");
+        setTimeout(function()
+        {
+            document.getElementById("calculVoiture").style.visibility = "hidden";
+            document.getElementById("calculVoiture").classList.remove("augmenteJauge");
+        }, 2000);
+        scoreVoiture += calcul;
+        if(scoreVoiture > 100)
+        {
+            scoreVoiture = 100;
+        }
+        barVoiture.style.width = scoreVoiture + '%';
+        console.log("scoreVoiture après voiture envoyé : ", scoreVoiture);
+        calcul = Math.round(30 / pasContentMax * 100);
+        document.getElementById("calculHumeur").innerHTML = '+' + calcul;
+        document.getElementById("calculHumeur").style.color = "red";
+        document.getElementById("calculHumeur").style.visibility = "visible";
+        document.getElementById("calculHumeur").classList.add("augmenteJauge");
+        setTimeout(function()
+        {
+            document.getElementById("calculHumeur").style.visibility = "hidden";
+            document.getElementById("calculHumeur").classList.remove("augmenteJauge");
+        }, 2000);
+        scoreHumeur += calcul;
+        if(scoreHumeur > 100)
+        {
+            scoreHumeur = 100;
+        }
+        barHumeur.style.width = scoreHumeur + '%';
+        console.log("scoreHumeur après voiture envoyé : ", scoreHumeur);
+    }
+    if(personne.fenetre == true &&  document.getElementsByClassName("personne content").id == idPersonne) {
+        if(louper == true) {
+            console.log(louper,"trop taaaar");
         }
         else {
-            console.log(louper,"Envoyer")
+            console.log(louper,"Envoyer");
         }
         
         document.getElementById('DestinationPersonne').style.display='none';
         clearInterval(intervalPerson);
     }
 });
+
+let personnesDansLeTrain = 0;
 
 document.getElementById("transport").addEventListener("click", event =>
 {
@@ -1266,10 +1362,77 @@ document.getElementById("transport").addEventListener("click", event =>
     {
         socket.emit("DiminueVelo", document.getElementsByClassName("personne content").id);
     }
-    document.getElementById('DestinationPersonne').style.display='none';
+    if(typeTransport == "transportPied")
+    {
+        if(scoreVoiture >= Math.round((100 / nbVoituresMax * 10) / 50))
+        {
+            calcul = Math.round((100 / nbVoituresMax * 10) / 50);
+            document.getElementById("calculVoiture").innerHTML = '-' + calcul;
+            document.getElementById("calculVoiture").style.color = "green";
+            document.getElementById("calculVoiture").style.visibility = "visible";
+            document.getElementById("calculVoiture").classList.add("augmenteJauge");
+            setTimeout(function()
+            {
+                document.getElementById("calculVoiture").style.visibility = "hidden";
+                document.getElementById("calculVoiture").classList.remove("augmenteJauge");
+            }, 2000);
+            scoreVoiture -= calcul;
+            console.log("scoreVoiture après avoir choisi pied : ", scoreVoiture);
+            barVoiture.style.width = scoreVoiture + '%';
+        }
+    }
+    if(typeTransport == "transportTrain")
+    {
+        personnesDansLeTrain += 1;
+    }
+    document.getElementById('DestinationPersonne').style.display = 'none';
     clearInterval(intervalPerson);
     socket.emit("GetMove", document.getElementsByClassName("personne content").id, typeTransport);
     socket.emit("SupprimePersonne", document.getElementsByClassName("personne content").id);
+});
+
+socket.on("Choix", move =>
+{
+    if(move == 4)
+    {
+        calcul = Math.round(30 / pasContentMax * 100);
+        document.getElementById("calculHumeur").innerHTML = '+' + calcul;
+        document.getElementById("calculHumeur").style.color = "red";
+        document.getElementById("calculHumeur").style.visibility = "visible";
+        document.getElementById("calculHumeur").classList.add("augmenteJauge");
+        setTimeout(function()
+        {
+            document.getElementById("calculHumeur").style.visibility = "hidden";
+            document.getElementById("calculHumeur").classList.remove("augmenteJauge");
+        }, 2000);
+        scoreHumeur += calcul;
+        if(scoreHumeur > 100)
+        {
+            scoreHumeur = 100;
+        }
+        console.log("scoreHumeur après 4e choix : ", scoreHumeur);
+        barHumeur.style.width = scoreHumeur + '%';
+    }
+    if(move == 3)
+    {
+        calcul = Math.round(10 / pasContentMax * 100);
+        document.getElementById("calculHumeur").innerHTML = '+' + calcul;
+        document.getElementById("calculHumeur").style.color = "red";
+        document.getElementById("calculHumeur").style.visibility = "visible";
+        document.getElementById("calculHumeur").classList.add("augmenteJauge");
+        setTimeout(function()
+        {
+            document.getElementById("calculHumeur").style.visibility = "hidden";
+            document.getElementById("calculHumeur").classList.remove("augmenteJauge");
+        }, 2000);
+        scoreHumeur += calcul;
+        if(scoreHumeur > 100)
+        {
+            scoreHumeur = 100;
+        }
+        console.log("scoreHumeur après 3e choix : ", scoreHumeur);
+        barHumeur.style.width = scoreHumeur + '%';
+    }
 });
 
 document.getElementById('aplus').addEventListener("click", event => 
@@ -1278,13 +1441,31 @@ document.getElementById('aplus').addEventListener("click", event =>
     clearInterval(intervalPerson);
 });
 
+socket.on("Finito", () =>
+{
+    chrono.mettrePause();
+    let fenetres = document.getElementsByClassName("fenetre");
+    for(let i = 0; i < fenetres.length; ++i)
+    {
+        fenetres[i].style.display = "none";
+    }
+    document.getElementById("gameOver").style.display = "block";
+    if(scoreVoiture < 100 && scoreHumeur < 100)
+    {
+        document.getElementById("result").innerHTML = "gagné";
+    }
+    else
+    {
+        document.getElementById("result").innerHTML = "perdu";
+    }
+});
+
 /*** Menu volume ***/
 
 var slider = document.getElementById("myRange");
 var output = document.getElementById("value");
-output.innerHTML = slider.value; // Display the default slider value
+output.innerHTML = slider.value;
 
-// Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
   output.innerHTML = this.value;
 } 

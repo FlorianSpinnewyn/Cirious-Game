@@ -13,7 +13,7 @@
   width: 100px; 
   height: 100px;
   top: 5px;
-  right: 100px;
+  left: 100px;
 }
 
 #DestinationPersonne {
@@ -76,6 +76,85 @@
   background-repeat: no-repeat;
 }
 
+/*jauges voitures / humeur*/
+
+.jauges {
+  display: none;
+  margin-top: 3rem;
+  position: relative;
+  float: right;
+  z-index: 1;
+  background-color: rgba(191, 191, 191, 0.50);
+}
+
+.jaugeVoiture, .jaugeHumeur {
+  height: 6rem;
+  width: fit-content;
+}
+
+.voitureProgress, .humeurProgress {
+  width: 400px;
+  height: 3rem;
+  margin: 25px;
+  border-radius: 1rem;
+  background: #f9f9f9;
+  position: relative;
+  float: right;
+  z-index: 2;
+}
+
+.humeurProgress {
+  display: inline-block;
+  width: 400px;
+  height: 3rem;
+  margin: 25px;
+  border-radius: 1rem;
+  background: #f9f9f9;
+  position: fixed;
+  z-index: 2;
+}
+
+.bar {
+  border-radius: 1rem;
+  width: 0%;
+  height: 100%;
+  transition: width;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(.36,.55,.63,.48);
+  z-index: 3;
+}
+
+.shadow {
+  box-shadow: 0px 45px 50px rgba(0, 0, 0, 0.25); 
+}
+
+.overlapVoiture {
+  background-color : #E65E45;
+}
+
+.overlapHumeur {
+  background-color : #e2942e;
+}
+
+.calcul {
+  display: inline-block;
+  width: 40px;
+  margin-top: 55px;
+  margin-left: 50px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: red;
+  opacity: 1;
+  visibility: hidden;
+  transition: transform 4s, font-size 4s, opacity 4s;
+}
+
+.augmenteJauge {
+  transform: translate(0, -50px);
+  font-size: 2rem;
+  opacity: 0;
+}
+
 .relireTuto {
   position: relative;
   float: right;
@@ -97,7 +176,8 @@
   font-size:20px;
   background-color:rgba(191, 191, 191, 0.8);
 }
-.boutonCoucou{
+
+.boutonCoucou {
   background: transparent; outline: none;
   background-color: #D9DCDF;
   color:black;
@@ -114,7 +194,6 @@
   display: none;
   position: fixed;
   bottom: 23%;
-  padding-top: 20%;
 }
 
 .pagination button {
@@ -229,11 +308,7 @@
 
 /*Mini Jeu Parking*/
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
-
-#miniJeuParking {
-  font-family: 'Montserrat', sans-serif;
-  color: #111;
+.parkingContent {
   background: url("./pictures/parkingminijeu.png") no-repeat;
   background-size: 628px 652px;
   background-position: center;
@@ -356,9 +431,6 @@
 }
 
 /*Mini Jeu Garage*/
-#miniJeuGarage {
-  font-family: 'Montserrat', sans-serif;
-}
 
 .grid-container {
   display: grid;
@@ -501,10 +573,10 @@
 }
 
 /* Mini-Jeu Technicentre */
-#miniJeuTechnicentre {
-  font-family: 'Montserrat', sans-serif;
+
+.technicentreContent {
   background: url(./pictures/fond.jpg) no-repeat;
-  background-size: 50% 70%;
+  background-size: 70% 90%;
   background-position: center;
   color: #111;
 }
@@ -679,7 +751,7 @@
 }
 
 /* Page Choix Niveau */
-.choixNivo{
+.choixNivo {
   display: block;
   position: fixed;
   z-index: 2;
@@ -690,7 +762,8 @@
   text-align:center;
   background-repeat: no-repeat;
 }
-.boutonChoix:hover{cursor: pointer}
+
+.boutonChoix:hover {cursor: pointer}
 .boutonChoix {
   background: transparent; outline: none;
   position: fixed;
@@ -706,7 +779,7 @@
   overflow: hidden;
 }
 
-.boutonChoix:disabled:hover{cursor: not-allowed}
+.boutonChoix:disabled:hover {cursor: not-allowed}
 .boutonChoix:disabled {
   background-color:#333333;
   color:white;
@@ -731,8 +804,8 @@
   left:1455px;
 }
 
-.boutonChoix:hover:before{opacity: 1; transform: translate(0,0);}
-.boutonChoix:before{
+.boutonChoix:hover:before {opacity: 1; transform: translate(0,0);}
+.boutonChoix:before {
   content: attr(data-hover);
   position: absolute;
   top: 35%; left: 2%;
@@ -764,14 +837,15 @@
 #level5:before{
   color: #FD4343;
 }
-  .boutonChoix:hover div{opacity: 0; transform: translate(100%,0)}
-  .boutonChoix div{
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 800;
-    font-size: 15px;
-    transition: all .3s ease-in-out;
-  }
+
+.boutonChoix:hover div {opacity: 0; transform: translate(100%,0)}
+.boutonChoix div {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  font-size: 15px;
+  transition: all .3s ease-in-out;
+}
 
 /* Page démarrer */
 .menuDemarrer {
@@ -785,13 +859,14 @@
   text-align:center;
   background-repeat: no-repeat;
 }
-.logoD{
+
+.logoD {
   position: fixed;
   left: 505px;
   width:900px;
 }
 
-.boutonPlay:hover{cursor: pointer}
+.boutonPlay:hover {cursor: pointer}
 .boutonPlay {
   background: transparent; outline: none;
   position: fixed;
@@ -807,8 +882,9 @@
   padding: 15px 50px;
   overflow: hidden;
 }
-.boutonPlay:hover:before{opacity: 1; transform: translate(0,0);}
-.boutonPlay:before{
+
+.boutonPlay:hover:before {opacity: 1; transform: translate(0,0);}
+.boutonPlay:before {
   content: attr(data-hover);
   position: absolute;
   top: 13%; left: 2%;
@@ -821,14 +897,15 @@
   transform: translate(-100%,0);
   transition: all .3s ease-in-out;
 }
-  .boutonPlay:hover div{opacity: 0; transform: translate(100%,0)}
-  .boutonPlay div{
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    font-weight: 800;
-    font-size: 35px;
-    transition: all .3s ease-in-out;
-  }
+
+.boutonPlay:hover div {opacity: 0; transform: translate(100%,0)}
+.boutonPlay div {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-weight: 800;
+  font-size: 35px;
+  transition: all .3s ease-in-out;
+}
 
 /* Page de Chargement */
 #loading-screen {
@@ -929,7 +1006,7 @@
   100%   {left:5500px; top:820px;}
 }
 
-.logoC{
+.logoC {
   position: fixed;
   top: 240px;
   left: 640px;
