@@ -1,10 +1,10 @@
 class Mairie {
     constructor()
     {
-        this.panneMetro = true;
-        this.panneTrain = true;
-        this.manqueVelo = true;
-        this.embouteillage = true;
+        this.panneMetro = false;
+        this.panneTrain = false;
+        this.manqueVelo = false;
+        this.embouteillage = false;
         this.x = -10;
         this.z = -13;
     }
