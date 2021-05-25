@@ -3,12 +3,9 @@
                             *       Fichier Main JS lié à la page Test          *
                             *                                                   *
                             * * * * * * * * * * * * * * * * * * * * * * * * * * *                  */
-
+  
 let intervalPerson;
 
-//variables qui seront dans la base de données et qu'on devra récupérer :
-let heurePanneTrain = 20; //evenement Train tous les 20 min
-let heurePanneMetro = 10;
 let modulo = 5;
 
 chrono = new Chrono();
@@ -43,8 +40,7 @@ setInterval(function() {
         
         if(chrono.pause == false) {
             socket.emit("NouvellePersonne");
-        }
-        
+        }  
     }
 
     socket.emit("alertMairie");
@@ -397,7 +393,7 @@ let pollutionMax = 0;
 let pasContentMax = 0;
 let nbPersonnesMax = 0;
 
-socket.on("initialisationViewLevel", (numeroLevel,tab, secondsPersonne, voituresMax, polluMax, mecontentMax, personnesMax) => {
+socket.on("initialisationViewLevel", (numeroLevel, tab, secondsPersonne, voituresMax, polluMax, mecontentMax, personnesMax) => {
     nbSecondsPersonne = secondsPersonne;
     nbVoituresMax = voituresMax;
     pollutionMax = polluMax;
@@ -420,25 +416,58 @@ socket.on("initialisationViewLevel", (numeroLevel,tab, secondsPersonne, voitures
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
     let str ="<ul>";
-    for(let i =0;i<tab.length;i++){
+    for(let i = 0;i < tab.length; ++i) {
         str += "<li id='badge"+(i+1).toString()+"'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
     }
     str += "</ul>";
-    document.getElementById("listeBadges").innerHTML=str;
+    document.getElementById("listeBadges").innerHTML = str;
 });
 
 socket.on("displayListeBadges", tab => {
+    document.getElementById("NouveauBadge").style.visibility = "visible";
+    document.getElementById("NouveauBadge").classList.add("nouveauBadge");
+    setTimeout(function()
+    {
+        document.getElementById("NouveauBadge").style.visibility = "hidden";
+        document.getElementById("NouveauBadge").classList.remove("nouveauBadge");
+    }, 2000);
+
+    calcul = Math.round(20 / pasContentMax * 100);
+    document.getElementById("calculHumeur").innerHTML = '-' + calcul;
+    document.getElementById("calculHumeur").style.color = "green";
+    document.getElementById("calculHumeur").style.visibility = "visible";
+    document.getElementById("calculHumeur").classList.add("augmenteJauge");
+    setTimeout(function()
+    {
+        document.getElementById("calculHumeur").style.visibility = "hidden";
+        document.getElementById("calculHumeur").classList.remove("augmenteJauge");
+    }, 2000);
+    scoreHumeur -= calcul;
+    if(scoreHumeur > 100)
+    {
+        scoreHumeur = 100;
+    }
+    barHumeur.style.width = scoreHumeur + '%';
+    scoreFinal += 60;
+
+    let premier = true;
     let str ="<ul>";
-    for(let i =0;i<tab.length;i++){
-        if(tab[i].termine==true){
-            str += "<li id='badge"+(i+1).toString()+"' style='color:green;'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+    for(let i = 0; i < tab.length; ++i) {
+        if(tab[i].termine == true) {
+            valid = true;
+            str += "<li id='badge"+(i+1).toString() + "' style='color:green;'>badge " + tab[i].id + " : " + tab[i].description + "</li>";
         }
-        else{
-            str += "<li id='badge"+(i+1).toString()+"'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+        else {
+            str += "<li id='badge"+(i+1).toString() + "'>badge " + tab[i].id + " : " + tab[i].description + "</li>";
+            if(premier)
+            {
+                premier = false;
+                document.getElementById("prochainObjectif").innerHTML = "Maintenant, tente de résoudre cet objectif : <br>" + tab[i].description;
+            }
         }
     }
     str += "</ul>";
-    document.getElementById("listeBadges").innerHTML=str;
+    document.getElementById("listeBadges").innerHTML = str;
 });
 
 document.getElementById("pause").addEventListener("click", event =>
@@ -592,18 +621,6 @@ document.getElementById('cancel').addEventListener("click", event =>
 socket.on("afficheActualite", (score, prochainObjectif, badgeDebloque) => 
 {
     console.log("Nous sommes au Kiosque :)");
-    if(score != 0)
-    {
-        document.getElementById("score").innerHTML = "Tu as " + score + " points !";
-    }
-    if(badgeDebloque!=[])
-    {
-        document.getElementById("badgeDebloque").innerHTML = "Voici tes badges débloqués : " ;
-    }
-    if(prochainObjectif != '')
-    {
-        document.getElementById("prochainObjectif").innerHTML = "Maintenant, tente de résoudre cet objectif : <br>" + prochainObjectif;
-    }
     document.getElementById('actualite').style.display='block';
 });
 

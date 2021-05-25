@@ -30,6 +30,8 @@ class Kiosque {
 
     reset() {
         this.score = 0;
+        this.badgeDebloque = [];
+        this.prochainObjectif = "";
     }
 }
 

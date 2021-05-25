@@ -155,21 +155,18 @@ io.on('connection', (socket) =>
                 delete(personne);
             }
             let tabBadgesId = [1,2,3,4,5,6];
-            for(let i = 0; i<myLevel.nbBadges;i++) {
+            for(let i = 0; i < myLevel.nbBadges; ++i) {
                 let tempBadge = new Badge();
                 function findbadge(result5) {
-                    
                     let a = Math.floor(Math.random() * tabBadgesId.length);
-                    console.log(a,result5[tabBadgesId[a]]);
-                    tempBadge.id=result5[tabBadgesId[a]].idbadges;
+                    tempBadge.id = result5[tabBadgesId[a]].idbadges;
                     tempBadge.description = result5[tabBadgesId[a]].description;
                     tabBadgesId.splice(a, 1);
-                     myLevel.listeBadges.push(tempBadge);
-                     delete(tempBadge);
-                     delete(a);
-                    if(i==myLevel.nbBadges-1) {
-                        console.log(myLevel.listeBadges);
-                        socket.emit("initialisationViewLevel", myLevel.numLevel,myLevel.listeBadges, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax, myLevel.nbPersonnes);
+                    myLevel.listeBadges.push(tempBadge);
+                    delete(tempBadge);
+                    delete(a);
+                    if(i == myLevel.nbBadges-1) {
+                        socket.emit("initialisationViewLevel", myLevel.numLevel, myLevel.listeBadges, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax, myLevel.nbPersonnes);
                     }
                 }
                 baseDeDonnees.select("SELECT * FROM badges", findbadge);
@@ -180,15 +177,15 @@ io.on('connection', (socket) =>
 
     /**------------- badges -------------------- **/
     socket.on("testBadge", id => {
-        for(let i = 0; i<myLevel.nbBadges; i++) {
+        for(let i = 0; i < myLevel.nbBadges; ++i) {
             if(myLevel.listeBadges[i].id == id) {
-                if(myLevel.listeBadges[i].termine==false) {
-                    myLevel.listeBadges[i].termine=true;
-                    socket.emit("displayListeBadges", myLevel.listeBadges)
+                if(myLevel.listeBadges[i].termine == false) {
+                    myLevel.listeBadges[i].termine = true;
+                    socket.emit("displayListeBadges", myLevel.listeBadges);
                 }
             }
         }
-        console.log(myLevel.listeBadges);
+        socket.emit("Badge");
     });
     
     /**------------- Tuto -------------------- **/
@@ -198,7 +195,7 @@ io.on('connection', (socket) =>
     });
     
     /**------------Requete des pannes-----------**/
-    socket.on("alertMairie", ()=>{
+    socket.on("alertMairie", () => {
         if(myLevel.city.mairie.panneMetro)
         {
             socket.emit("alertMairie2", true);
@@ -229,24 +226,6 @@ io.on('connection', (socket) =>
     {
         myLevel.city.mairie.evenementMetro();
     });
-    
-    function myFunction(){
-        if(!myLevel.city.kiosque.score)
-        {
-            myLevel.city.kiosque.recupScore();
-        }
-        if(!myLevel.city.kiosque.prochainObjectif)
-        {
-            myLevel.city.kiosque.recupProchainObjectif();
-        }
-        if(!myLevel.city.kiosque.badgeDebloque)
-        {
-            myLevel.city.kiosque.recupBadgeDebloque();
-        }
-
-        setTimeout(myFunction,5000); /* rappel après 5 secondes = 2000 millisecondes */
-    }  
-    myFunction();
 
     socket.on("mairie", () => 
     {
@@ -275,13 +254,8 @@ io.on('connection', (socket) =>
 
     socket.on("kiosque", () => 
     {
-        let score = 0;
         let prochainObjectif = '';
         let badgeDebloque = [];
-        if(myLevel.city.kiosque.score != 0)
-        {
-            score = myLevel.city.kiosque.recupScore();
-        }
         if(myLevel.city.kiosque.prochainObjectif.length > 0)
         {
             prochainObjectif = myLevel.city.kiosque.recupProchainObjectif();
@@ -290,7 +264,7 @@ io.on('connection', (socket) =>
         {
             badgeDebloque = myLevel.city.kiosque.recupBadgeDebloque();
         }
-        socket.emit("afficheActualite", score, prochainObjectif, badgeDebloque);
+        socket.emit("afficheActualite", prochainObjectif, badgeDebloque);
     });
 
     /*** Technicentre ***/
@@ -576,6 +550,7 @@ io.on('connection', (socket) =>
         }
         let level = myLevel.numLevel;
         myLevel.reset();
+        console.log("reset : ", myLevel.city.kiosque);
         socket.emit("ReinitialisationLevel", level);
     });
 

@@ -995,7 +995,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
     });
 
     /**------Tecnhicentre-----**/
-    loader.load('3d/TestBlender/road/technicentre.glb', function(gltf){
+    loader.load('3d/TestBlender/road/technicentre.glb', function(gltf) {
         gltf.scene.traverse(function (child) {
             if (child.isMesh) {
                 child.receiveShadow = true

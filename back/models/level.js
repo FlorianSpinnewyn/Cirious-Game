@@ -51,11 +51,13 @@ class Level {
     {
         this.numLevel = 0;
         this.personnes = [];
+        this.listeBadges = [];
         this.city.atelier.reset();
         this.city.garage.reset();
         this.city.technicentre.reset();
         this.city.parking.reset();
         this.city.mairie.reset();
+        this.city.kiosque.reset();
         this.personnesEnvoye = 0;
         this.personnesApparu = 0;
         this.city.gares[0].temps = 15;
