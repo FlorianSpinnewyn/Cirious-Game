@@ -484,7 +484,8 @@ function init()
         })
     
         scene.add(gltf.scene);
-    
+        gltf.scene.name="flecheMairie";
+        gltf.scene.visible=false;
         mixer16 = new THREE.AnimationMixer(gltf.scene);
         mixer16.clipAction(gltf.animations[0]).play();
     });
@@ -911,7 +912,8 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev) {
-        console.log("Tu as trouvé le nuage");
+            console.log("Tu as un nuage");
+            testBadges(5)
     });
     mixer96 = new THREE.AnimationMixer(gltf.scene);
     mixer96.clipAction(gltf.animations[0]).play();
@@ -931,7 +933,8 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
     scene.add(gltf.scene);
     gltf.scene.cursor = 'pointer';
     gltf.scene.on('click', function(ev) {
-        console.log("Tu as trouvé une fleur"); 
+        console.log("Tu as trouvé une fleur");
+        testBadges(6);
     });
     });
 
@@ -949,6 +952,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
     gltf.scene.cursor = 'pointer';
     gltf.scene.on('click', function(ev) {
         console.log("Tu as trouvé le mouton");
+        testBadges(4);
         document.getElementById('musique_mout').muted = false;
         setTimeout(function(){
             document.getElementById('musique_mout').loop = false;
@@ -969,8 +973,9 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
     scene.add(gltf.scene);
     gltf.scene.cursor = 'pointer';
     gltf.scene.on('click', function(ev) {
+        testBadges(3);
         console.log("Tu as trouvé le ballot");
-        
+        testBadges(3);
     });
     });
   
@@ -2625,7 +2630,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){
             console.log("Tu as trouvé le plot");
-            
+            testBadges(2);
         });
     });
 
@@ -2642,7 +2647,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){
             console.log("Tu as trouvé le plot 2");
-            
+            testBadges(2);
         });
     });
 
@@ -2659,7 +2664,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){
             console.log("Tu as trouvé le plot 3");
-            
+            testBadges(2);
         });
     });
 
@@ -2676,7 +2681,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){
             console.log("Tu as trouvé le plot 4");
-            
+            testBadges(2);
         });
     });
 
@@ -2693,7 +2698,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev){
             console.log("Tu as trouvé le plot 5");
-            
+            testBadges(2);
         });
     });
 
@@ -2711,6 +2716,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
         gltf.scene.cursor = 'pointer';
         gltf.scene.on('click', function(ev) {
             console.log("Tu as trouvé le Chien");
+            testBadges(1);
             document.getElementById('musique_chien').muted = false;
             setTimeout(function(){
                 document.getElementById('musique_chien').loop = false;
@@ -2832,3 +2838,7 @@ function animate()
 
 init();
 animate();
+
+function testBadges(id) {
+    socket.emit("testBadge",id);
+}

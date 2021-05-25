@@ -5,6 +5,7 @@ class Gare {
         this.attente = 8;
         this.x = -1;
         this.z = -19;
+        this.tabAttente = [];
     }
     
     count()

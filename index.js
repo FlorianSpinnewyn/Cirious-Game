@@ -38,6 +38,7 @@ const Velo = require('./back/models/Velo.js');
 const Metro = require('./back/models/Metro.js');
 const Pied = require('./back/models/Pied.js');
 const Game = require('./back/models/Game.js');
+const Badge = require('./back/models/Badge.js');
 const baseDeDonnees = require('./back/modules/baseDeDonnees.js');
 
 const jsonParser = bodyParser.json();
@@ -102,7 +103,7 @@ io.on('connection', (socket) =>
         //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
         function findLevel(result4) {
             //modif à remettre normal plus tard
-            myLevel.initalisationLevel(numeroLevel, 1/*result4[0].nbPersonne*/, result4[0].nbVoituresMax, result4[0].nbSecondsPersonne, result4[0].nbBadges, result4[0].nbEvenements, result4[0].pasContentMax, result4[0].pollutionMax);
+            myLevel.initalisationLevel(numeroLevel, result4[0].nbPersonnes, result4[0].nbVoituresMax, result4[0].nbSecondsPersonne, result4[0].nbBadges, result4[0].nbEvenements, result4[0].pasContentMax, result4[0].pollutionMax);
 
             let tab = [
                 "0.7.N",
@@ -153,9 +154,41 @@ io.on('connection', (socket) =>
                 myLevel.personnes.push(personne);
                 delete(personne);
             }
-            socket.emit("initialisationViewLevel", myLevel.numLevel, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax, myLevel.nbPersonnes);
+            let tabBadgesId = [1,2,3,4,5,6];
+            for(let i = 0; i<myLevel.nbBadges;i++) {
+                let tempBadge = new Badge();
+                function findbadge(result5) {
+                    
+                    let a = Math.floor(Math.random() * tabBadgesId.length);
+                    console.log(a,result5[tabBadgesId[a]]);
+                    tempBadge.id=result5[tabBadgesId[a]].idbadges;
+                    tempBadge.description = result5[tabBadgesId[a]].description;
+                    tabBadgesId.splice(a, 1);
+                     myLevel.listeBadges.push(tempBadge);
+                     delete(tempBadge);
+                     delete(a);
+                    if(i==myLevel.nbBadges-1) {
+                        console.log(myLevel.listeBadges);
+                        socket.emit("initialisationViewLevel", myLevel.numLevel,myLevel.listeBadges, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax, myLevel.nbPersonnes);
+                    }
+                }
+                baseDeDonnees.select("SELECT * FROM badges", findbadge);
+            }
         }
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
+    });
+
+    /**------------- badges -------------------- **/
+    socket.on("testBadge", id => {
+        for(let i = 0; i<myLevel.nbBadges; i++) {
+            if(myLevel.listeBadges[i].id == id) {
+                if(myLevel.listeBadges[i].termine==false) {
+                    myLevel.listeBadges[i].termine=true;
+                    socket.emit("displayListeBadges", myLevel.listeBadges)
+                }
+            }
+        }
+        console.log(myLevel.listeBadges);
     });
     
     /**------------- Tuto -------------------- **/
@@ -165,6 +198,28 @@ io.on('connection', (socket) =>
     });
     
     /**------------Requete des pannes-----------**/
+    socket.on("alertMairie", ()=>{
+        if(myLevel.city.mairie.panneMetro)
+        {
+            socket.emit("alertMairie2", true);
+        }
+        else if(myLevel.city.mairie.panneTrain)
+        {
+            socket.emit("alertMairie2", true);
+        }
+        else if(myLevel.city.mairie.manqueVelo)
+        {
+            socket.emit("alertMairie2", true);
+        }
+        else if(myLevel.city.mairie.embouteillage)
+        {
+            socket.emit("alertMairie2", true);
+        }
+        else{
+            socket.emit("alertMairie2", false);
+        }
+    });
+
     socket.on("HeurePanneTrain", () =>
     {
         myLevel.city.mairie.evenementTrain();
@@ -433,23 +488,55 @@ io.on('connection', (socket) =>
             departWord = myLevel.personnes[numberPersonne].depart;
         }
         typeTransport = typeTransport.substring(9).toLowerCase();
-        function idTransport(result1)
-        {
-            let idtransport = result1[0].idtransport;
-            function idBatiment(result2)
-            {
-                let idbatiment = result2[0].idcity;
-                function trajet(result3)
-                {
-                    socket.emit("Choix", result3[0].class);
-                }
-                baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + departWord + "'", trajet);
-            }
-            baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + myLevel.personnes[numberPersonne].destination + "'", idBatiment);
+        if(typeTransport=="train") {
+            myLevel.city.gares[0].tabAttente.push(myLevel.personnes[numberPersonne]);
+            myLevel.city.gares[0].tabAttente[myLevel.city.gares[0].tabAttente.length-1].chrono=30;
+            socket.emit("ajoutPersonneListeTrain", myLevel.city.gares[0].tabAttente);
         }
-        baseDeDonnees.select("SELECT * FROM transport WHERE type='" + typeTransport + "'", idTransport);
+        else{
+            function idTransport(result1)
+            {
+                let idtransport = result1[0].idtransport;
+                function idBatiment(result2)
+                {
+                    console.log(myLevel.personnes[numberPersonne].destination,result2[0])
+                    let idbatiment = result2[0].idcity;
+                    function trajet(result3)
+                    {
+                        socket.emit("Choix", result3[0].class);
+                    }
+                    baseDeDonnees.select("SELECT * FROM move WHERE idcity='" + idbatiment + "' AND idtransport='" + idtransport + "' AND depart='" + departWord + "'", trajet);
+                }
+                baseDeDonnees.select("SELECT * FROM city WHERE batiment='" + myLevel.personnes[numberPersonne].destination + "'", idBatiment);
+            }
+            baseDeDonnees.select("SELECT * FROM transport WHERE type='" + typeTransport + "'", idTransport);
+        }
     });
 
+    socket.on("videGare", () => {
+        if(myLevel.city.gares[0].tabAttente.length > 0) {
+            for(let i = 0; i < myLevel.city.gares[0].tabAttente.length; i++){
+                //envoyer
+            }
+            myLevel.city.gares[0].tabAttente.splice(0, myLevel.city.gares[0].tabAttente.length)
+            socket.emit("ajoutPersonneListeTrain", myLevel.city.gares[0].tabAttente);
+        }
+    });
+
+    socket.on("chronoPersonnesGare", () => {
+        for(let i = 0; i < myLevel.city.gares[0].tabAttente.length; i++){
+            if(myLevel.city.gares[0].tabAttente[i].chrono==0) {
+                myLevel.city.gares[0].tabAttente.splice(i, 1);
+                myLevel.personnesEnvoye++;
+            }
+            else{
+                myLevel.city.gares[0].tabAttente[i].chrono= myLevel.city.gares[0].tabAttente[i].chrono-1;
+            }
+           
+        }
+        socket.emit("ajoutPersonneListeTrain", myLevel.city.gares[0].tabAttente);
+    });
+    
     socket.on("SupprimePersonne", numberPersonne =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;

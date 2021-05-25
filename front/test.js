@@ -47,11 +47,26 @@ setInterval(function() {
         
     }
 
+    socket.emit("alertMairie");
+
+    if(chrono.pause==false) {
+        socket.emit("chronoPersonnesGare");
+    }
+
     if(scoreVoiture == 100 || scoreHumeur == 100)
     {
         socket.emit("Perdu");
     }
 }, 2000);
+
+socket.on("alertMairie2", (bool)=>{
+    if(bool==true) {
+        scene.getObjectByName("flecheMairie").visible = true;
+    }
+    else {
+        scene.getObjectByName("flecheMairie").visible = false;
+    }
+});
 
 let scoreFinal = 0;
 
@@ -78,6 +93,7 @@ document.getElementById('parametreOmbre').addEventListener('change', function() 
         activeOmbre();
     } else {
         desactiveOmbre();
+        testBadges(7);
     }
   });
 
@@ -381,7 +397,7 @@ let pollutionMax = 0;
 let pasContentMax = 0;
 let nbPersonnesMax = 0;
 
-socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax, polluMax, mecontentMax, personnesMax) => {
+socket.on("initialisationViewLevel", (numeroLevel,tab, secondsPersonne, voituresMax, polluMax, mecontentMax, personnesMax) => {
     nbSecondsPersonne = secondsPersonne;
     nbVoituresMax = voituresMax;
     pollutionMax = polluMax;
@@ -396,20 +412,40 @@ socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax,
     scoreHumeur = 0;
     barVoiture.style.width = 0;
     barHumeur.style.width = 0;
-    mixer.timeScale = 0.95;
+    mixer.timeScale = 1;
     document.getElementById("level").style.display = "none";
     document.getElementById("time").style.display = 'block';
     document.getElementById("compteur").style.display = 'block';
     document.getElementById("jauges").style.display = "block";
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
+    let str ="<ul>";
+    for(let i =0;i<tab.length;i++){
+        str += "<li id='badge"+(i+1).toString()+"'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+    }
+    str += "</ul>";
+    document.getElementById("listeBadges").innerHTML=str;
+});
+
+socket.on("displayListeBadges", tab => {
+    let str ="<ul>";
+    for(let i =0;i<tab.length;i++){
+        if(tab[i].termine==true){
+            str += "<li id='badge"+(i+1).toString()+"' style='color:green;'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+        }
+        else{
+            str += "<li id='badge"+(i+1).toString()+"'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+        }
+    }
+    str += "</ul>";
+    document.getElementById("listeBadges").innerHTML=str;
 });
 
 document.getElementById("pause").addEventListener("click", event =>
 {
     document.getElementById("menuPause").style.display = 'block';
     document.getElementById("pause").hidden = true;
-    mixer.timeScale = 0.95;
+    mixer.timeScale = 0;
     chrono.mettrePause();
 });
 
@@ -431,7 +467,7 @@ document.getElementById("continuer").addEventListener("click", event =>
     document.getElementById("menuPause").style.display = 'none';
     document.getElementById("pause").hidden = false;
     chrono.continuer();
-    mixer.timeScale = 0.95;
+    mixer.timeScale = 1;
 });
 
 document.getElementById("quitterJeu").addEventListener("click", event =>
@@ -496,7 +532,7 @@ socket.on("afficheFlechePanne", (str) => {
 });
 
 socket.on("pauseAnimationTrain", () => {
-    mixer.timeScale = 0.95;
+    mixer.timeScale = 0;
 });
 
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
@@ -644,7 +680,7 @@ function dropT(event) {
         document.getElementById("reparationTrain").style.display = "block";
         document.getElementById("probTrain").hidden = true;
         document.getElementById("jeuTechnicentreReussi").hidden = false;
-        mixer.timeScale = 0.95;
+        mixer.timeScale = 1;
         scene.getObjectByName("flecheTechnicentre").visible = false;
         socket.emit("trainRepare");
     }
@@ -1132,11 +1168,12 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
     }
     else
     {
-        if(temps == 0)
+        if(((mixer.time >= 0) && (mixer.time <= 30)) || ((mixer.time >= 45) && (mixer.time <= 75)) || ((mixer.time >= 90) && (mixer.time <= 120)) || ((mixer.time >= 135) && (mixer.time <= 165)))
         {
-            document.getElementById("tempsTrainAttente").innerHTML = attente;
-            document.getElementById("prochainTrain").hidden = true;
-            document.getElementById("trainEnGare").hidden = false;
+            minutes = Math.floor(180 - mixer.time) / 2;
+            document.getElementById("tempsTrainArrive").innerHTML = minutes;
+            document.getElementById("prochainTrain").hidden = false;
+            document.getElementById("trainEnGare").hidden = true;
             document.getElementById("attenteTrain").hidden = true;
         }
         else
@@ -1165,10 +1202,13 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
                 }
                 personnesDansLeTrain = 0;
             }
-            document.getElementById("tempsTrainArrive").innerHTML = temps;
-            document.getElementById("prochainTrain").hidden = false;
-            document.getElementById("trainEnGare").hidden = true;
+            document.getElementById("prochainTrain").hidden = true;
+            document.getElementById("trainEnGare").hidden = false;
             document.getElementById("attenteTrain").hidden = true;
+        }
+        if((mixer.time >= 165) && (mixer.time <= 180)){
+            socket.emit("videGare");
+            console.log("videe")
         }
     }
 });
@@ -1177,6 +1217,15 @@ document.getElementById('bye').addEventListener("click", event =>
 { 
     document.getElementById('horaireTrain').style.display='none';
     console.log("Nous avons quitté la gare.");
+});
+
+socket.on("ajoutPersonneListeTrain", (tab) => {
+    let str ="<ul>";
+    for(let i =0;i<tab.length;i++){
+        str += "<li>Personne : " + (i+1).toString() + " Destination : "+tab[i].destination + " Temps d'attente : " + tab[i].chrono +"</li>";
+    }
+    str += "</ul>";
+    document.getElementById("listePersonnes").innerHTML=str;
 });
 
 /*** Métro ***/

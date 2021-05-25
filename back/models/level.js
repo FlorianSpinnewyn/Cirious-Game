@@ -16,6 +16,7 @@ class Level {
         this.personnesApparu = 0;
         this.tabEvenement = [];
         this.personneVoiture = 0;
+        this.listeBadges = [];
     }
 
     /**
