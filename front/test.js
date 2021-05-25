@@ -47,30 +47,13 @@ setInterval(function() {
         
     }
 
-    // if(chrono.heure != 16 || chrono.minute != 0)
-    // {
-    //     if((chrono.heure * 60 + chrono.minute) % heurePanneTrain == 0)
-    //     {
-    //         socket.emit("HeurePanneTrain");
-    //     }
-    //     if((chrono.heure * 60 + chrono.minute) % heurePanneMetro == 0)
-    //     {
-    //         socket.emit("HeurePanneMetro");
-    //     }
-    // }
-
     if(scoreVoiture == 100 || scoreHumeur == 100)
     {
-        chrono.mettrePause();
-        let fenetres = document.getElementsByClassName("fenetre");
-        for(let i = 0; i < fenetres.length; ++i)
-        {
-            fenetres[i].style.display = "none";
-        }
-        document.getElementById("gameOver").style.display = 'block';
-        document.getElementById("result").innerHTML = 'perdu';
+        socket.emit("Perdu");
     }
 }, 2000);
+
+let scoreFinal = 0;
 
 /*** Menu ***/
 document.getElementById('play').addEventListener("click", event =>
@@ -90,13 +73,21 @@ socket.on("initialisationViewPlay", (tabLevel) => {
 });
 
 /*** Parametre ***/
-document.getElementById('myonoffswitch').addEventListener('change', function() {
+document.getElementById('parametreOmbre').addEventListener('change', function() {
     if (this.checked) {
         activeOmbre();
     } else {
         desactiveOmbre();
     }
   });
+
+document.getElementById('parametreSon').addEventListener('change', function() {
+    if (this.checked) {
+        document.getElementById('musique').muted = true;
+    } else {
+        document.getElementById('musique').muted = false;
+    }
+});
 
 /*** Tuto ***/
 document.getElementById('level0').addEventListener("click", event =>
@@ -145,6 +136,12 @@ setInterval(function()
             document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
+            document.getElementById("imgPage2").hidden = true;
+            document.getElementById("imgPage3").hidden = true;
+            document.getElementById("tuto6").hidden = true;
+            document.getElementById("tuto7").hidden = true;
+            document.getElementById("imgPage5").hidden = true;
+            document.getElementById("imgPage6").hidden = true
         });
     }
 
@@ -169,6 +166,12 @@ setInterval(function()
             document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
+            document.getElementById("imgPage2").hidden = false;
+            document.getElementById("imgPage3").hidden = true;            
+            document.getElementById("tuto6").hidden = true;
+            document.getElementById("tuto7").hidden = true;
+            document.getElementById("imgPage5").hidden = true;
+            document.getElementById("imgPage6").hidden = true;
         });
     }
 
@@ -193,6 +196,12 @@ setInterval(function()
             document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
+            document.getElementById("imgPage2").hidden = true;
+            document.getElementById("imgPage3").hidden = false;            
+            document.getElementById("tuto6").hidden = true;
+            document.getElementById("tuto7").hidden = true;
+            document.getElementById("imgPage5").hidden = true;
+            document.getElementById("imgPage6").hidden = true;
         });
     }
 
@@ -217,6 +226,12 @@ setInterval(function()
             document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
+            document.getElementById("imgPage2").hidden = true;
+            document.getElementById("imgPage3").hidden = true;
+            document.getElementById("tuto6").hidden = false;
+            document.getElementById("tuto7").hidden = false;
+            document.getElementById("imgPage5").hidden = true;
+            document.getElementById("imgPage6").hidden = true;
         });
     }
 
@@ -241,6 +256,13 @@ setInterval(function()
             document.getElementById("page6").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = true;
+            document.getElementById("imgPage2").hidden = true;
+            document.getElementById("imgPage3").hidden = true;            
+            document.getElementById("tuto6").hidden = true;
+            document.getElementById("tuto7").hidden = true;
+            document.getElementById("imgPage5").hidden = false;
+            document.getElementById("imgPage6").hidden = true;
+
         });
     }
 
@@ -249,7 +271,7 @@ setInterval(function()
     { 
         boutons6[i].addEventListener("click", event =>
         {
-            document.getElementById("titreTuto").innerHTML = "Vu d'ensemble de CirCity";
+            document.getElementById("titreTuto").innerHTML = "Vue d'ensemble de CirCity";
             document.getElementById("phraseTuto").innerHTML = "SUPER MAP DETAILLEE TROP BELLE AVEC DES FLECHES";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
@@ -263,6 +285,12 @@ setInterval(function()
             document.getElementById("page5").classList.remove("active");
             document.getElementById("finTuto").hidden = true;
             document.getElementById("finirTuto").hidden = false;
+            document.getElementById("imgPage2").hidden = true;
+            document.getElementById("imgPage3").hidden = true;
+            document.getElementById("tuto6").hidden = true;
+            document.getElementById("tuto7").hidden = true;
+            document.getElementById("imgPage5").hidden = true;
+            document.getElementById("imgPage6").hidden = false;
         });
     }
 
@@ -282,7 +310,7 @@ document.getElementById("finTuto").addEventListener("click", event =>
     document.getElementById("relireTuto").hidden = false;
     chrono.restart();
     chrono.continuer();
-    socket.emit("initialisationLevel", 1);
+    socket.emit("initialisationLevel", 0);
 });
 
 document.getElementById("relireTuto").addEventListener("click", event =>
@@ -351,12 +379,18 @@ let nbSecondsPersonne = 0;
 let nbVoituresMax = 0;
 let pollutionMax = 0;
 let pasContentMax = 0;
+let nbPersonnesMax = 0;
 
-socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax, polluMax, mecontentMax) => {
+socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax, polluMax, mecontentMax, personnesMax) => {
     nbSecondsPersonne = secondsPersonne;
     nbVoituresMax = voituresMax;
     pollutionMax = polluMax;
     pasContentMax = mecontentMax;
+    nbPersonnesMax = personnesMax;
+    document.getElementById("personnesMax").innerHTML = personnesMax;
+    document.getElementById("compteur").style.display = "block";
+    document.getElementById("personnes").innerHTML = 0;
+    scoreFinal = 0;
     personnesDansLeTrain = 0;
     scoreVoiture = 0;
     scoreHumeur = 0;
@@ -364,6 +398,8 @@ socket.on("initialisationViewLevel", (numeroLevel, secondsPersonne, voituresMax,
     barHumeur.style.width = 0;
     mixer.timeScale = 0.95;
     document.getElementById("level").style.display = "none";
+    document.getElementById("time").style.display = 'block';
+    document.getElementById("compteur").style.display = 'block';
     document.getElementById("jauges").style.display = "block";
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
@@ -422,6 +458,8 @@ document.getElementById("retry").addEventListener("click", event =>
 document.getElementById("quit").addEventListener("click", event =>
 {
     document.getElementById("level").style.display = 'block';
+    document.getElementById("time").style.display = 'none';
+    document.getElementById("compteur").style.display = 'none';
     document.getElementById("jauges").style.display = 'none';
     document.getElementById("alerteQuit").style.display = 'none';
     socket.emit("QuitterJeu");
@@ -1175,13 +1213,13 @@ socket.on("HoraireMetro2", (temps, panne) =>
 
 document.getElementById('ciao1').addEventListener("click", event => 
 { 
-    document.getElementById('horaireMetro1').style.display='none';
+    document.getElementById('horaireMetro1').style.display = 'none';
     console.log("Nous avons quitté la station de métro.");
 });
 
 document.getElementById('ciao2').addEventListener("click", event => 
 { 
-    document.getElementById('horaireMetro2').style.display='none';
+    document.getElementById('horaireMetro2').style.display = 'none';
     console.log("Nous avons quitté la station de métro.");
 });
 
@@ -1202,13 +1240,13 @@ socket.on("nombreVelo", (nombreV, nbstation) => {
 
 document.getElementById('aurevoir1').addEventListener("click", event => 
 { 
-    document.getElementById('veloRestants1').style.display='none';
+    document.getElementById('veloRestants1').style.display = 'none';
     console.log("Nous avons quitté la station de vélo.");
 });
 
 document.getElementById('aurevoir2').addEventListener("click", event => 
 { 
-    document.getElementById('veloRestants2').style.display='none';
+    document.getElementById('veloRestants2').style.display = 'none';
     console.log("Nous avons quitté la station de vélo.");
 });
 
@@ -1297,8 +1335,9 @@ let barVoiture = document.getElementById("barVoiture");
 let barHumeur = document.getElementById("barHumeur");
 let calcul = 0;
 
-socket.on("PersonneDisparait", (idPersonne, personne, louper) =>
+socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =>
 {
+    document.getElementById("personnes").innerHTML = personnesEnvoye;
     RemoveFlecheTransport();
     removeFlecheDest();
     suppPersonne(personne);
@@ -1441,7 +1480,7 @@ document.getElementById('aplus').addEventListener("click", event =>
     clearInterval(intervalPerson);
 });
 
-socket.on("Finito", () =>
+socket.on("Finito", (numLevel) =>
 {
     chrono.mettrePause();
     let fenetres = document.getElementsByClassName("fenetre");
@@ -1450,25 +1489,143 @@ socket.on("Finito", () =>
         fenetres[i].style.display = "none";
     }
     document.getElementById("gameOver").style.display = "block";
+    document.getElementById("finReessayer").hidden = true;
+    document.getElementById("finRecommencer").hidden = true;
+    document.getElementById("finQuitter").hidden = true;
     if(scoreVoiture < 100 && scoreHumeur < 100)
     {
         document.getElementById("result").innerHTML = "gagné";
+        document.getElementById("etoile1").hidden = false;
+        document.getElementById("etoile2").hidden = false;
+        document.getElementById("etoile3").hidden = false;
+        document.getElementById("conseil").hidden = false;
+        let tmp = document.getElementById("barVoiture").style.width;
+        if(tmp.charAt(0) == '0')
+        {
+            scoreFinal = 100 * 10;
+        }  
+        else
+        {
+            tmp = tmp.split('%');
+            scoreFinal = (100 - tmp[0]) * 10;
+        }
+        tmp = document.getElementById("barHumeur").style.width;
+        if(tmp.charAt(0) == '0')
+        {
+            scoreFinal += 100 * 10;
+        }
+        else
+        {
+            tmp = tmp.split('%');
+            scoreFinal += (100 - tmp[0]) * 10;
+        }
+        document.getElementById("score").innerHTML  = scoreFinal;
+        document.getElementById("scoreFinal").hidden = false;
+        if(scoreFinal > 1000)
+        {
+            document.getElementById("etoile1").src = "pictures/star2.png";
+        }
+        else
+        {
+            document.getElementById("finRecommencer").hidden = false;
+            document.getElementById("finQuitter").hidden = false;
+        }
+        if(scoreFinal > 1400)
+        {
+            setTimeout(function() 
+            {
+                document.getElementById("etoile2").src = "pictures/star2.png";
+                if(scoreFinal > 1800)
+                {
+                    setTimeout(function() 
+                    {
+                        document.getElementById("etoile3").src = "pictures/star2.png";
+                        document.getElementById("finRecommencer").hidden = false;
+                    }, 1000);
+                }
+                else
+                {
+                    document.getElementById("finRecommencer").hidden = false;
+                    document.getElementById("finQuitter").hidden = false;
+                }
+            }, 1000);
+        }
+        else
+        {
+            document.getElementById("finRecommencer").hidden = false;
+            document.getElementById("finQuitter").hidden = false;
+        }
+        
+        switch(numLevel)
+        {
+            case '1': document.getElementById("level2").disabled = false;
+                break;
+            case '2': document.getElementById("level3").disabled = false;
+                break;
+            case '3': document.getElementById("level4").disabled = false;
+                break;
+            case '4': document.getElementById("level5").disabled = false;
+                break;
+        }
     }
     else
     {
         document.getElementById("result").innerHTML = "perdu";
+        document.getElementById("scoreFinal").hidden = true;
+        document.getElementById("etoile1").hidden = true;
+        document.getElementById("etoile2").hidden = true;
+        document.getElementById("etoile3").hidden = true;
+        document.getElementById("conseil").hidden = true;
+        document.getElementById("finReessayer").hidden = false;
+        document.getElementById("finRecommencer").hidden = true;
+        document.getElementById("finQuitter").hidden = false;
     }
+    switch(numLevel)
+    {
+        case '0' : document.getElementById("conseil").innerHTML = "Le transport routier représente 33% des émissions de CO2 en France, c’est le principal responsable du réchauffement climatique.";
+            break;
+        case '1': document.getElementById("conseil").innerHTML = "Pour limiter des couts élevés de déplacement, la congestion du trafic, la pollution de l’aire, le covoiturage est une réelle solution aussi bien pour les trajets domicile-travail que les longues distances.";
+            break;
+        case '2': document.getElementById("conseil").innerHTML = "Le vélo demeure le moyen de transport le plus rapide dans les grandes villes pour des distance de 1 à 7km. Il ne pollue pas, ne consomme pas d’énergie fossile et fait du bien à la santé.";
+            break;
+        case '3': document.getElementById("conseil").innerHTML = "Le cycliste est moins touché par la pollution. Vous êtes plus exposé à la pollution dans votre voiture que sur votre vélo.";
+            break;
+        case '4': document.getElementById("conseil").innerHTML = "Adapter le moyen de transport a votre trajet est un « plus » pour la planète. Un déplacement en train émet jusqu’à 10 fois moins de C02 que le même trajet en voiture.";
+            break;
+        case '5' : document.getElementById("conseil").innerHTML = "En ville, les transports en communs sont aussi rapides que la voiture, ils polluent moins et évitent le stress des embouteillages. Un passager de métro consomme environ 10 fois moins d’énergie qu’en utilisant sa voiture.";
+            break;
+    }
+    scoreVoiture = 0;
+    scoreHumeur = 0;
 });
 
-/*** Menu volume ***/
+document.getElementById("finReessayer").addEventListener("click", event =>
+{
+    document.getElementById("gameOver").style.display = "none";
+    document.getElementById("etoile1").src = "pictures/star1.png";
+    document.getElementById("etoile2").src = "pictures/star1.png";
+    document.getElementById("etoile3").src = "pictures/star1.png";
+    chrono.restart();
+    chrono.continuer();
+    socket.emit("Retry");
+});
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("value");
-output.innerHTML = slider.value;
+document.getElementById("finRecommencer").addEventListener("click", event =>
+{
+    document.getElementById("gameOver").style.display = "none";
+    chrono.restart();
+    chrono.continuer();
+    socket.emit("Retry");
+});
 
-slider.oninput = function() {
-  output.innerHTML = this.value;
-} 
+document.getElementById("finQuitter").addEventListener("click", event =>
+{
+    document.getElementById("level").style.display = 'block';
+    document.getElementById("jauges").style.display = 'none';
+    document.getElementById("gameOver").style.display = 'none';
+    socket.emit("QuitterJeu");
+    mixer.setTime(0);
+});
 
 function activeOmbre() {
     light.castShadow = true;
@@ -1488,7 +1645,7 @@ function suppPersonne(personne) {
     scene.getObjectByName(personne.depart).visible = false;
 }
 
-function  removeFlecheDest() {
+function removeFlecheDest() {
     scene.getObjectByName("Ecole").visible = false;
     scene.getObjectByName("Campagne").visible = false;
     scene.getObjectByName("Magasins").visible = false;

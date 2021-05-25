@@ -59,8 +59,8 @@ class City {
             stationVelo = new StationVelo();
             this.stationsVelo.push(stationVelo);
         }
-        this.stationsVelo[0].velosLibre = 24;
-        this.stationsVelo[2].velosLibre = 17;
+        this.stationsVelo[0].velosLibre = 5;
+        this.stationsVelo[2].velosLibre = 7;
     }
 }
 

@@ -106,9 +106,9 @@ const clock = new THREE.Clock();
 function init()
 {
     /**------Affichage FPS------**/
-    stats = new Stats()
-    stats.showPanel(0)
-    document.body.appendChild(stats.dom)
+    // stats = new Stats()
+    // stats.showPanel(0)
+    // document.body.appendChild(stats.dom)
 
     /**------Scene et Fog------**/
     scene = new THREE.Scene();
@@ -155,12 +155,12 @@ function init()
     controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
     controls.minDistance = 1;
-    controls.maxDistance = 50;
-    controls.maxPolarAngle = 3*Math.PI / 8;
+    controls.maxDistance = 20;
+    controls.maxPolarAngle = 3.5*Math.PI / 8;
 
     /**------Axe-----**/
-    const axesHelper = new THREE.AxesHelper(5);
-    scene.add(axesHelper);
+    // const axesHelper = new THREE.AxesHelper(5);
+    // scene.add(axesHelper);
 
     const loadingManager = new THREE.LoadingManager(() => {
 	
@@ -949,7 +949,10 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
     gltf.scene.cursor = 'pointer';
     gltf.scene.on('click', function(ev) {
         console.log("Tu as trouvé le mouton");
-        
+        document.getElementById('musique_mout').muted = false;
+        setTimeout(function(){
+            document.getElementById('musique_mout').loop = false;
+        },1500);
     });
     });
 
@@ -1097,7 +1100,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
 
         scene.add(gltf.scene);
         gltf.scene.cursor = 'pointer';
-        gltf.scene.on('click', function(ev){
+        gltf.scene.on('click', function(ev) {
             console.log("Nous sommes à la station de vélo n°1 :)");
             document.getElementById('veloRestants1').style.display='block';
             socket.emit("velo", 1);
@@ -1117,7 +1120,7 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
 
         scene.add(gltf.scene);
         gltf.scene.cursor = 'pointer';
-        gltf.scene.on('click', function(ev){
+        gltf.scene.on('click', function(ev) {
             console.log("Nous sommes à la station de vélo n°3 :)");
             document.getElementById('veloRestants2').style.display='block';
             socket.emit("velo", 3);
@@ -1932,12 +1935,12 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
          })
  
         
-         cube53.name="1.9.NE"
-     cube53.visible=false;
-     cube53.position.set(-1+0.82,0,-17-0.82);
-     scene.add( cube53 );
-     cube53.cursor = 'pointer';
-     cube53.on('click', function(ev){
+        cube53.name="1.9.NE"
+        cube53.visible=false;
+        cube53.position.set(-1+0.82,0,-17-0.82);
+        scene.add( cube53 );
+        cube53.cursor = 'pointer';
+        cube53.on('click', function(ev){
         evenementClickPersonne("1.9.NE")
      });
      
@@ -2706,20 +2709,22 @@ loader.load('3d/TestBlender/road/animation/Fleche/fleche_rouge.glb', function(gl
 
         scene.add(gltf.scene);
         gltf.scene.cursor = 'pointer';
-        gltf.scene.on('click', function(ev){
+        gltf.scene.on('click', function(ev) {
             console.log("Tu as trouvé le Chien");
-            
+            document.getElementById('musique_chien').muted = false;
+            setTimeout(function(){
+                document.getElementById('musique_chien').loop = false;
+            },1000);
         });
     });
      
 }
 
-
 let delta;
 
 function animate()
 {
-    stats.begin()
+    //stats.begin()
 
     requestAnimationFrame( animate );
     delta = clock.getDelta();
@@ -2821,7 +2826,7 @@ function animate()
     mixer.update(delta);
     controls.update();
     renderer.render( scene, camera );
-    stats.end();
+    //stats.end();
     //console.log(mixer.time)
 }
 

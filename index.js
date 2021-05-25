@@ -101,7 +101,8 @@ io.on('connection', (socket) =>
         
         //requête dans la base de données pour aller chercher le nombre de personnes dont on a besoin
         function findLevel(result4) {
-            myLevel.initalisationLevel(numeroLevel,result4[0].nbPersonnes, result4[0].nbVoituresMax, result4[0].nbSecondsPersonne, result4[0].nbBadges, result4[0].nbEvenements, result4[0].pasContentMax, result4[0].pollutionMax);
+            //modif à remettre normal plus tard
+            myLevel.initalisationLevel(numeroLevel, 1/*result4[0].nbPersonne*/, result4[0].nbVoituresMax, result4[0].nbSecondsPersonne, result4[0].nbBadges, result4[0].nbEvenements, result4[0].pasContentMax, result4[0].pollutionMax);
 
             let tab = [
                 "0.7.N",
@@ -152,7 +153,7 @@ io.on('connection', (socket) =>
                 myLevel.personnes.push(personne);
                 delete(personne);
             }
-            socket.emit("initialisationViewLevel", myLevel.numLevel, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax);
+            socket.emit("initialisationViewLevel", myLevel.numLevel, myLevel.nbSecondsPersonne, myLevel.nbVoituresMax, myLevel.pollutionMax, myLevel.pasContentMax, myLevel.nbPersonnes);
         }
         baseDeDonnees.select("SELECT * FROM levels WHERE idlevels='" + numeroLevel + "' ", findLevel);
     });
@@ -292,8 +293,8 @@ io.on('connection', (socket) =>
     socket.on("stockRempli", () => {
         myLevel.city.garage.evenementRepare();
         myLevel.city.mairie.manqueVelo = false;
-        myLevel.city.stationsVelo[2].velosLibre = 17;
-        myLevel.city.stationsVelo[0].velosLibre = 24;
+        myLevel.city.stationsVelo[2].velosLibre = 7;
+        myLevel.city.stationsVelo[0].velosLibre = 5;
     });
 
     /*** Atelier ***/
@@ -357,10 +358,9 @@ io.on('connection', (socket) =>
                 if(temps == 1) //la personne disparaît et prend la voiture
                 {
                     myLevel.personnes[i].envoye = 1;
-                    socket.emit("PersonneDisparait", i, myLevel.personnes[i],true);
                     myLevel.personnesEnvoye++;
                     myLevel.personneVoiture++;
-                    //console.log(myLevel.personneVoiture)
+                    socket.emit("PersonneDisparait", i, myLevel.personnes[i], true, myLevel.personnesEnvoye);
                     if(myLevel.city.mairie.evenementEmbouteillage(myLevel.personneVoiture)){
                         socket.emit("afficheFlechePanne", "flecheParking");
                         myLevel.personneVoiture = 0;
@@ -368,7 +368,7 @@ io.on('connection', (socket) =>
                 }
             }
             if(myLevel.personnesEnvoye == myLevel.nbPersonnes) {
-                socket.emit("Finito");
+                socket.emit("Finito", myLevel.numLevel);
             }
         }
     });
@@ -454,7 +454,7 @@ io.on('connection', (socket) =>
     {
         myLevel.personnes[numberPersonne].envoye = 1;
         myLevel.personnesEnvoye++;
-        socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne], false);
+        socket.emit("PersonneDisparait", numberPersonne, myLevel.personnes[numberPersonne], false, myLevel.personnesEnvoye);
     });
 
     socket.on("DiminueVelo", (idPersonne) => 
@@ -484,7 +484,7 @@ io.on('connection', (socket) =>
         {
             if(myLevel.personnes[i].apparue == true && myLevel.personnes[i].envoye == 0)
             {
-                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false);
+                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false, myLevel.personnesEnvoye);
             }
         }
         let level = myLevel.numLevel;
@@ -498,11 +498,18 @@ io.on('connection', (socket) =>
         {
             if(myLevel.personnes[i].apparue == true && myLevel.personnes[i].envoye == 0)
             {
-                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false);
+                socket.emit("PersonneDisparait", i, myLevel.personnes[i], false, myLevel.personnesEnvoye);
             }
         }
         myLevel.reset();
     });
+
+    //ajout
+    socket.on("Perdu", () =>
+    {
+        socket.emit("Finito", myLevel.numLevel);
+    });
+    //fin ajout
 });
 
 http.listen(4235, () =>

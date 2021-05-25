@@ -31,9 +31,40 @@
     <!-- Map -->
     <div id="game" class="fond">
         <div id="HUD" hidden=true>
-            <div id=time>
-                <p>16h 00m</p>
+            <div class="info">
+                <div id=time>
+                    <p>16h 00m</p>
+                </div>
+             
+                <!-- Bouton Pause -->
+                <button id="pause" class="pause" hidden><i class="fa fa-pause-circle" style="font-size: 30px;"></i></button>
+    
+                <!-- compteur personnes -->
+                <div id="compteur" class="compteur">
+                    <p>Vous avez envoyé <span id="personnes"></span>/<span id="personnesMax"></span> personnes</p>
+                </div>
+    
+                <div id="jauges" class="jauges">
+                    <!--Jauge voiture/pollution -->
+                    <div class="jaugeVoiture ">
+                        <i class="fas fa-car-side" style="font-size: 30px; margin-top: 30px; position:fixed; color:#E65E45;"></i>
+                        <div id="calculVoiture" class="calcul">+11</div>
+                        <div class="voitureProgress">
+                            <div id="barVoiture" class="bar shadow overlapVoiture" min="0" max="100"></div>
+                        </div>
+                    </div>
+                
+                    <!--Jauge pas content -->
+                    <div class="jaugeHumeur">
+                        <i class="far fa-angry" style="font-size: 30px; margin-top: 35px; position: fixed; color:#e2942e;"></i>
+                        <div id="calculHumeur" class="calcul">+4</div>
+                        <div class="humeurProgress">
+                            <div id="barHumeur" class="bar shadow overlapHumeur" min="0" max="100"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
                 <!-- bouton personne -->
             <div id="DestinationPersonne" >
                 <div class="personne content" id="">
@@ -82,29 +113,37 @@
 
     <!-- Menu Pause -->
     <div id="menuPause" class="menuPause">
-        <button id="continuer">Reprendre le niveau</button> <br><br>
-        <button id="cog"><i class="fa fa-cog" aria-hidden="true"></i></button> <br><br>
-        <button id="recommencer">Recommencer le niveau</button> <br><br>
-        <button id="quitterJeu">Quitter le jeu</button>
+        <button class="boutonMilieu" id="continuer">Reprendre la partie</button> <br><br>
+        <button class="boutonMilieu" id="cog">Options <i class="fa fa-cog" aria-hidden="true"></i></button> <br><br>
+        <button class="boutonMilieu" id="recommencer">Recommencer le niveau</button> <br><br>
+        <button class="boutonMilieu" id="quitterJeu">Quitter le jeu</button>
     </div>
-
-    <!-- Bouton Pause -->
-    <button id="pause" class="pause" hidden><i class="fa fa-pause-circle"></i></button>
 
     <!-- Menu Paramètre -->
     <div id="menuParametre" class="menuParametre">
-        <div>           
-            <label for="volume" class="form-label">Volume : <span id="value"></span>%</label> <br>
-            <input type="range" style="width:20%" class="form-range" id="myRange">
+        <div class="boutonOption">
+            Musique : 
+            <audio id="musique" autoplay loop> <source src="musique.mp3" type="audio/mp3"> </audio>
+                <audio id="musique_mout" autoplay muted=true loop> <source src="mouton.mp3" type="audio/mp3" > </audio>
+                    <audio id="musique_chien" autoplay muted=true loop> <source src="chien.mp3" type="audio/mp3" > </audio>
+                <!-- <button onclick="document.getElementById('musique').muted = true;">Mute</button>
+            <button onclick="document.getElementById('musique').muted = false;">Unmute</button> -->
+            <p>Son :</p>
+            <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="parametreSon" tabindex="0" checked>
+              <label class="onoffswitch-label" for="myonoffswitch"></label>
+            </div>
         </div>
         <br><br>
-        <p>Ombres :</p>
-        <div class="onoffswitch">
-            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" checked>
-            <label class="onoffswitch-label" for="myonoffswitch"></label>
+        <div class="boutonOption">
+            Ombres :
+            <div class="onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="parametreOmbre" tabindex="0" checked>
+                <label class="onoffswitch-label" for="myonoffswitch"></label>
+            </div>
         </div>
         <br><br>
-        <button id="retour">Retour</button>
+        <button class="boutonMilieu"  id="retour">Retour</button>
     </div>
 
      <!-- Alertes -->
@@ -121,7 +160,15 @@
 
     <!-- Game Over -->
     <div id="gameOver" class="menuPause">
-        <h1>Vous avez <span id="result"></span>!</h1> 
+        <h1>Vous avez <span id="result"></span>!</h1><br>
+        <img id="etoile1" class="etoile" src="pictures/star1.png"></img>
+        <img id="etoile2" class="etoile" src="pictures/star1.png"></img>
+        <img id="etoile3" class="etoile" src="pictures/star1.png"></img>
+        <p id="scoreFinal" style="font-size: 100px"><span id="score"></span> points</p>
+        <p id="conseil" style="font-size: 40px;"></p>
+        <button id="finReessayer" hidden>Réessayer</button>
+        <button id="finRecommencer" hidden>Rejouer</button>
+        <button id="finQuitter" hidden>Revenir au menu principal</button>
     </div>
 
     <!-- Tuto -->
@@ -129,6 +176,25 @@
         <button id="closeTuto" class="btn btn-outline-dark cancel" hidden=true><i class="fa fa-remove"></i></button>
         <h1 id="titreTuto"></h1><br><br>
         <p id="phraseTuto"></p><br><br>
+        <div id="imgPage2" hidden>
+            <img src="./pictures/tuto1.jpg" alt="tuto" height="200" width="300" id="tuto1">
+            <img src="./pictures/tuto2.jpg" alt="tuto2" height="200" width="300" id="tuto2">
+            <img src="./pictures/tuto3.jpg" alt="tuto3" height="200" width="300" id="tuto3">
+        </div>
+        <div id="imgPage3" hidden>
+            <img src="./pictures/tuto4.jpg" alt="tuto4" height="200" width="300" id="tuto4">
+            <img src="./pictures/tuto5.jpg" alt="tuto5" height="200" width="300" id="tuto5">
+        </div>
+        <img src="./pictures/tuto6.jpg" alt="tuto6" height="200" width="300" id="tuto6" hidden>
+        <img src="./pictures/tuto7.jpg" alt="tuto7" height="500" width="300" id="tuto7"hidden>
+        <div id="imgPage5" hidden>
+            <img src="./pictures/tuto8.jpg" alt="tuto8" height="200" width="300" id="tuto8">
+            <img src="./pictures/tuto9.jpg" alt="tuto9" height="200" width="300" id="tuto9">
+        </div>
+        <div id="imgPage6" hidden>
+            <img src="./pictures/tuto10.jpg" alt="tuto10" height="400" width="500" id="tuto10">
+        </div>
+
         <button class="boutonCoucou" id="commencerTuto">C'est parti <i class="fa fa-smile-o"></i></button>
         <button class="boutonCoucou" id="finTuto" hidden=true>Accès au jeu</button>
         <button class="boutonCoucou" id="finirTuto" hidden=true>Fin du tutoriel</button>
@@ -137,24 +203,9 @@
 
     <button id="relireTuto" class="relireTuto" hidden=true>Tutoriel <i class="fa fa-info-circle"></i></button>
 
-    <div id="jauges" class="jauges">
-        <!--Jauge voiture/pollution -->
-        <div class="jaugeVoiture ">
-            <i class="fas fa-car-side" style="font-size: 30px; margin-top: 30px; position:fixed; color:#E65E45;"></i>
-            <div id="calculVoiture" class="calcul">+11</div>
-            <div class="voitureProgress">
-                <div id="barVoiture" class="bar shadow overlapVoiture" min="0" max="100"></div>
-            </div>
-        </div>
-    
-        <!--Jauge pas content -->
-        <div class="jaugeHumeur">
-            <i class="far fa-angry" style="font-size: 30px; margin-top: 35px; position: fixed; color:#e2942e;"></i>
-            <div id="calculHumeur" class="calcul">+4</div>
-            <div class="humeurProgress">
-                <div id="barHumeur" class="bar shadow overlapHumeur" min="0" max="100"></div>
-            </div>
-        </div>
+    <!-- compteur personnes -->
+    <div id="compteur" class="compteur">
+        <p>Vous avez envoyé <span id="personnes"></span>/<span id="personnesMax"></span> personnes</p>
     </div>
 
     <!-- bouton mairie -->
