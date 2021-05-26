@@ -431,7 +431,7 @@ io.on('connection', (socket) =>
     });
 
     socket.on("secondePersonne", (i) => {
-        socket.emit("secondePersonne2",myLevel.personnes[i].chrono);
+        socket.emit("secondePersonne2",myLevel.personnes[i].chrono,myLevel.nbSecondsPersonne);
     });
 
     socket.on("CliquePersonne", (str) => 

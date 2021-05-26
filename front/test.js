@@ -514,6 +514,9 @@ document.getElementById("quit").addEventListener("click", event =>
     document.getElementById("relireTuto").hidden = true;
     socket.emit("QuitterJeu");
     mixer.setTime(0);
+    RemoveFlecheTransport();
+    RemoveFlecheTransport()
+    RemoveFlechePanne()
 });
 
 document.getElementById("annulerRetry").addEventListener("click", event =>
@@ -1164,9 +1167,9 @@ socket.on("HoraireTrain", (temps, panne) =>
     }
     else
     {
-        if(((mixer.time >= 0) && (mixer.time <= 30)) || ((mixer.time >= 45) && (mixer.time <= 75)) || ((mixer.time >= 90) && (mixer.time <= 120)) || ((mixer.time >= 135) && (mixer.time <= 165)))
+        if((mixer.time >= 0) && (mixer.time <= 165))
         {
-            minutes = Math.floor((180 - mixer.time) / 2);
+            minutes = Math.floor((180 - mixer.time) / 2)-15;
             document.getElementById("tempsTrainArrive").innerHTML = minutes;
             document.getElementById("prochainTrain").hidden = false;
             document.getElementById("trainEnGare").hidden = true;
@@ -1397,8 +1400,8 @@ socket.on("AfficheDestination", (depart,destination, idPerso, panneTrain, panneM
     
 });
 
-socket.on("secondePersonne2", (i) => {
-    document.getElementById("sec").innerHTML = 10-i;
+socket.on("secondePersonne2", (i,secondelevel) => {
+    document.getElementById("sec").innerHTML = secondelevel-i;
 });
 
 let scoreVoiture = 0;
@@ -1672,6 +1675,10 @@ document.getElementById("finReessayer").addEventListener("click", event =>
     chrono.restart();
     chrono.continuer();
     socket.emit("Retry");
+    mixer.setTime(0);
+    RemoveFlecheTransport();
+    RemoveFlecheTransport()
+    RemoveFlechePanne()
 });
 
 document.getElementById("finRecommencer").addEventListener("click", event =>
@@ -1680,6 +1687,10 @@ document.getElementById("finRecommencer").addEventListener("click", event =>
     chrono.restart();
     chrono.continuer();
     socket.emit("Retry");
+    mixer.setTime(0);
+    RemoveFlecheTransport();
+    RemoveFlecheTransport()
+    RemoveFlechePanne()
 });
 
 document.getElementById("finQuitter").addEventListener("click", event =>
@@ -1690,6 +1701,9 @@ document.getElementById("finQuitter").addEventListener("click", event =>
     document.getElementById("gameOver").style.display = 'none';
     socket.emit("QuitterJeu");
     mixer.setTime(0);
+    RemoveFlecheTransport();
+    RemoveFlecheTransport()
+    RemoveFlechePanne()
 });
 
 function activeOmbre() {
@@ -1750,4 +1764,11 @@ function RemoveFlecheTransport() {
     scene.getObjectByName("flecheMetro3").visible = false;
     scene.getObjectByName("flecheVelo1").visible = false;
     scene.getObjectByName("flecheVelo2").visible = false;
+}
+
+function RemoveFlechePanne() {
+    scene.getObjectByName("flecheParking").visible = false;
+    scene.getObjectByName("flecheGarage").visible = false;
+    scene.getObjectByName("flecheAtelier").visible = false;
+    scene.getObjectByName("flecheTechnicentre").visible = false;
 }
