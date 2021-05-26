@@ -52,6 +52,7 @@ class Level {
         this.numLevel = 0;
         this.personnes = [];
         this.listeBadges = [];
+        this.tabEvenement = [];
         this.city.atelier.reset();
         this.city.garage.reset();
         this.city.technicentre.reset();

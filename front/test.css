@@ -18,11 +18,20 @@
 }
 
 #DestinationPersonne {
-  position : absolute;
+  position : fixed;
+  left:2%;
+  bottom:2%;
   width: 500px; 
   height: 500px;
   display: none;
   background-color: rgba(191, 191, 191, 0.50);
+}
+
+.destPersonne{
+  position : fixed;
+  left:11%;
+  bottom:36%;
+  text-align:center;
 }
 
 .fenetre {
@@ -33,7 +42,7 @@
   height: 100%; 
   overflow: auto;
   background-color: rgba(191, 191, 191, 0.50);
-  padding: 5% 15%;
+  padding: 8% 15%;
   text-align:center;
   background-repeat: no-repeat;
 }
@@ -47,7 +56,34 @@
   height: 100%; 
   overflow: auto;
   background-color: rgba(191, 191, 191, 0.50);
-  padding: 10% 15%;
+  padding: 15% 15%;
+  text-align: center;
+  background-repeat: no-repeat;
+}
+
+.miniJeu {
+  display: none;
+  position: fixed;
+  top: -10%;
+  z-index: 5;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto;
+  padding: 15% 15%;
+  text-align: center;
+  background-repeat: no-repeat;
+}
+
+#gameOver {
+  display: none;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto;
+  background-color: rgba(191, 191, 191, 0.50);
+  padding: 12% 15%;
   text-align: center;
   background-repeat: no-repeat;
 }
@@ -61,7 +97,7 @@
   height: 100%; 
   overflow: auto;
   background-color: rgba(191, 191, 191, 0.50);
-  padding: 10% 15%;
+  padding: 15% 15%;
   text-align:center;
   background-repeat: no-repeat;
 }
@@ -74,7 +110,7 @@
   height: 100%; 
   overflow: auto;
   background-color: rgba(191, 191, 191, 0.50);
-  padding: 5% 15%;
+  padding: 21% 15%;
   text-align: center;
   top: 0;
   background-repeat: no-repeat;
@@ -311,8 +347,8 @@
 }
 
 .panneau {
-  margin-left: 7.5%;
-  margin-top: 18%;
+  margin-left: 2%;
+  margin-top: 17%;
   width: 50%;
 }
 
@@ -321,8 +357,8 @@
 }
 
 .pancarte {
-  margin-left: 2%;
-  margin-top: 23%;
+  margin-left: 1%;
+  margin-top: 24%;
   width: 50%;
 }
 
@@ -341,9 +377,10 @@
 }
 
 .barriere {
-  margin-left: 23%;
-  margin-top: 31%;
-  width: 50%;
+  margin-left: 5%;
+    margin-top: 7.5%;
+    width: 50%;
+    color: white;
 }
 
 .garage {
@@ -351,9 +388,9 @@
 }
 
 .porte {
-  margin-left: 23%;
-  margin-top: 31%;
-  width: 50%;
+  margin-left: 6%;
+  margin-top: 7%;
+  width: 20%;
 }
 
 .atelier {
@@ -579,43 +616,43 @@
 }
 
 .rouge1 {
-  top: 156px;
-  left: 614px;
+  top: 240px;
+  left: 612px;
 }
 
 .rouge2 {
-  top: 156px;
-  left: 730px;
+  top: 240px;
+  left: 728px;
 }
 
 .bleu1 {
-  top: 156px;
-  left: 1024px;
+  top: 240px;
+  left: 1022px;
 }
 
 .bleu2 {
-  top: 156px;
-  left: 1139px;
+  top: 240px;
+  left: 1137px;
 }
 
 .jaune1 {
-  top: 300px;
-  left: 614px;
+  top: 385px;
+  left: 612px;
 }
 
 .jaune2 {
-  top: 300px;
-  left: 730px;
+  top: 385px;
+  left: 728px;
 }
 
 .vert1 {
-  top: 300px;
-  left: 1024px;
+  top: 385px;
+  left: 1022px;
 }
 
 .vert2 {
-  top: 300px;
-  left: 1139px;
+  top: 385px;
+  left: 1137px;
 }
 
 .droppableG.droppableG-hover {
@@ -780,6 +817,7 @@
 
 .stationV {
   background-image: url("./pictures/stationV.png");
+  padding: 4.5% 2%;
 }
 
 .compteurV {
@@ -842,7 +880,7 @@
 .boutonChoix {
   background: transparent; outline: none;
   position: fixed;
-  top: 123px;
+  top: 31%;
   background-color: #D9DCDF;
   color:black;
   border-radius: 16px;
@@ -930,7 +968,7 @@
   width: 100%; 
   height: 100%; 
   overflow: auto;
-  padding: 15px 15%;
+  padding: 15% 15%;
   text-align:center;
   background-repeat: no-repeat;
 }
@@ -945,7 +983,7 @@
 .boutonPlay {
   background: transparent; outline: none;
   position: fixed;
-  top: 280px;
+  top: 51%;
   left:805px;
   background-color: #333333;
   color:white;
@@ -1072,13 +1110,13 @@
   width: 1700px;
   position: relative;
   animation-name: locomotive;
-  animation-duration: 22s;
+  animation-duration: 6s;
 }
 
 @keyframes locomotive {
   0%   {left:-1400px; top:820px;}
   3%   {left:-1400px; top:820px;}
-  100%   {left:5500px; top:820px;}
+  100%   {left:6500px; top:820px;}
 }
 
 .logoC {
@@ -1171,4 +1209,82 @@
   overflow: hidden;
   font-size: 25px;
   margin-left: 474px;
+}
+
+.btnAlerte{
+  background: transparent;
+  background-color: #333333;
+  outline: none;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 160px;
+  height: 60px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 25px;
+  margin: 13px 50px;
+}
+
+.petitBouton{
+  background: transparent;
+  background-color: #333333;
+  outline: none;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 60px;
+  height: 30px;
+  margin-top:15px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.petitBouton2{
+  background: transparent;
+  background-color: #333333;
+  outline: none;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 200px;
+  height: 40px;
+  margin-top:15px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.petitBouton3{
+  background: transparent;
+  background-color: #cacaca;
+  outline: none;
+  color: black;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 250px;
+  height: 40px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.petitBouton4{
+  background: transparent;
+  background-color: #333333;
+  outline: none;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 60px;
+  height: 40px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 15px;
 }

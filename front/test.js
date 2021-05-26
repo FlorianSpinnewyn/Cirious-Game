@@ -35,7 +35,7 @@ setInterval(function() {
     {
         minute = chrono.minute;
     }
-    document.getElementById("time").innerHTML = heure + "h " + minute + "m ";   
+    document.getElementById("time").innerHTML = heure + "h" + minute;   
     if((chrono.heure * 60 + chrono.minute) % modulo == 0) {
         
         if(chrono.pause == false) {
@@ -83,24 +83,6 @@ socket.on("initialisationViewPlay", (tabLevel) => {
     }
 });
 
-/*** Parametre ***/
-document.getElementById('parametreOmbre').addEventListener('change', function() {
-    if (this.checked) {
-        activeOmbre();
-    } else {
-        desactiveOmbre();
-        testBadges(7);
-    }
-  });
-
-document.getElementById('parametreSon').addEventListener('change', function() {
-    if (this.checked) {
-        document.getElementById('musique').muted = true;
-    } else {
-        document.getElementById('musique').muted = false;
-    }
-});
-
 /*** Tuto ***/
 document.getElementById('level0').addEventListener("click", event =>
 {
@@ -109,7 +91,7 @@ document.getElementById('level0').addEventListener("click", event =>
     document.getElementById("tuto").style.display = 'block';
     document.getElementById("level").style.display = 'none';
     document.getElementById("titreTuto").innerHTML = "Bienvenue à CirCity!"
-    document.getElementById("phraseTuto").innerHTML = "Ce tutoriel va vous apprendre tout ce qu'il faut savoir pour jouer à <b>Choose&Go</b>."
+    document.getElementById("phraseTuto").innerHTML = "Ce tutoriel va t'apprendre tout ce qu'il faut savoir pour jouer à <b>Choose&Go</b>."
     document.getElementById("commencerTuto").hidden = false;
     document.getElementById("pagination").style.display = "none";
     document.getElementById("pagination").innerHTML = "<button id='precedent' hidden=true>&laquo;</button><button id='page1' class='active boutonTuto1'>1</button><button id='page2' class='boutonTuto2'>2</button><button id='page3' class='boutonTuto3'>3</button><button id='page4' class='boutonTuto4'>4</button><button id='page5' class='boutonTuto5'>5</button><button id='page6' class='boutonTuto6'>6</button><button id='suivant'>&raquo;</button>";
@@ -284,7 +266,7 @@ setInterval(function()
         boutons6[i].addEventListener("click", event =>
         {
             document.getElementById("titreTuto").innerHTML = "Vue d'ensemble de CirCity";
-            document.getElementById("phraseTuto").innerHTML = "SUPER MAP DETAILLEE TROP BELLE AVEC DES FLECHES";
+            document.getElementById("phraseTuto").innerHTML = "";
             document.getElementById("precedent").hidden = false;
             document.getElementById("precedent").removeAttribute("class");
             document.getElementById("precedent").classList.add("boutonTuto5");
@@ -322,7 +304,7 @@ document.getElementById("finTuto").addEventListener("click", event =>
     document.getElementById("relireTuto").hidden = false;
     chrono.restart();
     chrono.continuer();
-    socket.emit("initialisationLevel", 0);
+    socket.emit("initialisationLevel", 6);
 });
 
 document.getElementById("relireTuto").addEventListener("click", event =>
@@ -415,9 +397,10 @@ socket.on("initialisationViewLevel", (numeroLevel, tab, secondsPersonne, voiture
     document.getElementById("jauges").style.display = "block";
     document.getElementById("pause").hidden = false;
     document.getElementById("HUD").hidden = false;
-    let str ="<ul>";
+    document.getElementById("HUD").style.display = 'block';
+    let str ="<ul style='list-style:none;'>";
     for(let i = 0;i < tab.length; ++i) {
-        str += "<li id='badge"+(i+1).toString()+"'>badges : " + tab[i].id + " description : "+tab[i].description + "</li>";
+        str += "<li id='badge"+(i+1).toString()+"'>"+ tab[i].description + "</li>";
     }
     str += "</ul>";
     document.getElementById("listeBadges").innerHTML = str;
@@ -450,20 +433,14 @@ socket.on("displayListeBadges", tab => {
     barHumeur.style.width = scoreHumeur + '%';
     scoreFinal += 60;
 
-    let premier = true;
-    let str ="<ul>";
+    let str ="<ul style='list-style:none;'>";
     for(let i = 0; i < tab.length; ++i) {
         if(tab[i].termine == true) {
             valid = true;
-            str += "<li id='badge"+(i+1).toString() + "' style='color:green;'>badge " + tab[i].id + " : " + tab[i].description + "</li>";
+            str += "<li id='badge"+(i+1).toString() + "' style='color:green;'>"+ tab[i].description + "</li>";
         }
         else {
-            str += "<li id='badge"+(i+1).toString() + "'>badge " + tab[i].id + " : " + tab[i].description + "</li>";
-            if(premier)
-            {
-                premier = false;
-                document.getElementById("prochainObjectif").innerHTML = "Maintenant, tente de résoudre cet objectif : <br>" + tab[i].description;
-            }
+            str += "<li id='badge"+(i+1).toString() + "'>"+ tab[i].description + "</li>";
         }
     }
     str += "</ul>";
@@ -525,7 +502,7 @@ document.getElementById("quit").addEventListener("click", event =>
     document.getElementById("level").style.display = 'block';
     document.getElementById("time").style.display = 'none';
     document.getElementById("compteur").style.display = 'none';
-    document.getElementById("jauges").style.display = 'none';
+    document.getElementById("HUD").style.display = 'none';
     document.getElementById("alerteQuit").style.display = 'none';
     socket.emit("QuitterJeu");
     mixer.setTime(0);
@@ -566,7 +543,6 @@ socket.on("pauseAnimationTrain", () => {
 
 socket.on("afficheEvenement", (metro, train, velo, voiture) => 
 {
-    console.log("Nous sommes à la Mairie :)");
     if(!metro && !train && !velo && !voiture)
     {
         document.getElementById("bonheur").hidden = false;
@@ -613,21 +589,18 @@ socket.on("afficheEvenement", (metro, train, velo, voiture) =>
 document.getElementById('cancel').addEventListener("click", event => 
 {
     document.getElementById('information').style.display = 'none';
-    console.log("Nous avons quitté la Mairie");
 });
 
 /*** Kiosque ***/
 
 socket.on("afficheActualite", (score, prochainObjectif, badgeDebloque) => 
 {
-    console.log("Nous sommes au Kiosque :)");
     document.getElementById('actualite').style.display='block';
 });
 
 document.getElementById('close').addEventListener("click", event => 
 {
     document.getElementById('actualite').style.display='none';
-    console.log("Nous avons quitté le Kiosque");
 });
 
 /*** Technicentre ***/
@@ -647,7 +620,6 @@ socket.on("RepTrain", () => {
 document.getElementById('croix').addEventListener("click", event => 
 {
     document.getElementById('reparationTrain').style.display='none';
-    console.log("Nous avons quitté le Technicentre");
 });
 
 /*** Mini-Jeu Technicentre ***/
@@ -1050,6 +1022,8 @@ document.getElementById("metroRepare").addEventListener("click", event =>
         painting = true;
         debutX = e.clientX;
         debutY = e.clientY;
+
+        console.log('x : ' + debutX + ' y : ' + debutY);
     }
 
     function finishedPosition(e) {
@@ -1057,17 +1031,17 @@ document.getElementById("metroRepare").addEventListener("click", event =>
         finX = e.clientX;
         finY = e.clientY;
 
-        if (finX > 1265 && finX < 1370) {
-            if(cable == 'rouge' && finY > 765 && finY < 835) {
+        if (finX > 1250 && finX < 1360) {
+            if(cable == 'rouge' && finY > 860 && finY < 930) {
                 cableRouge = true;
             }
-            else if(cable == 'bleu' && finY > 550 && finY < 615) {
+            else if(cable == 'bleu' && finY > 655 && finY < 710) {
                 cableBleu = true;
             }
-            else if(cable == 'jaune' && finY > 130 && finY < 190) {
+            else if(cable == 'jaune' && finY > 235 && finY < 295) {
                 cableJaune = true;
             }
-            else if(cable == 'vert' && finY > 340 && finY < 400) {
+            else if(cable == 'vert' && finY > 435 && finY < 505) {
                 cableVert = true;
             }
         }
@@ -1105,7 +1079,6 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 
         if(cableRouge && cableVert && cableBleu && cableJaune)
         {
-            console.log("Nous avons réparé le métro");
             cableRouge = false;
             cableVert = false;
             cableBleu = false;
@@ -1125,20 +1098,20 @@ document.getElementById("metroRepare").addEventListener("click", event =>
         contexte.lineWidth = epaisseur;
         contexte.lineCap = 'round';
 
-        if (debutX > 555 && debutX < 630) {
-            if( !cableRouge && debutY > 130 && debutY < 190) {
+        if (debutX > 550 && debutX < 640) {
+            if( !cableRouge && debutY > 235 && debutY < 295) {
                 contexte.strokeStyle = couleurRouge;
                 suiteDraw(e, 'rouge');
             }
-            else if(!cableBleu && debutY > 340 && debutY < 410) {
+            else if(!cableBleu && debutY > 435 && debutY < 505) {
                 contexte.strokeStyle = couleurBleu;
                 suiteDraw(e, 'bleu');
             }
-            else if(!cableJaune && debutY > 550 && debutY < 615) {
+            else if(!cableJaune && debutY > 655 && debutY < 710) {
                 contexte.strokeStyle = couleurJaune;
                 suiteDraw(e, 'jaune');
             }
-            else if(!cableVert && debutY > 765 && debutY < 835) {
+            else if(!cableVert && debutY > 860 && debutY < 930) {
                 contexte.strokeStyle = couleurVert;
                 suiteDraw(e, 'vert');
             }
@@ -1147,10 +1120,10 @@ document.getElementById("metroRepare").addEventListener("click", event =>
 
     function suiteDraw(e, fil) {
         cable = fil;
-        contexte.lineTo(e.clientX -555, e.clientY-110);
+        contexte.lineTo(e.clientX -545, e.clientY -195);
         contexte.stroke();
         contexte.beginPath();
-        contexte.moveTo(e.clientX -555, e.clientY-110);
+        contexte.moveTo(e.clientX -545, e.clientY -195);
     }
 
     canvas.addEventListener('mousedown', startPosition);
@@ -1237,9 +1210,24 @@ document.getElementById('bye').addEventListener("click", event =>
 });
 
 socket.on("ajoutPersonneListeTrain", (tab) => {
-    let str ="<ul>";
+    let str ="<ul style='list-style:none;'>";
     for(let i =0;i<tab.length;i++){
-        str += "<li>Personne : " + (i+1).toString() + " Destination : "+tab[i].destination + " Temps d'attente : " + tab[i].chrono +"</li>";
+        if(tab[i].destination == "Campagne")
+        {
+            str += "<li> Une personne attend pour aller à la "+tab[i].destination + ". Elle partira en voiture dans " + tab[i].chrono +" minutes.</li>";
+        }
+        else if(tab[i].destination == "Ecole")
+        {
+            str += "<li> Une personne attend pour aller à l'"+tab[i].destination + ". Elle partira en voiture dans " + tab[i].chrono +" minutes.</li>";
+        }
+        else if(tab[i].destination == "Magasins")
+        {
+            str += "<li> Une personne attend pour aller aux "+tab[i].destination + ". Elle partira en voiture dans " + tab[i].chrono +" minutes.</li>";
+        }
+        else
+        {
+            str += "<li> Une personne attend pour aller au "+tab[i].destination + ". Elle partira en voiture dans " + tab[i].chrono +" minutes.</li>";
+        }
     }
     str += "</ul>";
     document.getElementById("listePersonnes").innerHTML=str;
@@ -1280,13 +1268,11 @@ socket.on("HoraireMetro2", (temps, panne) =>
 document.getElementById('ciao1').addEventListener("click", event => 
 { 
     document.getElementById('horaireMetro1').style.display = 'none';
-    console.log("Nous avons quitté la station de métro.");
 });
 
 document.getElementById('ciao2').addEventListener("click", event => 
 { 
     document.getElementById('horaireMetro2').style.display = 'none';
-    console.log("Nous avons quitté la station de métro.");
 });
 
 /*** Vélo ***/
@@ -1307,21 +1293,17 @@ socket.on("nombreVelo", (nombreV, nbstation) => {
 document.getElementById('aurevoir1').addEventListener("click", event => 
 { 
     document.getElementById('veloRestants1').style.display = 'none';
-    console.log("Nous avons quitté la station de vélo.");
 });
 
 document.getElementById('aurevoir2').addEventListener("click", event => 
 { 
     document.getElementById('veloRestants2').style.display = 'none';
-    console.log("Nous avons quitté la station de vélo.");
 });
 
 /*** Personne ***/
 
 function evenementClickPersonne(str)
 {
-    console.log("On a cliqué sur une personne.");
-    console.log(str);
     socket.emit("CliquePersonne", str);
 }
 
@@ -1409,7 +1391,6 @@ socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =
     suppPersonne(personne);
     if(louper)
     {
-        console.log(nbVoituresMax);
         calcul = Math.round(100 / nbVoituresMax);
         document.getElementById("calculVoiture").innerHTML = '+' + calcul;
         document.getElementById("calculVoiture").style.color = "red";
@@ -1426,7 +1407,6 @@ socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =
             scoreVoiture = 100;
         }
         barVoiture.style.width = scoreVoiture + '%';
-        console.log("scoreVoiture après voiture envoyé : ", scoreVoiture);
         calcul = Math.round(30 / pasContentMax * 100);
         document.getElementById("calculHumeur").innerHTML = '+' + calcul;
         document.getElementById("calculHumeur").style.color = "red";
@@ -1443,16 +1423,8 @@ socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =
             scoreHumeur = 100;
         }
         barHumeur.style.width = scoreHumeur + '%';
-        console.log("scoreHumeur après voiture envoyé : ", scoreHumeur);
     }
     if(personne.fenetre == true &&  document.getElementsByClassName("personne content").id == idPersonne) {
-        if(louper == true) {
-            console.log(louper,"trop taaaar");
-        }
-        else {
-            console.log(louper,"Envoyer");
-        }
-        
         document.getElementById('DestinationPersonne').style.display='none';
         clearInterval(intervalPerson);
     }
@@ -1515,7 +1487,6 @@ socket.on("Choix", move =>
         {
             scoreHumeur = 100;
         }
-        console.log("scoreHumeur après 4e choix : ", scoreHumeur);
         barHumeur.style.width = scoreHumeur + '%';
     }
     if(move == 3)
@@ -1535,7 +1506,6 @@ socket.on("Choix", move =>
         {
             scoreHumeur = 100;
         }
-        console.log("scoreHumeur après 3e choix : ", scoreHumeur);
         barHumeur.style.width = scoreHumeur + '%';
     }
 });
@@ -1648,15 +1618,15 @@ socket.on("Finito", (numLevel) =>
     }
     switch(numLevel)
     {
-        case '0' : document.getElementById("conseil").innerHTML = "Le transport routier représente 33% des émissions de CO2 en France, c’est le principal responsable du réchauffement climatique.";
+        case '0' : document.getElementById("conseil").innerHTML = "Le transport routier représente 33% des émissions de CO2 en France, c’est le principal responsable du réchauffement climatique. Limiter le trafic en voiture, notamment en ville, est une action que chacun peut réaliser.";
             break;
-        case '1': document.getElementById("conseil").innerHTML = "Pour limiter des couts élevés de déplacement, la congestion du trafic, la pollution de l’aire, le covoiturage est une réelle solution aussi bien pour les trajets domicile-travail que les longues distances.";
+        case '1': document.getElementById("conseil").innerHTML = "Pour limiter des coûts élevés de déplacement, la congestion du trafic et la pollution de l’air, le covoiturage est une réelle solution aussi bien pour les trajets domicile-travail que les longues distances.";
             break;
         case '2': document.getElementById("conseil").innerHTML = "Le vélo demeure le moyen de transport le plus rapide dans les grandes villes pour des distance de 1 à 7km. Il ne pollue pas, ne consomme pas d’énergie fossile et fait du bien à la santé.";
             break;
-        case '3': document.getElementById("conseil").innerHTML = "Le cycliste est moins touché par la pollution. Vous êtes plus exposé à la pollution dans votre voiture que sur votre vélo.";
+        case '3': document.getElementById("conseil").innerHTML = "Après plusieurs recherches réalisées, le cycliste est moins touché par la pollution. Vous êtes plus exposé à la pollution dans votre voiture que sur votre vélo.";
             break;
-        case '4': document.getElementById("conseil").innerHTML = "Adapter le moyen de transport a votre trajet est un « plus » pour la planète. Un déplacement en train émet jusqu’à 10 fois moins de C02 que le même trajet en voiture.";
+        case '4': document.getElementById("conseil").innerHTML = "Adapter le moyen de transport à votre trajet est un « plus » pour la planète. Un déplacement en train émet jusqu’à 10 fois moins de C02 que le même trajet en voiture.";
             break;
         case '5' : document.getElementById("conseil").innerHTML = "En ville, les transports en communs sont aussi rapides que la voiture, ils polluent moins et évitent le stress des embouteillages. Un passager de métro consomme environ 10 fois moins d’énergie qu’en utilisant sa voiture.";
             break;
@@ -1687,7 +1657,7 @@ document.getElementById("finRecommencer").addEventListener("click", event =>
 document.getElementById("finQuitter").addEventListener("click", event =>
 {
     document.getElementById("level").style.display = 'block';
-    document.getElementById("jauges").style.display = 'none';
+    document.getElementById("HUD").style.display = 'none';
     document.getElementById("gameOver").style.display = 'none';
     socket.emit("QuitterJeu");
     mixer.setTime(0);

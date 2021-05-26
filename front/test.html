@@ -33,7 +33,7 @@
         <div id="HUD" hidden=true>
             <div class="info">
                 <div id=time>
-                    <p>16h 00m</p>
+                    <p>16h00</p>
                 </div>
              
                 <!-- Bouton Pause -->
@@ -41,7 +41,7 @@
     
                 <!-- compteur personnes -->
                 <div id="compteur" class="compteur">
-                    <p>Vous avez envoyé <span id="personnes"></span>/<span id="personnesMax"></span> personnes</p>
+                    <p>Tu as envoyé <span id="personnes"></span> personnes sur <span id="personnesMax"></span>.</p>
                 </div>
 
                 <div id="NouveauBadge" class="newBadge">+1 badge</div>
@@ -76,12 +76,12 @@
                     <div class="destPersonne">
                         <br><br>
                         <div>Je voudrais aller <span id="dest"></span></div>
-                        <div>Attention ! Cette personne va prendre sa voiture dans <span id="sec"></span> minutes !</div>
+                        <div>Je partirai en voiture dans <span id="sec"></span> minutes !</div>
                         <div id="transport">
-                            <button id="transportPied">Pied</button>
-                            <button id="transportVelo">Vélo</button>
-                            <button id="transportMetro">Métro</button>
-                            <button id="transportTrain">Train</button>
+                            <button class="petitBouton4" id="transportPied">Pied</button>
+                            <button class="petitBouton4" id="transportVelo">Vélo</button>
+                            <button class="petitBouton4" id="transportMetro">Métro</button>
+                            <button class="petitBouton4" id="transportTrain">Train</button>
                         </div>
                     </div>
                 </div>
@@ -121,28 +121,21 @@
         <button class="boutonMilieu" id="quitterJeu">Quitter le jeu</button>
     </div>
 
+
+    <audio id="musique" autoplay loop> <source src="/son/musique.mp3" type="audio/mp3"> </audio>
+    <audio id="musique_mout" autoplay muted=true loop> <source src="/son/mouton.mp3" type="audio/mp3" > </audio>
+    <audio id="musique_chien" autoplay muted=true loop> <source src="/son/chien.mp3" type="audio/mp3" > </audio>
     <!-- Menu Paramètre -->
     <div id="menuParametre" class="menuParametre">
         <div class="boutonOption">
-            Musique : 
-            <audio id="musique" autoplay loop> <source src="musique.mp3" type="audio/mp3"> </audio>
-                <audio id="musique_mout" autoplay muted=true loop> <source src="mouton.mp3" type="audio/mp3" > </audio>
-                    <audio id="musique_chien" autoplay muted=true loop> <source src="chien.mp3" type="audio/mp3" > </audio>
-                <!-- <button onclick="document.getElementById('musique').muted = true;">Mute</button>
-            <button onclick="document.getElementById('musique').muted = false;">Unmute</button> -->
-            <p>Son :</p>
-            <div class="onoffswitch">
-              <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="parametreSon" tabindex="0" checked>
-              <label class="onoffswitch-label" for="myonoffswitch"></label>
-            </div>
+            <button class="petitBouton" onclick="document.getElementById('musique').muted = false;">Avec</button> ou 
+            <button class="petitBouton" onclick="document.getElementById('musique').muted = true;">sans</button> son
         </div>
         <br><br>
         <div class="boutonOption">
-            Ombres :
-            <div class="onoffswitch">
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="parametreOmbre" tabindex="0" checked>
-                <label class="onoffswitch-label" for="myonoffswitch"></label>
-            </div>
+            <button class="petitBouton" onclick="activeOmbre();">Avec</button> ou 
+            <button class="petitBouton" onclick="desactiveOmbre();testBadges(7);">sans</button> ombre
+
         </div>
         <br><br>
         <button class="boutonMilieu"  id="retour">Retour</button>
@@ -150,27 +143,27 @@
 
      <!-- Alertes -->
      <div id="alerteRetry" class="alerte">
-        <p>Attention ! En recommençant le niveau vous perdrez la progression en cours.</p>
-        <button id="annulerRetry">Annuler</button>
-        <button id="retry">Recommencer le niveau</button>
+        <p style="font-size:30px"><b>Attention ! En recommençant le niveau tu perdras la progression en cours.</b></p>
+        <button class="btnAlerte" id="annulerRetry">Annuler</button>
+        <button class="btnAlerte" id="retry">Rejouer</button>
     </div>
     <div id="alerteQuit" class="alerte">
-        <p>Attention ! En quittant le niveau vous perdrez la progression en cours.</p>
-        <button id="annulerQuit">Annuler</button>
-        <button id="quit">Quitter le niveau</button>
+        <p style="font-size:30px"><b>Attention ! En quittant le niveau tu perdras la progression en cours.</b></p>
+        <button class="btnAlerte" id="annulerQuit">Annuler</button>
+        <button class="btnAlerte" id="quit">Quitter</button>
     </div>
 
     <!-- Game Over -->
-    <div id="gameOver" class="menuPause">
-        <h1>Vous avez <span id="result"></span>!</h1><br>
+    <div id="gameOver">
+        <h1>Tu as <span id="result"></span>!</h1><br>
         <img id="etoile1" class="etoile" src="pictures/star1.png"></img>
         <img id="etoile2" class="etoile" src="pictures/star1.png"></img>
         <img id="etoile3" class="etoile" src="pictures/star1.png"></img>
         <p id="scoreFinal" style="font-size: 100px"><span id="score"></span> points</p>
-        <p id="conseil" style="font-size: 40px;"></p>
-        <button id="finReessayer" hidden>Réessayer</button>
-        <button id="finRecommencer" hidden>Rejouer</button>
-        <button id="finQuitter" hidden>Revenir au menu principal</button>
+        <b id="conseil" style="font-size: 40px;"></b>
+        <button class="btnAlerte" id="finReessayer" hidden>Rejouer</button>
+        <button class="btnAlerte" id="finRecommencer" hidden>Rejouer</button>
+        <button class="btnAlerte" id="finQuitter" hidden>Menu</button>
     </div>
 
     <!-- Tuto -->
@@ -232,9 +225,6 @@
             <div class="pancarte">
                 <h2>Voici les actualités du <strong>Kiosque</strong> :</h2>
                 <br><br>
-                <div id="score"></div> <br>
-                <div id="badgeDebloque"></div> <br>
-                <div id="prochainObjectif"></div>
                 <div id="listeBadges"></div>
             </div>
         </div>
@@ -250,14 +240,14 @@
                 <h2>Tableau des missions du <strong>Technicentre</strong> :</h2>
                 <br><br>
                 <div id="parfait" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les trains.</div> 
-                <div id="probTrain" hidden=true><button id="trainRepare">Réparer le train</button></div> 
-                <div id="jeuTechnicentreReussi" hidden=true>Vous avez réparé le train.</div> 
+                <div id="probTrain" hidden=true><button class="petitBouton2" id="trainRepare">Réparer le train</button></div> 
+                <div id="jeuTechnicentreReussi" hidden=true>Tu as réparé le train.</div> 
             </div>
         </div>
     </div>
 
      <!--Mini-Jeu Technicentre-->
-     <div id="miniJeuTechnicentre" class="menuPause">
+     <div id="miniJeuTechnicentre" class="miniJeu">
         <div class="technicentreContent">
             <button id="technicentreClose" class="btn btn-outline-dark cancel">X</button>
             <div class="box unT">
@@ -286,14 +276,14 @@
                 <h2>Résolution de l' <strong>Embouteillage</strong> :</h2>
                 <br><br>
                 <div id="joie" hidden=false>Le trafic est fluide pour le moment.</div> 
-                <div id="probVoiture" hidden=true><button id="traficOk">Fluidifier le trafic</button></div> 
-                <div id="jeuParkingReussi" hidden=true>Vous avez fluidifier le trafic.</div> 
+                <div id="probVoiture" hidden=true><button class="petitBouton3" id="traficOk">Fluidifier le trafic</button></div> 
+                <div id="jeuParkingReussi" hidden=true>Tu as fluidifié le trafic.</div> 
             </div>
         </div>
     </div>
 
     <!-- Mini-Jeu Parking -->
-    <div id="miniJeuParking" class="menuPause">
+    <div id="miniJeuParking" class="miniJeu">
         <div class="parkingContent" style="padding-left: 26.8%; padding-top: 4.6%; text-align:left;">
             <button id="parkingClose" class="btn btn-outline-dark cancel">X</button>
             <div class="box unP">
@@ -329,14 +319,14 @@
                 <h2><strong>Garage</strong> de maintien du stock de vélo :</h2>
                 <br><br>
                 <div id="noStress" hidden=false>Il y a assez de vélo.</div> 
-                <div id="probVelo" hidden=true><button id="veloRempli">Remettre des vélos</button></div> 
-                <div id="jeuGarageReussi" hidden=true>Vous avez remis des vélos.</div>
+                <div id="probVelo" hidden=true><button class="petitBouton3" id="veloRempli">Remettre des vélos</button></div> 
+                <div id="jeuGarageReussi" hidden=true>Tu as remis des vélos.</div>
             </div>
         </div>
     </div> 
 
     <!-- Mini-Jeu Garage -->
-    <div id="miniJeuGarage" class="menuPause">
+    <div id="miniJeuGarage" class="miniJeu">
         <button id="garageClose" class="btn btn-outline-dark cancel">X</button>
         <div class="grid-container">
             <div class="grid-item item1"></div>
@@ -396,14 +386,14 @@
                 <h2>Affiche des tâches de l' <strong>Atelier</strong> :</h2>
                 <br><br>
                 <div id="relax" hidden=false>Actuellement, il n'y a aucun soucis technique concernant les métros.</div> 
-                <div id="probMetro" hidden=true><button id="metroRepare">Réparer le métro</button></div> 
-                <div id="jeuAtelierReussi">Vous avez réparé le métro.</div>
+                <div id="probMetro" hidden=true><button class="petitBouton2" id="metroRepare">Réparer le métro</button></div> 
+                <div id="jeuAtelierReussi">Tu as réparé le métro.</div>
             </div>
         </div>
     </div> 
 
     <!-- Mini-Jeu Atelier -->
-    <div id="miniJeuAtelier" style="z-index:30" class="menuPause">
+    <div id="miniJeuAtelier" style="z-index:30" class="miniJeu">
         <button id="atelierClose" class="btn btn-outline-dark cancel">X</button>
         <img src="./pictures/cable.png" id="image">
         <canvas id="canvas" allow="autoplay"></canvas>
