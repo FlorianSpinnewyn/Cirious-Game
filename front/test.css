@@ -5,7 +5,7 @@
 #game {
   z-index: 1;
   position: fixed;
-  top:0;
+  top: 0;
 }
 
 #time {
@@ -19,19 +19,19 @@
 
 #DestinationPersonne {
   position : fixed;
-  left:2%;
-  bottom:2%;
+  left: 2%;
+  bottom: 2%;
   width: 500px; 
   height: 500px;
   display: none;
   background-color: rgba(191, 191, 191, 0.50);
 }
 
-.destPersonne{
+.destPersonne {
   position : fixed;
-  left:11%;
-  bottom:36%;
-  text-align:center;
+  left: 11%;
+  bottom: 36%;
+  text-align: center;
 }
 
 .fenetre {
@@ -43,7 +43,7 @@
   overflow: auto;
   background-color: rgba(191, 191, 191, 0.50);
   padding: 8% 15%;
-  text-align:center;
+  text-align: center;
   background-repeat: no-repeat;
 }
 
@@ -235,53 +235,56 @@
 .tuto {
   display: none;
   position: fixed;
-  border-radius:75px;
+  border-radius: 75px;
   margin: 5%;
-  z-index:2;
+  z-index: 2;
   height: 74%;
-  width:90%;
-  padding:4%;
+  width: 90%;
+  padding: 4%;
   text-align: center;
-  font-size:20px;
+  font-size: 20px;
   background-color:rgba(191, 191, 191, 0.8);
 }
 
-#phraseTuto{
-  position:relative;
+#phraseTuto {
+  position: relative;
 }
 
-#tuto1{
-  margin-right:10rem;
+#tuto1 {
+  margin-right: 10rem;
 }
 
-#tuto3{
-  margin-left:10rem;
+#tuto3 {
+  margin-left: 10rem;
 }
 
-#tuto8{
-  margin-right:10rem;
+#tuto8 {
+  margin-right: 10rem;
 }
 
-#tuto6, #tuto7{
-  position:absolute;
-  top:25px;
-  left:30px;
-}
-#tuto6{
-  z-index:2;
-  margin-top:15%;
-}
-#tuto7{
-  z-index:2;
-  margin-left:79%;
+#tuto6, #tuto7 {
+  position: absolute;
+  top: 25px;
+  left: 30px;
 }
 
-#tuto9{
-  margin-left:10rem;
+#tuto6 {
+  z-index: 2;
+  margin-top: 15%;
 }
 
-#imgPage2{
-  margin-bottom:5rem;
+#tuto7 {
+  z-index: 2;
+  margin-left: 85%;
+  margin-top: 7rem;
+}
+
+#tuto9 {
+  margin-left: 10rem;
+}
+
+#imgPage2 {
+  margin-bottom: 5rem;
 }
 
 .boutonCoucou {

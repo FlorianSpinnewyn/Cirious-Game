@@ -295,6 +295,7 @@ setInterval(function()
         document.getElementById("pagination").style.display = "none";
         document.getElementById("finTuto").hidden = false;
         document.getElementById("finirTuto").style.display = "none";
+        document.getElementById("imgPage6").hidden = true;
     });
 }, 100);
 
@@ -327,6 +328,12 @@ document.getElementById("relireTuto").addEventListener("click", event =>
     document.getElementById("pagination").style.display = "flex";
     document.getElementById("relireTuto").hidden = true;
     document.getElementById("closeTuto").hidden = false;
+    document.getElementById("imgPage2").hidden = true;
+    document.getElementById("imgPage3").hidden = true;
+    document.getElementById("tuto6").hidden = true;
+    document.getElementById("tuto7").hidden = true;
+    document.getElementById("imgPage5").hidden = true;
+    document.getElementById("imgPage6").hidden = true;
 });
 
 document.getElementById("closeTuto").addEventListener("click", event =>
@@ -431,7 +438,7 @@ socket.on("displayListeBadges", tab => {
         scoreHumeur = 100;
     }
     barHumeur.style.width = scoreHumeur + '%';
-    scoreFinal += 60;
+    scoreFinal += 100;
 
     let str ="<ul style='list-style:none;'>";
     for(let i = 0; i < tab.length; ++i) {
@@ -504,6 +511,7 @@ document.getElementById("quit").addEventListener("click", event =>
     document.getElementById("compteur").style.display = 'none';
     document.getElementById("HUD").style.display = 'none';
     document.getElementById("alerteQuit").style.display = 'none';
+    document.getElementById("relireTuto").hidden = true;
     socket.emit("QuitterJeu");
     mixer.setTime(0);
 });
@@ -522,7 +530,7 @@ document.getElementById("annulerQuit").addEventListener("click", event =>
 
 socket.on("ReinitialisationLevel", (idlevel) =>
 {
-    if(idlevel == 0)
+    if(idlevel == 6)
     {
         document.getElementById("relireTuto").hidden = false;
     }
@@ -1022,8 +1030,6 @@ document.getElementById("metroRepare").addEventListener("click", event =>
         painting = true;
         debutX = e.clientX;
         debutY = e.clientY;
-
-        console.log('x : ' + debutX + ' y : ' + debutY);
     }
 
     function finishedPosition(e) {
@@ -1148,7 +1154,7 @@ document.getElementById('partir').addEventListener("click", event =>
 
 /*** Gare ***/
 
-socket.on("HoraireTrain", (temps, attente, panne) =>
+socket.on("HoraireTrain", (temps, panne) =>
 {
     if(panne)
     {
@@ -1160,7 +1166,7 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
     {
         if(((mixer.time >= 0) && (mixer.time <= 30)) || ((mixer.time >= 45) && (mixer.time <= 75)) || ((mixer.time >= 90) && (mixer.time <= 120)) || ((mixer.time >= 135) && (mixer.time <= 165)))
         {
-            minutes = Math.floor(180 - mixer.time) / 2;
+            minutes = Math.floor((180 - mixer.time) / 2);
             document.getElementById("tempsTrainArrive").innerHTML = minutes;
             document.getElementById("prochainTrain").hidden = false;
             document.getElementById("trainEnGare").hidden = true;
@@ -1187,7 +1193,6 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
                     {
                         scoreVoiture = 100;
                     }
-                    console.log("scoreVoiture après train vide parti : ", scoreVoiture);
                     barVoiture.style.width = scoreVoiture + '%';
                 }
                 personnesDansLeTrain = 0;
@@ -1198,7 +1203,6 @@ socket.on("HoraireTrain", (temps, attente, panne) =>
         }
         if((mixer.time >= 165) && (mixer.time <= 180)){
             socket.emit("videGare");
-            console.log("videe")
         }
     }
 });
@@ -1231,6 +1235,27 @@ socket.on("ajoutPersonneListeTrain", (tab) => {
     }
     str += "</ul>";
     document.getElementById("listePersonnes").innerHTML=str;
+});
+
+socket.on("PersonneEnvoyeTrain", () =>
+{
+    personnesDansLeTrain += 1;
+    calcul = Math.round(30 / pasContentMax * 100);
+    document.getElementById("calculHumeur").innerHTML = '+' + calcul;
+    document.getElementById("calculHumeur").style.color = "red";
+    document.getElementById("calculHumeur").style.visibility = "visible";
+    document.getElementById("calculHumeur").classList.add("augmenteJauge");
+    setTimeout(function()
+    {
+        document.getElementById("calculHumeur").style.visibility = "hidden";
+        document.getElementById("calculHumeur").classList.remove("augmenteJauge");
+    }, 2000);
+    scoreHumeur += calcul;
+    if(scoreHumeur > 100)
+    {
+        scoreHuemur = 100;
+    }
+    barHumeur.style.width = scoreHumeur + '%';
 });
 
 /*** Métro ***/
@@ -1319,7 +1344,6 @@ socket.on("AfficheDestination", (depart,destination, idPerso, panneTrain, panneM
     RemoveFlecheTransport()
     DisplayFlecheTransport(depart);
     removeFlecheDest();
-    console.log(destination);
     scene.getObjectByName(destination).visible = true;
     socket.emit("secondePersonne", idPerso);
     if(panneTrain)
@@ -1454,7 +1478,6 @@ document.getElementById("transport").addEventListener("click", event =>
                 document.getElementById("calculVoiture").classList.remove("augmenteJauge");
             }, 2000);
             scoreVoiture -= calcul;
-            console.log("scoreVoiture après avoir choisi pied : ", scoreVoiture);
             barVoiture.style.width = scoreVoiture + '%';
         }
     }
@@ -1538,12 +1561,12 @@ socket.on("Finito", (numLevel) =>
         let tmp = document.getElementById("barVoiture").style.width;
         if(tmp.charAt(0) == '0')
         {
-            scoreFinal = 100 * 10;
+            scoreFinal += 100 * 10;
         }  
         else
         {
             tmp = tmp.split('%');
-            scoreFinal = (100 - tmp[0]) * 10;
+            scoreFinal += (100 - tmp[0]) * 10;
         }
         tmp = document.getElementById("barHumeur").style.width;
         if(tmp.charAt(0) == '0')
@@ -1557,40 +1580,45 @@ socket.on("Finito", (numLevel) =>
         }
         document.getElementById("score").innerHTML  = scoreFinal;
         document.getElementById("scoreFinal").hidden = false;
-        if(scoreFinal > 1000)
+        setTimeout(function() 
         {
-            document.getElementById("etoile1").src = "pictures/star2.png";
-        }
-        else
-        {
-            document.getElementById("finRecommencer").hidden = false;
-            document.getElementById("finQuitter").hidden = false;
-        }
-        if(scoreFinal > 1400)
-        {
-            setTimeout(function() 
+            if(scoreFinal > 1000)
             {
-                document.getElementById("etoile2").src = "pictures/star2.png";
-                if(scoreFinal > 1800)
+                document.getElementById("etoile1").src = "pictures/star2.png";
+            }
+            else
+            {
+                document.getElementById("finRecommencer").hidden = false;
+                document.getElementById("finQuitter").hidden = false;
+            }
+            if(scoreFinal > 1400)
+            {
+                setTimeout(function() 
                 {
-                    setTimeout(function() 
+                    document.getElementById("etoile2").src = "pictures/star2.png";
+                    if(scoreFinal > 1800)
                     {
-                        document.getElementById("etoile3").src = "pictures/star2.png";
+                        setTimeout(function() 
+                        {
+                            document.getElementById("etoile3").src = "pictures/star2.png";
+                            document.getElementById("finRecommencer").hidden = false;
+                            document.getElementById("finQuitter").hidden = false;
+
+                        }, 1000);
+                    }
+                    else
+                    {
                         document.getElementById("finRecommencer").hidden = false;
-                    }, 1000);
-                }
-                else
-                {
-                    document.getElementById("finRecommencer").hidden = false;
-                    document.getElementById("finQuitter").hidden = false;
-                }
-            }, 1000);
-        }
-        else
-        {
-            document.getElementById("finRecommencer").hidden = false;
-            document.getElementById("finQuitter").hidden = false;
-        }
+                        document.getElementById("finQuitter").hidden = false;
+                    }
+                }, 1000);
+            }
+            else
+            {
+                document.getElementById("finRecommencer").hidden = false;
+                document.getElementById("finQuitter").hidden = false;
+            }
+        }, 1000);
         
         switch(numLevel)
         {
@@ -1618,7 +1646,7 @@ socket.on("Finito", (numLevel) =>
     }
     switch(numLevel)
     {
-        case '0' : document.getElementById("conseil").innerHTML = "Le transport routier représente 33% des émissions de CO2 en France, c’est le principal responsable du réchauffement climatique. Limiter le trafic en voiture, notamment en ville, est une action que chacun peut réaliser.";
+        case '6' : document.getElementById("conseil").innerHTML = "Le transport routier représente 33% des émissions de CO2 en France, c’est le principal responsable du réchauffement climatique. Limiter le trafic en voiture, notamment en ville, est une action que chacun peut réaliser.";
             break;
         case '1': document.getElementById("conseil").innerHTML = "Pour limiter des coûts élevés de déplacement, la congestion du trafic et la pollution de l’air, le covoiturage est une réelle solution aussi bien pour les trajets domicile-travail que les longues distances.";
             break;
@@ -1657,6 +1685,7 @@ document.getElementById("finRecommencer").addEventListener("click", event =>
 document.getElementById("finQuitter").addEventListener("click", event =>
 {
     document.getElementById("level").style.display = 'block';
+    document.getElementById("relireTuto").hidden = true;
     document.getElementById("HUD").style.display = 'none';
     document.getElementById("gameOver").style.display = 'none';
     socket.emit("QuitterJeu");
@@ -1673,7 +1702,6 @@ function desactiveOmbre() {
 }
 
 function ajoutPersonne(personne) {
-    console.log(personne.depart);
     scene.getObjectByName(personne.depart).visible = true;
 }
 
@@ -1694,29 +1722,23 @@ function removeFlecheDest() {
 function DisplayFlecheTransport(depart) {
     scene.getObjectByName("flecheGare").visible = true;
     let tab = depart.split(".");
-    console.log(tab);
     if((tab[0] == "0") && (tab[1] == "7")) {
-        console.log("iciii1");
         scene.getObjectByName("flecheVelo2").visible = true;
         scene.getObjectByName("flecheMetro1").visible = true;
     }
     else if((tab[0] == "1") && (tab[1] == "7")) {
-        console.log("iciii2");
         scene.getObjectByName("flecheVelo1").visible = true;
         scene.getObjectByName("flecheMetro1").visible = true;
     }
     else if((tab[0] == "1") && (tab[1] == "8")) {
-        console.log("iciii3");
         scene.getObjectByName("flecheVelo1").visible = true;
         scene.getObjectByName("flecheMetro1").visible = true;
     }
     else if((tab[0] == "1") && (tab[1] == "9")) {
-        console.log("iciii4");
         scene.getObjectByName("flecheVelo1").visible = true;
         scene.getObjectByName("flecheMetro1").visible = true;
     }
     else {
-        console.log("iciii");
         scene.getObjectByName("flecheVelo1").visible = true;
         scene.getObjectByName("flecheMetro3").visible = true;
     }

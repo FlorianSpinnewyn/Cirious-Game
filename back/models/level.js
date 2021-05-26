@@ -44,7 +44,6 @@ class Level {
         for(let i = 0; i < this.nbEvenements; ++i) {
             this.tabEvenement.push((i+1)*inter);
         }
-        console.log(this.tabEvenement);
     }
 
     reset()
@@ -65,10 +64,10 @@ class Level {
         this.city.gares[1].temps = 30;
         this.city.gares[2].temps = 45;
         this.city.gares[3].temps = 60;
-        this.city.gares[0].attente = 7;
+        /*this.city.gares[0].attente = 7;
         this.city.gares[1].attente = 7;
         this.city.gares[2].attente = 7;
-        this.city.gares[3].attente = 7;
+        this.city.gares[3].attente = 7;*/
         this.city.stationsMetro[0].temps = 2;
         this.city.stationsMetro[9].temps = 7;
         this.city.stationsVelo[0].velosLibre = 5;
