@@ -6,7 +6,7 @@ class Parking {
         this.z = 3;
     }
     
-    evenementRepare(){
+    evenementRepare() {
         this.repare = true;
     }
 

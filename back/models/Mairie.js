@@ -12,7 +12,7 @@ class Mairie {
     evenementTrain() 
     {
         let isPanneTrain = Math.floor(Math.random() * 100);
-        if(isPanneTrain < 50)
+        if(isPanneTrain < 100)
         {
             this.panneTrain = true;
         }
@@ -21,7 +21,7 @@ class Mairie {
     evenementMetro() 
     {
         let isPanneMetro = Math.floor(Math.random() * 100);
-        if(isPanneMetro < 50)
+        if(isPanneMetro < 100)
         {
             this.panneMetro = true;
         }

@@ -14,6 +14,7 @@ const session = require("express-session")(
     secure: false
   }                           
 });
+
 const sharedsession = require("express-socket.io-session");
 const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
@@ -316,8 +317,8 @@ io.on('connection', (socket) =>
     socket.on("stockRempli", () => {
         myLevel.city.garage.evenementRepare();
         myLevel.city.mairie.manqueVelo = false;
-        myLevel.city.stationsVelo[2].velosLibre = 7;
-        myLevel.city.stationsVelo[0].velosLibre = 5;
+        myLevel.city.stationsVelo[2].velosLibre = 3;
+        myLevel.city.stationsVelo[0].velosLibre = 3;
     });
 
     /*** Atelier ***/
@@ -379,7 +380,7 @@ io.on('connection', (socket) =>
                     myLevel.personnesEnvoye++;
                     myLevel.personneVoiture++;
                     socket.emit("PersonneDisparait", i, myLevel.personnes[i], true, myLevel.personnesEnvoye);
-                    if(myLevel.city.mairie.evenementEmbouteillage(myLevel.personneVoiture)){
+                    if(myLevel.city.mairie.evenementEmbouteillage(myLevel.personneVoiture)) {
                         socket.emit("afficheFlechePanne", "flecheParking");
                         myLevel.personneVoiture = 0;
                     }

@@ -63,8 +63,8 @@ class Level {
         this.city.gares[0].tabAttente = [];
         this.city.stationsMetro[0].temps = 2;
         this.city.stationsMetro[9].temps = 7;
-        this.city.stationsVelo[0].velosLibre = 5;
-        this.city.stationsVelo[2].velosLibre = 7;
+        this.city.stationsVelo[0].velosLibre = 3;
+        this.city.stationsVelo[2].velosLibre = 3;
     }
 }
 

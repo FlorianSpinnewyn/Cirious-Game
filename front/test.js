@@ -291,7 +291,7 @@ setInterval(function()
     document.getElementById("finirTuto").addEventListener("click", event =>
     {
         document.getElementById("titreTuto").innerHTML = "Tu as toutes les cartes en main !";
-        document.getElementById("phraseTuto").innerHTML = "Le tutoriel est terminé... Maintenant c'est à toi de jouer ! Accède au jeu pour vérifier que tu as bien tout compris à Choose&Go. Tu peux relire ce tutoriel à tout moment en cliquant sur l'icone en haut à droite.";
+        document.getElementById("phraseTuto").innerHTML = "Le tutoriel est terminé... Maintenant c'est à toi de jouer ! <br> Accède au jeu pour vérifier que tu as bien tout compris à Choose&Go. <br><br>Tu peux relire ce tutoriel à tout moment en cliquant sur l'icone en haut à droite.";
         document.getElementById("pagination").style.display = "none";
         document.getElementById("finTuto").hidden = false;
         document.getElementById("finirTuto").style.display = "none";
@@ -338,6 +338,12 @@ document.getElementById("relireTuto").addEventListener("click", event =>
 
 document.getElementById("closeTuto").addEventListener("click", event =>
 {
+    document.getElementById("imgPage2").hidden = true;
+    document.getElementById("imgPage3").hidden = true;
+    document.getElementById("tuto6").hidden = true;
+    document.getElementById("tuto7").hidden = true;
+    document.getElementById("imgPage5").hidden = true;
+    document.getElementById("imgPage6").hidden = true;
     document.getElementById("relireTuto").hidden = false;
     document.getElementById("closeTuto").hidden = true;
     document.getElementById("tuto").style.display = "none";

@@ -37,6 +37,7 @@
 .fenetre {
   display: none;
   position: fixed;
+  top: 0;
   z-index: 30;
   width: 100%; 
   height: 100%; 
@@ -226,10 +227,24 @@
 
 .relireTuto {
   position: relative;
-  float: right;
-  margin-right: 1%;
+  float: left;
+  margin:4% 2%;
   z-index: 2;
   cursor: help;
+
+  background: transparent;
+  background-color: #333333;
+  outline: none;
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  width: 100px;
+  height: 40px;
+  border: none;
+  padding: 5px;
+  overflow: hidden;
+  margin-top:5px;
+  font-size: 15px;
 }
 
 .tuto {
@@ -240,7 +255,7 @@
   z-index: 2;
   height: 74%;
   width: 90%;
-  padding: 4%;
+  padding: 3%;
   text-align: center;
   font-size: 20px;
   background-color:rgba(191, 191, 191, 0.8);
@@ -299,11 +314,16 @@
   padding: 25px 13px;
   overflow: hidden;
 }
+#finirTuto {
+  position:fixed;
+  bottom :30%;
+  right:15%;
+}
 
 .pagination {
   display: none;
   position: fixed;
-  bottom: 23%;
+  bottom: 19%;
 }
 
 .pagination button {
@@ -1289,5 +1309,10 @@
   border: none;
   padding: 5px;
   overflow: hidden;
+  margin-top:5px;
   font-size: 15px;
+}
+.petitBouton4:disabled{
+  background-color: #cacaca;
+  cursor:not-allowed;
 }
