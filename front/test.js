@@ -515,8 +515,7 @@ document.getElementById("quit").addEventListener("click", event =>
     socket.emit("QuitterJeu");
     mixer.setTime(0);
     RemoveFlecheTransport();
-    RemoveFlecheTransport()
-    RemoveFlechePanne()
+    RemoveFlechePanne();
 });
 
 document.getElementById("annulerRetry").addEventListener("click", event =>
@@ -1157,8 +1156,9 @@ document.getElementById('partir').addEventListener("click", event =>
 
 /*** Gare ***/
 
-socket.on("HoraireTrain", (temps, panne) =>
+socket.on("HoraireTrain", (panne) =>
 {
+    let temps = mixer.time % 180;
     if(panne)
     {
         document.getElementById("prochainTrain").hidden = true;
@@ -1167,17 +1167,22 @@ socket.on("HoraireTrain", (temps, panne) =>
     }
     else
     {
-        if((mixer.time >= 0) && (mixer.time <= 165))
+        if((temps >= 0) && (temps < 165))
         {
-            minutes = Math.floor((180 - mixer.time) / 2)-15;
+            minutes = Math.floor((165 - temps) / 2);
             document.getElementById("tempsTrainArrive").innerHTML = minutes;
             document.getElementById("prochainTrain").hidden = false;
             document.getElementById("trainEnGare").hidden = true;
             document.getElementById("attenteTrain").hidden = true;
         }
-        else
-        {
-            if(temps == 15 && (chrono.heure != 16 || chrono.minute != 0))
+        if((temps >= 165) && (temps < 180)) {
+            document.getElementById("prochainTrain").hidden = true;
+            minutes = Math.floor((180 - temps) / 2);
+            document.getElementById("tempsTrainAttente").innerHTML = minutes;
+            document.getElementById("trainEnGare").hidden = false;
+            document.getElementById("attenteTrain").hidden = true;
+            socket.emit("videGare");
+            if(temps == 180)
             {
                 if(personnesDansLeTrain == 0)
                 {
@@ -1200,12 +1205,6 @@ socket.on("HoraireTrain", (temps, panne) =>
                 }
                 personnesDansLeTrain = 0;
             }
-            document.getElementById("prochainTrain").hidden = true;
-            document.getElementById("trainEnGare").hidden = false;
-            document.getElementById("attenteTrain").hidden = true;
-        }
-        if((mixer.time >= 165) && (mixer.time <= 180)){
-            socket.emit("videGare");
         }
     }
 });
@@ -1242,6 +1241,7 @@ socket.on("ajoutPersonneListeTrain", (tab) => {
 
 socket.on("PersonneEnvoyeTrain", () =>
 {
+    console.log("personneEnvoyeTrain");
     personnesDansLeTrain += 1;
     calcul = Math.round(30 / pasContentMax * 100);
     document.getElementById("calculHumeur").innerHTML = '+' + calcul;
@@ -1344,7 +1344,7 @@ socket.on("PersonneApparue", (idPersonne,personne) =>
 socket.on("AfficheDestination", (depart,destination, idPerso, panneTrain, panneMetro, manqueVelo) => 
 {
     clearInterval(intervalPerson);
-    RemoveFlecheTransport()
+    RemoveFlecheTransport();
     DisplayFlecheTransport(depart);
     removeFlecheDest();
     scene.getObjectByName(destination).visible = true;
@@ -1413,8 +1413,6 @@ let calcul = 0;
 socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =>
 {
     document.getElementById("personnes").innerHTML = personnesEnvoye;
-    RemoveFlecheTransport();
-    removeFlecheDest();
     suppPersonne(personne);
     if(louper)
     {
@@ -1452,6 +1450,8 @@ socket.on("PersonneDisparait", (idPersonne, personne, louper, personnesEnvoye) =
         barHumeur.style.width = scoreHumeur + '%';
     }
     if(personne.fenetre == true &&  document.getElementsByClassName("personne content").id == idPersonne) {
+        RemoveFlecheTransport();
+        removeFlecheDest();
         document.getElementById('DestinationPersonne').style.display='none';
         clearInterval(intervalPerson);
     }

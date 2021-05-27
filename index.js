@@ -344,12 +344,7 @@ io.on('connection', (socket) =>
     {
         if(pause == false)
         {
-            if(myLevel.city.mairie.panneTrain == false)
-            {
-                myLevel.city.gares[0].count();
-            }
-            socket.emit("HoraireTrain", myLevel.city.gares[0].temps, myLevel.city.mairie.panneTrain);
-            
+            socket.emit("HoraireTrain", myLevel.city.mairie.panneTrain);
             if(myLevel.city.mairie.panneMetro == false)
             {
                 myLevel.city.stationsMetro[0].count();
@@ -479,9 +474,6 @@ io.on('connection', (socket) =>
 
     socket.on("videGare", () => {
         if(myLevel.city.gares[0].tabAttente.length > 0) {
-            /*for(let i = 0; i < myLevel.city.gares[0].tabAttente.length; i++){
-                //envoyer
-            }*/
             myLevel.city.gares[0].tabAttente.splice(0, myLevel.city.gares[0].tabAttente.length)
             socket.emit("ajoutPersonneListeTrain", myLevel.city.gares[0].tabAttente);
         }

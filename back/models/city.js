@@ -37,10 +37,6 @@ class City {
             gare = new Gare();
             this.gares.push(gare);
         }
-        this.gares[0].temps = 15;
-        this.gares[1].temps = 30;
-        this.gares[2].temps = 45;
-        this.gares[3].temps = 60;
 
         this.stationsMetro = [];
         let stationMetro;
